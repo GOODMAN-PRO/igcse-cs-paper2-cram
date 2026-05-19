@@ -3,5 +3,8 @@ Thumbs.db
 *.log
 *.tmp
 node_modules/
+package-lock.json
 .vscode/
 .idea/
+.env
+.env.local

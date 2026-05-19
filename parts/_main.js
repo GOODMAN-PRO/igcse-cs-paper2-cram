@@ -241,10 +241,26 @@ function askClaudeAbout(qIdx) {
 }
 
 // ===========================================================================
-// AI TUTOR — Claude (when connected) + rule-based fallback
+// AI TUTOR — Local Bridge (Claude Max) > Claude API key > rule-based fallback
 // ===========================================================================
 let chatHistory = [];
 let chatBusy = false;
+
+// Local bridge state (server.mjs at /api/* — uses Claude Code OAuth → Max plan)
+const localBridge = { available: false, detected: false };
+
+async function detectLocalBridge() {
+  try {
+    const r = await fetch('/api/health', { signal: AbortSignal.timeout(1500) });
+    if (r.ok) {
+      const data = await r.json();
+      localBridge.available = data.status === 'ok';
+    }
+  } catch { localBridge.available = false; }
+  localBridge.detected = true;
+  updateTutorStatus();
+  return localBridge.available;
+}
 
 function appendChat(html, who) {
   const log = document.getElementById('chatLog');
@@ -265,12 +281,17 @@ function clearChat() {
 }
 
 function greetUser() {
-  const connected = window.ClaudeAPI && window.ClaudeAPI.hasKey();
-  const greet = connected
-    ? `<div><strong>Connected to Claude.</strong> I have the full 2026 IGCSE syllabus in mind. Ask anything.</div>
-       <div class="text-xs text-zinc-500 mt-2">Try: <em>"explain trace tables with an example"</em> · <em>"generate a 10-mark question on file handling"</em> · <em>"check this answer: ..."</em> · <em>"compare linear and binary search"</em></div>`
-    : `<div>Hi. I'm your IGCSE CS Paper 2 tutor. Right now I'm running on rule-based fallback (offline). For real Claude AI, click <strong>Connect Claude</strong> in the header.</div>
+  let greet;
+  if (localBridge.available) {
+    greet = `<div><strong>Connected via Claude Max</strong> (local bridge → Claude Agent SDK). Real Claude, no API key, billed to your subscription.</div>
+       <div class="text-xs text-zinc-500 mt-2">Try: <em>"explain trace tables with an example"</em> · <em>"generate a 15-mark question on files"</em> · <em>"mark this answer: ..."</em> · <em>"compare linear and binary search"</em></div>`;
+  } else if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
+    greet = `<div><strong>Connected to Claude</strong> via API key. I have the full 2026 IGCSE syllabus in mind. Ask anything.</div>
+       <div class="text-xs text-zinc-500 mt-2">Try: <em>"explain trace tables with an example"</em> · <em>"generate a 10-mark question on file handling"</em> · <em>"check this answer: ..."</em></div>`;
+  } else {
+    greet = `<div>Hi. I'm your IGCSE CS Paper 2 tutor. Running on rule-based fallback (offline). For real Claude AI: run <span class="mono">node server.mjs</span> locally (Max plan, free) or click <strong>Connect Claude</strong> in the header (API key).</div>
        <div class="text-xs text-zinc-500 mt-2">Try: <em>"what is abstraction"</em> · <em>"python code for bubble sort"</em> · <em>"difference between validation and verification"</em> · <em>"give me a question"</em></div>`;
+  }
   appendChat(greet, 'bot');
   updateTutorStatus();
 }
@@ -278,16 +299,18 @@ function greetUser() {
 function updateTutorStatus() {
   const status = document.getElementById('tutorStatus');
   const tokenEl = document.getElementById('tokenUsage');
-  const intro = document.getElementById('tutorIntro');
-  const btn = document.getElementById('connectClaudeBtn');
   const lbl = document.getElementById('connectLabel');
-  if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
-    if (status) status.innerHTML = `<span class="pulse-dot"></span> Claude connected · model: haiku-4.5`;
+  if (localBridge.available) {
+    if (status) status.innerHTML = `<span class="pulse-dot"></span> Claude Max · local bridge · haiku-4.5`;
+    if (lbl) lbl.textContent = 'Max bridge live';
+    if (tokenEl) tokenEl.textContent = 'Auth: Claude Code OAuth · Billed to your Max plan';
+  } else if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
+    if (status) status.innerHTML = `<span class="pulse-dot"></span> Claude connected (API key) · haiku-4.5`;
     if (lbl) lbl.textContent = 'Claude connected';
     const stats = window.ClaudeAPI.getTokenStats();
     if (tokenEl) tokenEl.textContent = `Tokens — in: ${stats.in.toLocaleString()} · out: ${stats.out.toLocaleString()} · calls: ${stats.calls}`;
   } else {
-    if (status) status.textContent = 'Offline mode (rule-based fallback). Click "Connect Claude" for real AI.';
+    if (status) status.textContent = 'Offline mode (rule-based). For Max: run local bridge. For API key: click Connect Claude.';
     if (lbl) lbl.textContent = 'Connect Claude';
     if (tokenEl) tokenEl.textContent = '';
   }
@@ -301,10 +324,72 @@ async function chatSend() {
   inp.value = '';
   appendChat(escapeHtml(text), 'user');
 
-  if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
+  if (localBridge.available) {
+    await sendToLocalBridge(text);
+  } else if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
     await sendToClaude(text);
   } else {
     setTimeout(() => appendChat(ruleBasedRespond(text), 'bot'), 150);
+  }
+}
+
+async function sendToLocalBridge(userMessage) {
+  chatBusy = true;
+  const sendBtn = document.getElementById('chatSendBtn');
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Thinking...'; }
+
+  const botDiv = appendChat('<span class="chat-streaming"></span>', 'bot');
+  botDiv.classList.add('chat-streaming');
+  const renderFn = (window.ClaudeAPI && window.ClaudeAPI.renderMarkdown)
+    ? window.ClaudeAPI.renderMarkdown
+    : (t) => '<p>' + escapeHtml(t).replace(/\n/g, '<br>') + '</p>';
+  let fullText = '';
+
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: userMessage, history: chatHistory }),
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+
+    const reader = r.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        let ev;
+        try { ev = JSON.parse(line.slice(6)); } catch { continue; }
+        if (ev.type === 'chunk') {
+          fullText += ev.text;
+          botDiv.innerHTML = renderFn(fullText) + '<span class="chat-streaming"></span>';
+          const log = document.getElementById('chatLog');
+          if (log) log.scrollTop = log.scrollHeight;
+        } else if (ev.type === 'done') {
+          botDiv.classList.remove('chat-streaming');
+          botDiv.innerHTML = renderFn(fullText);
+          chatHistory.push({ role: 'user', content: userMessage });
+          chatHistory.push({ role: 'assistant', content: fullText });
+          if (chatHistory.length > 16) chatHistory = chatHistory.slice(-16);
+        } else if (ev.type === 'error') {
+          throw new Error(ev.message || 'bridge error');
+        }
+      }
+    }
+  } catch (e) {
+    botDiv.classList.remove('chat-streaming');
+    botDiv.innerHTML = `<div class="text-red-300"><strong>Local bridge error:</strong> ${escapeHtml(String(e.message || e))}</div>
+      <div class="text-xs text-zinc-500 mt-2">Check the terminal where you ran <span class="mono">node server.mjs</span>. Falling back to offline mode.</div>
+      <div class="mt-2">${ruleBasedRespond(userMessage)}</div>`;
+  } finally {
+    chatBusy = false;
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send'; }
   }
 }
 
@@ -729,7 +814,9 @@ buildQ15();
 buildQuiz();
 restoreChecklist();
 updateTutorStatus();
-greetUser();
+
+// Detect local bridge before greeting, so we show the right welcome message
+detectLocalBridge().finally(() => greetUser());
 
 if (window.mermaid) {
   mermaid.initialize({
