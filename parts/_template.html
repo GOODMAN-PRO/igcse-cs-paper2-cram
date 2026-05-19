@@ -285,6 +285,60 @@ else:
       <div id="quizContainer"></div>
     </section>
 
+    <!-- OPEN-ENDED QUESTIONS -->
+    <section id="sec-oeq" class="section">
+      <div class="flex items-baseline justify-between mb-1 flex-wrap gap-2">
+        <h2 class="text-2xl font-bold">Open-Ended Questions</h2>
+        <div id="oeqAiStatus" class="text-xs text-zinc-500"></div>
+      </div>
+      <p class="text-zinc-400 mb-4">50 exam-style "describe / explain / state / compare" questions — the bread of Section A. Write your answer in the box, then click <strong>Mark with Claude</strong> for AI grading against the official mark scheme. Your answers are saved locally.</p>
+
+      <div class="card card-accent mb-4">
+        <div class="flex flex-wrap items-center gap-3 text-sm">
+          <strong>Filters:</strong>
+          <select id="oeqTopic" onchange="renderOEQ()" class="btn btn-ghost">
+            <option value="">All topics</option>
+            <option value="lifecycle">Life cycle</option>
+            <option value="ct">Computational thinking</option>
+            <option value="pseudocode">Pseudocode</option>
+            <option value="flowcharts">Flowcharts</option>
+            <option value="trace">Trace</option>
+            <option value="validation">Validation</option>
+            <option value="testing">Testing</option>
+            <option value="search">Search</option>
+            <option value="sort">Sort</option>
+            <option value="methods">Std methods</option>
+            <option value="arrays">Arrays</option>
+            <option value="functions">Functions</option>
+            <option value="files">Files</option>
+            <option value="python">Python</option>
+            <option value="sql">SQL</option>
+            <option value="errors">Errors</option>
+            <option value="datatypes">Data types</option>
+          </select>
+          <select id="oeqDiff" onchange="renderOEQ()" class="btn btn-ghost">
+            <option value="">All difficulties</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+          <select id="oeqMarks" onchange="renderOEQ()" class="btn btn-ghost">
+            <option value="">Any marks</option>
+            <option value="1">1 mark</option>
+            <option value="2">2 marks</option>
+            <option value="3">3 marks</option>
+            <option value="4">4 marks</option>
+            <option value="5">5 marks</option>
+            <option value="6">6 marks</option>
+          </select>
+          <button class="btn btn-ghost" onclick="shuffleOEQ()">Shuffle</button>
+          <span class="ml-auto text-xs text-zinc-500" id="oeqStats"></span>
+        </div>
+      </div>
+
+      <div id="oeqContainer"></div>
+    </section>
+
 <!-- INSERT:MISC -->
 
     <!-- CHEAT SHEET -->
@@ -326,6 +380,9 @@ else:
 </script>
 <script>
 /* INSERT:QUIZ */
+</script>
+<script>
+/* INSERT:OEQ */
 </script>
 <script>
 /* INSERT:MAIN_JS */

@@ -34,6 +34,7 @@ const NAV_STRUCTURE = [
   ]},
   { cat: 'Practice & AI', items: [
     { id: 'q15', label: '15-mark Questions' },
+    { id: 'oeq', label: 'Open-Ended Qs (AI marked)' },
     { id: 'errors', label: 'Identify Errors' },
     { id: 'quiz', label: 'Quiz (30 random)' },
     { id: 'pylab', label: 'Python Lab' },
@@ -114,6 +115,7 @@ function buildTopicGrid() {
     ['q15', '15-Mark Questions', '15 full programming tasks'],
     ['pylab', 'Python Lab', 'Run real code in browser'],
     ['quiz', 'Quiz', '100-question bank · scored'],
+    ['oeq', 'Open-Ended Qs', '50 short-answer · marked by Claude'],
     ['tutor', 'AI Tutor', 'Claude-powered with offline fallback'],
   ];
   grid.innerHTML = items.map(([id, t, d]) => `
@@ -790,6 +792,203 @@ function gradeQuiz() {
 }
 
 // ===========================================================================
+// OPEN-ENDED QUESTIONS (AI-marked via Claude bridge / API)
+// ===========================================================================
+let _oeqFiltered = [];
+
+function renderOEQ() {
+  if (!window.OEQ_BANK) return;
+  const topic = document.getElementById('oeqTopic').value;
+  const diff = document.getElementById('oeqDiff').value;
+  const marks = document.getElementById('oeqMarks').value;
+  _oeqFiltered = window.OEQ_BANK
+    .map((q, originalIdx) => ({ q, originalIdx }))
+    .filter(({ q }) =>
+      (!topic || q.topic === topic) &&
+      (!diff || q.difficulty === diff) &&
+      (!marks || String(q.marks) === marks)
+    );
+
+  const statsEl = document.getElementById('oeqStats');
+  if (statsEl) statsEl.textContent = `${_oeqFiltered.length} of ${window.OEQ_BANK.length}`;
+
+  const aiStatusEl = document.getElementById('oeqAiStatus');
+  if (aiStatusEl) {
+    if (localBridge.available) aiStatusEl.innerHTML = `<span class="pulse-dot"></span> AI marking: Claude Max (local bridge)`;
+    else if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) aiStatusEl.innerHTML = `<span class="pulse-dot"></span> AI marking: Claude API key`;
+    else aiStatusEl.textContent = 'AI marking unavailable — connect Claude in header, or compare manually with model answer';
+  }
+
+  const container = document.getElementById('oeqContainer');
+  if (!container) return;
+  if (_oeqFiltered.length === 0) {
+    container.innerHTML = '<div class="card text-zinc-400 text-center">No questions match filters.</div>';
+    return;
+  }
+
+  container.innerHTML = _oeqFiltered.map(({ q, originalIdx }, displayIdx) => {
+    const diffBadge = q.difficulty === 'easy' ? 'badge-green' : q.difficulty === 'medium' ? 'badge-amber' : 'badge-red';
+    const savedAnswer = localStorage.getItem('cram.oeq.' + originalIdx) || '';
+    return `<div class="card mb-4" id="oeq-${originalIdx}">
+      <div class="flex items-baseline justify-between flex-wrap gap-2 mb-2">
+        <h3 class="font-semibold">Q${displayIdx + 1}.</h3>
+        <div class="flex gap-2">
+          <span class="badge badge-purple">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+          <span class="badge badge-blue">${q.topic}</span>
+          <span class="badge ${diffBadge}">${q.difficulty}</span>
+        </div>
+      </div>
+      <div class="text-sm mb-3">${q.q}</div>
+      <textarea id="oeqAns-${originalIdx}" rows="4" placeholder="Write your answer here..." oninput="saveOEQ(${originalIdx})">${escapeHtml(savedAnswer)}</textarea>
+      <div class="flex gap-2 mt-3 flex-wrap">
+        <button class="btn btn-primary" onclick="markOEQ(${originalIdx})"><span class="claude-logo">C</span> Mark with Claude</button>
+        <button class="btn btn-ghost" onclick="toggleModel(${originalIdx})">Show model answer</button>
+        <button class="btn btn-ghost" onclick="togglePoints(${originalIdx})">Show mark points</button>
+        <button class="btn btn-ghost" onclick="clearOEQ(${originalIdx})">Clear</button>
+      </div>
+      <div id="oeqModel-${originalIdx}" class="mt-3 hidden">
+        <div class="card" style="background:#0a1f0a;border-color:#15803d">
+          <div class="text-xs uppercase tracking-wider text-green-400 mb-1">Model Answer</div>
+          <div class="text-sm">${q.model}</div>
+        </div>
+      </div>
+      <div id="oeqPoints-${originalIdx}" class="mt-3 hidden">
+        <div class="card" style="background:#1a1208;border-color:#92400e">
+          <div class="text-xs uppercase tracking-wider text-amber-400 mb-1">What examiner ticks (${q.marks} marks)</div>
+          <ul class="text-sm list-disc pl-5 space-y-1">${q.points.map(p => `<li>${p}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div id="oeqMark-${originalIdx}" class="mt-3"></div>
+    </div>`;
+  }).join('');
+}
+
+function shuffleOEQ() {
+  if (!window.OEQ_BANK) return;
+  for (let i = window.OEQ_BANK.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [window.OEQ_BANK[i], window.OEQ_BANK[j]] = [window.OEQ_BANK[j], window.OEQ_BANK[i]];
+  }
+  renderOEQ();
+}
+
+function saveOEQ(idx) {
+  const ta = document.getElementById('oeqAns-' + idx);
+  if (ta) localStorage.setItem('cram.oeq.' + idx, ta.value);
+}
+
+function clearOEQ(idx) {
+  const ta = document.getElementById('oeqAns-' + idx);
+  if (ta) ta.value = '';
+  localStorage.removeItem('cram.oeq.' + idx);
+  const m = document.getElementById('oeqMark-' + idx);
+  if (m) m.innerHTML = '';
+}
+
+function toggleModel(idx) {
+  const el = document.getElementById('oeqModel-' + idx);
+  if (el) el.classList.toggle('hidden');
+}
+function togglePoints(idx) {
+  const el = document.getElementById('oeqPoints-' + idx);
+  if (el) el.classList.toggle('hidden');
+}
+
+async function markOEQ(idx) {
+  const q = window.OEQ_BANK[idx];
+  if (!q) return;
+  const ta = document.getElementById('oeqAns-' + idx);
+  const ans = (ta?.value || '').trim();
+  const out = document.getElementById('oeqMark-' + idx);
+  if (!ans) { out.innerHTML = `<div class="text-sm text-amber-400">Write an answer first.</div>`; return; }
+
+  // Strip HTML from question for the prompt
+  const qPlain = q.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const markPrompt = `You are marking an IGCSE 0478/0984 Paper 2 short-answer question. Mark generously where the student shows the same understanding even if worded differently. Do NOT penalise minor wording.
+
+QUESTION: ${qPlain}
+MARKS AVAILABLE: ${q.marks}
+MARK SCHEME (each bullet = 1 mark):
+${q.points.map(p => '- ' + p.replace(/<[^>]+>/g, '')).join('\n')}
+
+MODEL ANSWER (for context, do not require verbatim): ${q.model.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()}
+
+STUDENT ANSWER:
+${ans}
+
+Reply in this EXACT format using markdown:
+
+**Marks: X / ${q.marks}**
+
+**What you got right:**
+- (bullet each point earned)
+
+**What's missing or wrong:**
+- (bullet each point not earned + why)
+
+**Quick tip to improve:**
+One actionable sentence.`;
+
+  if (!localBridge.available && !(window.ClaudeAPI && window.ClaudeAPI.hasKey())) {
+    out.innerHTML = `<div class="card" style="background:#1a0e1a;border-color:#7c3aed">
+      <div class="text-sm">AI marking needs Claude. Run <span class="mono">node server.mjs</span> locally (Max plan, free) or click <strong>Connect Claude</strong> in the header. For now, click <em>Show model answer</em> and <em>Show mark points</em> to self-mark.</div>
+    </div>`;
+    return;
+  }
+
+  out.innerHTML = `<div class="card" id="oeqMarkOut-${idx}" style="background:#0d0d14"><div class="text-xs text-zinc-500 mb-1">Claude is marking…</div><div id="oeqMarkBody-${idx}" class="text-sm"><span class="chat-streaming"></span></div></div>`;
+  const body = document.getElementById('oeqMarkBody-' + idx);
+  const renderFn = (window.ClaudeAPI && window.ClaudeAPI.renderMarkdown)
+    ? window.ClaudeAPI.renderMarkdown
+    : (t) => '<p>' + escapeHtml(t).replace(/\n/g, '<br>') + '</p>';
+  let fullText = '';
+
+  if (localBridge.available) {
+    try {
+      const r = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: markPrompt, history: [] }),
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const reader = r.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          let ev; try { ev = JSON.parse(line.slice(6)); } catch { continue; }
+          if (ev.type === 'chunk') {
+            fullText += ev.text;
+            body.innerHTML = renderFn(fullText) + '<span class="chat-streaming"></span>';
+          } else if (ev.type === 'done') {
+            body.innerHTML = renderFn(fullText);
+          } else if (ev.type === 'error') {
+            throw new Error(ev.message || 'bridge error');
+          }
+        }
+      }
+    } catch (e) {
+      body.innerHTML = `<div class="text-red-300">Marking error: ${escapeHtml(String(e.message || e))}</div>`;
+    }
+  } else if (window.ClaudeAPI && window.ClaudeAPI.hasKey()) {
+    await window.ClaudeAPI.chatWithClaude(markPrompt, [], {
+      onChunk: (txt) => {
+        fullText += txt;
+        body.innerHTML = renderFn(fullText) + '<span class="chat-streaming"></span>';
+      },
+      onDone: () => { body.innerHTML = renderFn(fullText); },
+      onError: (msg) => { body.innerHTML = `<div class="text-red-300">${escapeHtml(msg)}</div>`; }
+    });
+  }
+}
+
+// ===========================================================================
 // CHECKLIST RESTORATION (misc.html has inline onchange handlers writing to localStorage)
 // ===========================================================================
 function restoreChecklist() {
@@ -812,11 +1011,12 @@ buildTopicGrid();
 buildTracePractice();
 buildQ15();
 buildQuiz();
+renderOEQ();
 restoreChecklist();
 updateTutorStatus();
 
 // Detect local bridge before greeting, so we show the right welcome message
-detectLocalBridge().finally(() => greetUser());
+detectLocalBridge().finally(() => { greetUser(); renderOEQ(); });
 
 if (window.mermaid) {
   mermaid.initialize({
