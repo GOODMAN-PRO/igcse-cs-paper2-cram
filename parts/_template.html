@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IGCSE CS Paper 2 — Cram Mode</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { darkMode: 'class' };</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  html, body { background: #07070b; color: #e7e7ea; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  ::selection { background: #7c3aed66; }
+  pre { background: #0d0d14; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; border: 1px solid #27272a; font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code, pre, kbd, .mono { font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas, monospace; }
+  .kw { color: #c084fc; font-weight: 600; }
+  .str { color: #86efac; }
+  .num { color: #fbbf24; }
+  .com { color: #71717a; font-style: italic; }
+  .fn { color: #60a5fa; }
+  .nav-item { padding: 0.55rem 0.8rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.15s; font-size: 0.875rem; color: #a1a1aa; user-select: none; }
+  .nav-item:hover { background: #1c1c25; color: #e7e7ea; }
+  .nav-item.active { background: linear-gradient(135deg,#7c3aed,#5b21b6); color: white; box-shadow: 0 4px 12px -2px #7c3aed66; }
+  .nav-cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #52525b; padding: 0.75rem 0.8rem 0.35rem; font-weight: 600; }
+  .section { display: none; animation: fade 0.2s ease-out; }
+  .section.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .card { background: #101018; border: 1px solid #1f1f2a; border-radius: 0.75rem; padding: 1.25rem; }
+  .card-accent { background: linear-gradient(135deg,#1a0f2e 0%,#101018 60%); border-color: #3b1e60; }
+  table.trace { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.875rem; }
+  table.trace th, table.trace td { border: 1px solid #2e2e3a; padding: 0.45rem 0.75rem; text-align: center; }
+  table.trace th { background: #1a1a24; color: #c084fc; font-weight: 600; }
+  table.trace td.editable { background: #0d0d14; cursor: text; }
+  table.trace td.editable[contenteditable="true"]:focus { outline: 2px solid #7c3aed; }
+  table.trace td.correct { background: #052e16; color: #86efac; }
+  table.trace td.wrong { background: #2e0510; color: #fca5a5; }
+  .chat-msg { padding: 0.85rem 1rem; border-radius: 0.75rem; margin-bottom: 0.6rem; line-height: 1.55; }
+  .chat-msg p { margin: 0.3rem 0; }
+  .chat-msg ul, .chat-msg ol { margin: 0.4rem 0 0.4rem 1.25rem; }
+  .chat-msg pre { font-size: 0.8rem; margin: 0.5rem 0; }
+  .chat-msg code { font-size: 0.85em; background: #1a1a24; padding: 0.1rem 0.35rem; border-radius: 0.25rem; }
+  .chat-msg pre code { background: transparent; padding: 0; }
+  .chat-user { background: #1e1b4b; margin-left: 2rem; border: 1px solid #312e81; }
+  .chat-bot { background: #101018; border: 1px solid #1f1f2a; margin-right: 2rem; }
+  .chat-streaming::after { content: '▮'; animation: blink 1s steps(2) infinite; color: #c084fc; margin-left: 2px; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .mermaid { background: #101018 !important; padding: 1rem; border-radius: 0.5rem; border: 1px solid #1f1f2a; text-align: center; margin: 0.5rem 0; }
+  .badge { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+  .badge-purple { background: #4c1d95; color: #ddd6fe; }
+  .badge-green { background: #14532d; color: #86efac; }
+  .badge-amber { background: #78350f; color: #fcd34d; }
+  .badge-red { background: #7f1d1d; color: #fca5a5; }
+  .badge-blue { background: #1e3a8a; color: #bfdbfe; }
+  details { background: #101018; border: 1px solid #1f1f2a; border-radius: 0.5rem; padding: 0.5rem 1rem; margin: 0.5rem 0; }
+  details summary { cursor: pointer; font-weight: 600; padding: 0.3rem 0; user-select: none; }
+  details[open] summary { color: #c084fc; }
+  .btn { padding: 0.55rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.15s; cursor: pointer; font-size: 0.875rem; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .btn-primary { background: #7c3aed; color: white; }
+  .btn-primary:hover { background: #6d28d9; }
+  .btn-ghost { background: #101018; color: #e7e7ea; border-color: #2e2e3a; }
+  .btn-ghost:hover { background: #1a1a24; border-color: #4b4b5a; }
+  .btn-claude { background: linear-gradient(135deg,#d97706,#7c2d12); color: white; border: 1px solid #92400e; }
+  .btn-claude:hover { background: linear-gradient(135deg,#ea580c,#9a3412); }
+  textarea, input[type=text], input[type=password] { background: #0d0d14; border: 1px solid #2e2e3a; color: #e7e7ea; padding: 0.6rem 0.85rem; border-radius: 0.5rem; width: 100%; font-family: inherit; }
+  textarea.code, input.code { font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace; font-size: 0.85rem; line-height: 1.6; }
+  textarea:focus, input:focus { outline: 2px solid #7c3aed; border-color: transparent; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0a0a0f; }
+  ::-webkit-scrollbar-thumb { background: #2e2e3a; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3f3f4a; }
+  .heat { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+  .h0 { background: #18181b; }
+  .h3 { background: #22c55e; }
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .topic-grid .card { cursor: pointer; transition: all 0.15s; }
+  .topic-grid .card:hover { border-color: #7c3aed; transform: translateY(-2px); }
+  .glow { box-shadow: 0 0 40px -10px #7c3aed40; }
+  .keystroke { display: inline-block; padding: 0.1rem 0.4rem; background: #1a1a24; border: 1px solid #2e2e3a; border-radius: 0.3rem; font-size: 0.75rem; font-family: monospace; }
+  .pulse-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; animation: pulse 2s ease-in-out infinite; margin-right: 4px; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .claude-logo { display: inline-flex; align-items: center; justify-content: center; width: 1.1rem; height: 1.1rem; border-radius: 0.25rem; background: #d97706; color: white; font-weight: 700; font-size: 0.7rem; }
+</style>
+</head>
+<body class="min-h-screen">
+<header class="border-b border-zinc-800 bg-zinc-950/95 backdrop-blur sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-2">
+    <div>
+      <h1 class="text-lg font-bold tracking-tight">IGCSE CS Paper 2 — <span class="text-purple-400">Cram Mode</span></h1>
+      <p class="text-[11px] text-zinc-500 mt-0.5">0478 / 0984 · 2026 syllabus · single-file · Claude-powered tutor</p>
+    </div>
+    <div class="flex items-center gap-3 text-xs">
+      <button id="connectClaudeBtn" class="btn btn-claude" onclick="window.ClaudeAPI && window.ClaudeAPI.openConnectModal()">
+        <span class="claude-logo">C</span>
+        <span id="connectLabel">Connect Claude</span>
+      </button>
+      <button onclick="showSection('checklist')" class="btn btn-ghost">Checklist</button>
+      <div class="flex items-center gap-2">
+        <span class="text-zinc-500">Topics:</span>
+        <span id="progText" class="text-purple-300 font-mono">0/0</span>
+        <div class="w-24 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div id="progBar" class="h-full bg-purple-500 transition-all" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-6 grid grid-cols-12 gap-6">
+  <aside class="col-span-3">
+    <nav id="nav" class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1"></nav>
+  </aside>
+
+  <main class="col-span-9 pb-24" id="main">
+
+    <!-- DASHBOARD -->
+    <section id="sec-dashboard" class="section active">
+      <div class="card card-accent glow mb-6">
+        <h2 class="text-2xl font-bold mb-2">You have one job tonight.</h2>
+        <p class="text-zinc-400 mb-4">Know <span class="text-purple-300 font-semibold">pseudocode</span>, trace tables, flowcharts, validation, test data, search/sort, Python equivalents, and SQL. The 15-mark question always combines them.</p>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="showSection('lifecycle')" class="btn btn-primary">Start with Life Cycle</button>
+          <button onclick="showSection('tutor')" class="btn btn-claude"><span class="claude-logo">C</span> Ask Claude</button>
+          <button onclick="showSection('q15')" class="btn btn-ghost">15-mark Questions</button>
+          <button onclick="showSection('pylab')" class="btn btn-ghost">Run Python</button>
+        </div>
+      </div>
+
+      <h3 class="text-sm uppercase tracking-wider text-zinc-500 mb-3">Pick a topic</h3>
+      <div class="topic-grid" id="topicGrid"></div>
+
+      <div class="mt-8 grid grid-cols-2 gap-4">
+        <div class="card">
+          <div class="text-xs text-zinc-500 mb-1">What gets tested in Paper 2</div>
+          <ul class="text-sm space-y-1.5">
+            <li>· Section A: algorithms, trace tables, pseudocode, flowcharts (~25 marks)</li>
+            <li>· Section B: longer programming task / 15-mark write-a-program (~15 marks)</li>
+            <li>· Section C: databases / SQL (~10 marks)</li>
+            <li>· Total: 50 marks · 1h 45m</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="text-xs text-zinc-500 mb-1">Silent rules examiners enforce</div>
+          <ul class="text-sm space-y-1.5">
+            <li>· Use <span class="kw mono">←</span> for pseudocode assignment, <span class="mono">=</span> for Python</li>
+            <li>· Pseudocode arrays are <span class="num">1</span>-indexed; Python lists are <span class="num">0</span>-indexed</li>
+            <li>· <span class="fn mono">input()</span> in Python returns a string — cast it</li>
+            <li>· Always validate input before using it</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+<!-- INSERT:LIFECYCLE -->
+
+<!-- INSERT:PSEUDOCODE -->
+
+<!-- INSERT:FLOWCHARTS -->
+
+<!-- INSERT:ALGORITHMS -->
+
+<!-- INSERT:PYTHON -->
+
+<!-- INSERT:SQL -->
+
+    <!-- TRACE TABLES (interactive) -->
+    <section id="sec-trace" class="section">
+      <h2 class="text-2xl font-bold mb-1">Trace Tables — Interactive Practice</h2>
+      <p class="text-zinc-400 mb-5">Walk through the code, fill the cells, click <strong>Check</strong> to grade. One row per change of any variable.</p>
+
+      <div class="card mb-5">
+        <h3 class="font-semibold mb-2">Worked example</h3>
+        <p class="text-sm text-zinc-400 mb-3">Trace this pseudocode with inputs <span class="mono">5, 3, 8</span>:</p>
+<pre><span class="kw">DECLARE</span> Total : <span class="kw">INTEGER</span>
+Total ← <span class="num">0</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">3</span>
+  <span class="kw">INPUT</span> Num
+  Total ← Total + Num
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Total</pre>
+        <table class="trace mt-3">
+          <thead><tr><th>i</th><th>Num</th><th>Total</th><th>OUTPUT</th></tr></thead>
+          <tbody>
+            <tr><td>—</td><td>—</td><td>0</td><td></td></tr>
+            <tr><td>1</td><td>5</td><td>5</td><td></td></tr>
+            <tr><td>2</td><td>3</td><td>8</td><td></td></tr>
+            <tr><td>3</td><td>8</td><td>16</td><td></td></tr>
+            <tr><td></td><td></td><td></td><td>16</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="tracePractice"></div>
+    </section>
+
+    <!-- 15-MARK QUESTIONS (interactive) -->
+    <section id="sec-q15" class="section">
+      <h2 class="text-2xl font-bold mb-1">15-mark Programming Questions</h2>
+      <p class="text-zinc-400 mb-5">15 full-scale IGCSE-style programming tasks. Each has Python + pseudocode + a granular marking scheme. Click "Open in Lab" to actually run the solution.</p>
+      <div id="q15container"></div>
+    </section>
+
+    <!-- AI TUTOR (Claude-powered) -->
+    <section id="sec-tutor" class="section">
+      <div class="flex items-baseline justify-between mb-1 flex-wrap gap-2">
+        <h2 class="text-2xl font-bold">AI Tutor</h2>
+        <div id="tutorStatus" class="text-xs text-zinc-500"></div>
+      </div>
+      <p class="text-zinc-400 mb-5" id="tutorIntro">Ask anything about Paper 2. <strong>Connect Claude</strong> in the header for real AI answers, or use the offline rule-based fallback below. Try <kbd class="keystroke">explain trace tables</kbd>, <kbd class="keystroke">give me a question on validation</kbd>, <kbd class="keystroke">python code for bubble sort</kbd>.</p>
+
+      <div class="card">
+        <div id="chatLog" class="space-y-2 mb-3 max-h-[55vh] overflow-y-auto"></div>
+        <div class="flex gap-2">
+          <input id="chatIn" type="text" placeholder="Ask the tutor anything..." onkeydown="if(event.key==='Enter')chatSend()">
+          <button class="btn btn-primary" onclick="chatSend()" id="chatSendBtn">Send</button>
+        </div>
+        <div class="flex items-center justify-between mt-3 text-xs text-zinc-500">
+          <div id="tokenUsage"></div>
+          <div class="flex gap-2">
+            <button class="btn btn-ghost text-xs" onclick="clearChat()" style="padding: 0.25rem 0.6rem;">Clear chat</button>
+            <button class="btn btn-ghost text-xs" onclick="window.ClaudeAPI && window.ClaudeAPI.openConnectModal()" style="padding: 0.25rem 0.6rem;">Manage Claude</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PYTHON LAB -->
+    <section id="sec-pylab" class="section">
+      <h2 class="text-2xl font-bold mb-1">Python Lab</h2>
+      <p class="text-zinc-400 mb-5">Real Python in your browser via Pyodide — no install. First run downloads ~10 MB.</p>
+
+      <div class="card mb-3">
+        <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+          <div>
+            <h3 class="font-semibold">Code editor</h3>
+            <p class="text-xs text-zinc-500">Pyodide status: <span id="pyStatus" class="text-amber-400">not loaded</span></p>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <select id="pyExamples" class="btn btn-ghost" onchange="loadExample()">
+              <option value="">Load example...</option>
+              <option value="hello">Hello world</option>
+              <option value="avg">Average of 10 numbers</option>
+              <option value="validate">Range validation</option>
+              <option value="linear">Linear search</option>
+              <option value="binary">Binary search</option>
+              <option value="bubble">Bubble sort</option>
+              <option value="freq">Letter frequency</option>
+              <option value="file">File handling</option>
+              <option value="caesar">Caesar cipher</option>
+            </select>
+            <button class="btn btn-primary" onclick="runPy()">Run ▶</button>
+          </div>
+        </div>
+        <textarea id="pyCode" class="code" rows="14"># Try writing some Python here, then click Run.
+# input() works — pre-fill values in the "Inputs" box below.
+
+name = input("What's your name? ")
+age = int(input("Your age? "))
+
+if age >= 18:
+    print(f"Hello {name}, you can vote.")
+else:
+    years = 18 - age
+    print(f"Hello {name}, wait {years} more years.")
+</textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="card">
+          <h3 class="font-semibold mb-2 text-sm">Inputs (one per line)</h3>
+          <textarea id="pyInputs" class="code" rows="6">Alex
+17</textarea>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold mb-2 text-sm">Output</h3>
+          <pre id="pyOut" class="text-xs" style="min-height: 130px; margin: 0;">(run something to see output)</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="sec-quiz" class="section">
+      <h2 class="text-2xl font-bold mb-1">Quiz Mode</h2>
+      <p class="text-zinc-400 mb-5">30 randomised MCQs from a 100-question bank. Honest scoring at the end.</p>
+      <div id="quizContainer"></div>
+    </section>
+
+<!-- INSERT:MISC -->
+
+    <!-- CHEAT SHEET -->
+    <section id="sec-cheat" class="section">
+      <h2 class="text-2xl font-bold mb-1">One-page Cheat Sheet</h2>
+      <p class="text-zinc-400 mb-5">Open this 10 minutes before the exam. Skim it. Breathe. You've got this.</p>
+
+      <div class="grid grid-cols-3 gap-3 text-sm">
+        <div class="card"><div class="badge badge-purple mb-2">Life cycle</div><p>Analysis · Design · Coding · Testing</p><p class="text-xs text-zinc-500 mt-1">Abstraction + Decomposition in Analysis.</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Test data</div><p>Normal · Boundary · Extreme · Erroneous</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Validation</div><p>Range · Length · Type · Presence · Format · Check digit</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Verification</div><p>Double entry · Visual check</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Errors</div><p>Syntax · Logic · Runtime</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Flowchart shapes</div><p>Oval=Start/End · Parallelogram=I/O · Rectangle=Process · Diamond=Decision</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Operators</div><p class="mono text-xs">= &lt;&gt; &lt; &gt; &lt;= &gt;= AND OR NOT MOD DIV</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Search</div><p>Linear: unsorted, slow. Binary: sorted, halves each step.</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Bubble sort</div><p>Compare adjacent, swap if wrong, repeat. Swapped flag for early exit.</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Python gotchas</div><p>Cast int(input()), 0-indexed lists, range(a,b) excludes b.</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Strings</div><p class="text-xs">LENGTH · UCASE · LCASE · SUBSTRING(s, start, length)</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">SQL skeleton</div><p class="mono text-xs">SELECT … FROM … WHERE … ORDER BY …;</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Aggregates</div><p class="mono text-xs">SUM, COUNT, AVG, MIN, MAX</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">LIKE</div><p class="mono text-xs">% = any chars, _ = one char</p></div>
+        <div class="card"><div class="badge badge-purple mb-2">Files</div><p class="text-xs">OPENFILE FOR READ/WRITE/APPEND, READFILE, WRITEFILE, CLOSEFILE, EOF()</p></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+/* INSERT:CLAUDE_API */
+</script>
+<script>
+/* INSERT:TRACES */
+</script>
+<script>
+/* INSERT:Q15 */
+</script>
+<script>
+/* INSERT:QUIZ */
+</script>
+<script>
+/* INSERT:MAIN_JS */
+</script>
+</body>
+</html>

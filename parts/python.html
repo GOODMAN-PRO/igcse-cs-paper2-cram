@@ -1,0 +1,804 @@
+<section id="sec-python" class="section">
+  <h2 class="text-2xl font-bold mb-1">Python &harr; Pseudocode Equivalents</h2>
+  <p class="text-sm opacity-80 mb-4">
+    Paper 2 will ask you to read and write code in <em>either</em> Cambridge pseudocode or a high-level
+    language (Python is the most common). Almost every pseudocode construct has a near-direct Python
+    twin &mdash; the trick is remembering the small differences (indexing, casting, indentation, colons).
+    Learn this table cold and you can translate any pseudocode answer into Python (or back) under exam pressure.
+  </p>
+
+  <div class="flex flex-wrap gap-2 mb-3">
+    <span class="badge badge-purple">Translation</span>
+    <span class="badge badge-blue">Syntax</span>
+    <span class="badge">Paper 2</span>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Full translation table</h3>
+  <table class="trace">
+    <thead>
+      <tr>
+        <th>Pseudocode</th>
+        <th>Python</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>INPUT X</code></td>
+        <td><code>X = input()</code></td>
+        <td><code>input()</code> always returns a <strong>string</strong> &mdash; cast if you want a number.</td>
+      </tr>
+      <tr>
+        <td><code>INPUT N</code> (integer)</td>
+        <td><code>N = int(input())</code></td>
+        <td>Wrap in <code>int(...)</code>. Will crash on non-numeric input.</td>
+      </tr>
+      <tr>
+        <td><code>INPUT R</code> (real)</td>
+        <td><code>R = float(input())</code></td>
+        <td>Use <code>float</code> for decimals.</td>
+      </tr>
+      <tr>
+        <td><code>OUTPUT X</code></td>
+        <td><code>print(X)</code></td>
+        <td><code>print</code> auto-adds a newline.</td>
+      </tr>
+      <tr>
+        <td><code>OUTPUT X, Y, Z</code></td>
+        <td><code>print(X, Y, Z)</code></td>
+        <td>Python inserts a <strong>space</strong> between items; pseudocode concatenates.</td>
+      </tr>
+      <tr>
+        <td><code>X &larr; 5</code></td>
+        <td><code>X = 5</code></td>
+        <td>Single <code>=</code> means assign. (The arrow is U+2190.)</td>
+      </tr>
+      <tr>
+        <td><code>X &larr; Y + 1</code></td>
+        <td><code>X = Y + 1</code></td>
+        <td>Right-hand side evaluated first.</td>
+      </tr>
+      <tr>
+        <td><code>IF cond THEN ... ELSE ... ENDIF</code></td>
+        <td><code>if cond:</code> / <code>elif:</code> / <code>else:</code></td>
+        <td>Colon required; <strong>indentation</strong> defines the block.</td>
+      </tr>
+      <tr>
+        <td><code>CASE OF X</code> ... <code>ENDCASE</code></td>
+        <td><code>if/elif/else</code> chain (or <code>match</code>)</td>
+        <td>Cambridge accepts <code>if/elif</code> as the Python equivalent of CASE.</td>
+      </tr>
+      <tr>
+        <td><code>FOR i &larr; 1 TO 10</code></td>
+        <td><code>for i in range(1, 11):</code></td>
+        <td>Python's upper bound is <strong>exclusive</strong> &mdash; add 1.</td>
+      </tr>
+      <tr>
+        <td><code>FOR i &larr; 10 TO 1 STEP -1</code></td>
+        <td><code>for i in range(10, 0, -1):</code></td>
+        <td>Counting down: stop is one past the last value.</td>
+      </tr>
+      <tr>
+        <td><code>WHILE cond DO ... ENDWHILE</code></td>
+        <td><code>while cond:</code></td>
+        <td>Pre-test loop. Condition checked first.</td>
+      </tr>
+      <tr>
+        <td><code>REPEAT ... UNTIL cond</code></td>
+        <td><code>while True:</code> ... <code>if cond: break</code></td>
+        <td>Python has no native post-test loop &mdash; use <code>break</code>.</td>
+      </tr>
+      <tr>
+        <td><code>DECLARE A : ARRAY[1:n] OF ...</code></td>
+        <td><code>a = [0] * n</code></td>
+        <td>Python lists are <strong>0-indexed</strong> and grow dynamically.</td>
+      </tr>
+      <tr>
+        <td><code>ARRAY[1:r, 1:c]</code></td>
+        <td><code>grid = [[0]*c for _ in range(r)]</code></td>
+        <td>List of lists. Don't write <code>[[0]*c]*r</code> &mdash; it shares rows!</td>
+      </tr>
+      <tr>
+        <td><code>LENGTH(s)</code></td>
+        <td><code>len(s)</code></td>
+        <td>Works on strings and lists.</td>
+      </tr>
+      <tr>
+        <td><code>UCASE(s)</code></td>
+        <td><code>s.upper()</code></td>
+        <td>Returns a new string.</td>
+      </tr>
+      <tr>
+        <td><code>LCASE(s)</code></td>
+        <td><code>s.lower()</code></td>
+        <td>Returns a new string.</td>
+      </tr>
+      <tr>
+        <td><code>SUBSTRING(s, 2, 3)</code></td>
+        <td><code>s[1:4]</code></td>
+        <td>Pseudocode is 1-indexed; Python <code>s[start-1 : start-1+length]</code>.</td>
+      </tr>
+      <tr>
+        <td>Concatenation <code>&amp;</code></td>
+        <td><code>+</code> or f-string <code>f"{a}{b}"</code></td>
+        <td>Both operands must be strings &mdash; cast numbers with <code>str()</code>.</td>
+      </tr>
+      <tr>
+        <td><code>MOD</code></td>
+        <td><code>%</code></td>
+        <td>Remainder after division.</td>
+      </tr>
+      <tr>
+        <td><code>DIV</code></td>
+        <td><code>//</code></td>
+        <td>Integer division (floor).</td>
+      </tr>
+      <tr>
+        <td><code>AND OR NOT</code></td>
+        <td><code>and or not</code></td>
+        <td>Lowercase in Python.</td>
+      </tr>
+      <tr>
+        <td><code>= &lt;&gt; &lt; &gt; &lt;= &gt;=</code></td>
+        <td><code>== != &lt; &gt; &lt;= &gt;=</code></td>
+        <td>Pseudocode <code>=</code> compares; Python uses <code>==</code>. <code>&lt;&gt;</code> becomes <code>!=</code>.</td>
+      </tr>
+      <tr>
+        <td><code>TRUE / FALSE</code></td>
+        <td><code>True / False</code></td>
+        <td>Capitalised in Python.</td>
+      </tr>
+      <tr>
+        <td><code>OPENFILE "x" FOR READ</code></td>
+        <td><code>f = open("x", "r")</code></td>
+        <td>Mode <code>"r"</code> = read.</td>
+      </tr>
+      <tr>
+        <td><code>OPENFILE "x" FOR WRITE</code></td>
+        <td><code>f = open("x", "w")</code></td>
+        <td>Mode <code>"w"</code> overwrites existing content.</td>
+      </tr>
+      <tr>
+        <td><code>OPENFILE "x" FOR APPEND</code></td>
+        <td><code>f = open("x", "a")</code></td>
+        <td>Mode <code>"a"</code> adds to the end.</td>
+      </tr>
+      <tr>
+        <td><code>READFILE "x", Line</code></td>
+        <td><code>line = f.readline()</code></td>
+        <td>Reads one line including its <code>\n</code>.</td>
+      </tr>
+      <tr>
+        <td><code>WRITEFILE "x", text</code></td>
+        <td><code>f.write(text + "\n")</code></td>
+        <td>Python does <strong>not</strong> auto-add newline &mdash; add <code>\n</code>.</td>
+      </tr>
+      <tr>
+        <td><code>CLOSEFILE "x"</code></td>
+        <td><code>f.close()</code></td>
+        <td>Always close. Or use a <code>with</code> block.</td>
+      </tr>
+      <tr>
+        <td><code>EOF("x")</code></td>
+        <td>check if <code>f.readline() == ""</code></td>
+        <td>An empty string means end-of-file (a blank line returns <code>"\n"</code>).</td>
+      </tr>
+      <tr>
+        <td><code>PROCEDURE Name(params)</code> ... <code>ENDPROCEDURE</code></td>
+        <td><code>def name(params):</code></td>
+        <td>No return value &mdash; just the body.</td>
+      </tr>
+      <tr>
+        <td><code>FUNCTION Name(params) RETURNS T</code></td>
+        <td><code>def name(params): return ...</code></td>
+        <td>Use <code>return</code> to send the value back.</td>
+      </tr>
+      <tr>
+        <td><code>CALL ProcName(args)</code></td>
+        <td><code>proc_name(args)</code></td>
+        <td>No <code>CALL</code> keyword in Python.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Three traps that cost marks</h3>
+  <div class="card card-accent">
+    <ol class="list-decimal pl-6 space-y-2">
+      <li>
+        <strong>Forgetting to cast <code>input()</code>.</strong>
+        Writing <code>age = input()</code> then <code>if age &gt; 18:</code> raises
+        <code>TypeError: '&gt;' not supported between instances of 'str' and 'int'</code>.
+        Fix: <code>age = int(input())</code>.
+      </li>
+      <li>
+        <strong>Off-by-one in <code>range()</code>.</strong>
+        <code>range(1, 10)</code> produces <code>1, 2, ..., 9</code> &mdash; it does NOT include 10.
+        For pseudocode <code>FOR i &larr; 1 TO 10</code> write <code>range(1, 11)</code>.
+      </li>
+      <li>
+        <strong>0-indexed lists vs 1-indexed pseudocode arrays.</strong>
+        <code>Names[1]</code> in pseudocode is the <em>first</em> item; in Python it is the <em>second</em>.
+        Either translate by subtracting 1, or pad your list with a dummy at index 0.
+      </li>
+    </ol>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">More traps (bonus)</h3>
+  <div class="card">
+    <ol start="4" class="list-decimal pl-6 space-y-1">
+      <li>Confusing <code>=</code> (assign) with <code>==</code> (compare). Pseudocode uses <code>=</code> for both!</li>
+      <li>Forgetting the <code>:</code> at the end of <code>if</code> / <code>for</code> / <code>while</code> / <code>def</code> lines.</li>
+      <li><strong>Indentation matters</strong> in Python &mdash; it defines the block. Mixing tabs and spaces causes <code>IndentationError</code>.</li>
+      <li><code>print(a, b)</code> puts a space between values; pseudocode <code>OUTPUT a, b</code> concatenates with no separator.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="sec-arrays" class="section">
+  <h2 class="text-2xl font-bold mb-1">Arrays and Lists</h2>
+  <p class="text-sm opacity-80 mb-4">
+    In IGCSE pseudocode an <strong>array</strong> is a fixed-size, 1-indexed collection of items of the
+    <em>same type</em>; a Python <strong>list</strong> is 0-indexed, can change size, and may hold mixed types.
+  </p>
+
+  <div class="flex flex-wrap gap-2 mb-3">
+    <span class="badge badge-purple">Data structures</span>
+    <span class="badge badge-blue">1D &amp; 2D</span>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">1D arrays side-by-side</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">DECLARE</span> Names : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">5</span>] <span class="kw">OF</span> <span class="kw">STRING</span>
+Names[<span class="num">1</span>] &larr; <span class="str">"Sam"</span>
+Names[<span class="num">2</span>] &larr; <span class="str">"Alex"</span>
+<span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">OUTPUT</span> Names[i]
+<span class="kw">NEXT</span> i</code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>names = [<span class="str">""</span>] * <span class="num">5</span>             <span class="com"># 5 empty slots</span>
+names[<span class="num">0</span>] = <span class="str">"Sam"</span>          <span class="com"># index shifts -1</span>
+names[<span class="num">1</span>] = <span class="str">"Alex"</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(names[i])</code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">2D arrays side-by-side</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">DECLARE</span> Grid : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">3</span>, <span class="num">1</span>:<span class="num">3</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">FOR</span> r &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">3</span>
+  <span class="kw">FOR</span> c &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">3</span>
+    Grid[r, c] &larr; <span class="num">0</span>
+  <span class="kw">NEXT</span> c
+<span class="kw">NEXT</span> r</code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>grid = [[<span class="num">0</span>]*<span class="num">3</span> <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
+<span class="kw">for</span> r <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        grid[r][c] = <span class="num">0</span>
+<span class="com"># access with grid[row][col]</span></code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Common array operations</h3>
+
+  <div class="card mt-2">
+    <div class="font-semibold mb-2">Traverse (print every item)</div>
+    <div class="grid grid-cols-2 gap-4">
+<pre><code><span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">OUTPUT</span> Names[i]
+<span class="kw">NEXT</span> i</code></pre>
+<pre><code><span class="kw">for</span> n <span class="kw">in</span> names:
+    <span class="fn">print</span>(n)</code></pre>
+    </div>
+  </div>
+
+  <div class="card mt-2">
+    <div class="font-semibold mb-2">Linear search</div>
+    <div class="grid grid-cols-2 gap-4">
+<pre><code>Found &larr; <span class="kw">FALSE</span>
+<span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">IF</span> Names[i] = Target <span class="kw">THEN</span>
+    Found &larr; <span class="kw">TRUE</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Found</code></pre>
+<pre><code>found = <span class="kw">False</span>
+<span class="kw">for</span> n <span class="kw">in</span> names:
+    <span class="kw">if</span> n == target:
+        found = <span class="kw">True</span>
+<span class="fn">print</span>(found)</code></pre>
+    </div>
+  </div>
+
+  <div class="card mt-2">
+    <div class="font-semibold mb-2">Modify (overwrite an element)</div>
+    <div class="grid grid-cols-2 gap-4">
+<pre><code>Scores[<span class="num">3</span>] &larr; <span class="num">100</span></code></pre>
+<pre><code>scores[<span class="num">2</span>] = <span class="num">100</span>   <span class="com"># index shifts -1</span></code></pre>
+    </div>
+  </div>
+
+  <div class="card mt-2">
+    <div class="font-semibold mb-2">Sum all values</div>
+    <div class="grid grid-cols-2 gap-4">
+<pre><code>Total &larr; <span class="num">0</span>
+<span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">20</span>
+  Total &larr; Total + Scores[i]
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Total</code></pre>
+<pre><code>total = <span class="num">0</span>
+<span class="kw">for</span> s <span class="kw">in</span> scores:
+    total += s
+<span class="fn">print</span>(total)
+<span class="com"># or: print(sum(scores))</span></code></pre>
+    </div>
+  </div>
+
+  <div class="card mt-2">
+    <div class="font-semibold mb-2">Find maximum value</div>
+    <div class="grid grid-cols-2 gap-4">
+<pre><code>Max &larr; Scores[<span class="num">1</span>]
+<span class="kw">FOR</span> i &larr; <span class="num">2</span> <span class="kw">TO</span> <span class="num">20</span>
+  <span class="kw">IF</span> Scores[i] &gt; Max <span class="kw">THEN</span>
+    Max &larr; Scores[i]
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Max</code></pre>
+<pre><code>mx = scores[<span class="num">0</span>]
+<span class="kw">for</span> s <span class="kw">in</span> scores[<span class="num">1</span>:]:
+    <span class="kw">if</span> s &gt; mx:
+        mx = s
+<span class="fn">print</span>(mx)
+<span class="com"># or: print(max(scores))</span></code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-style questions</h3>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      1. An array <code>Scores[1:20]</code> stores 20 game scores.
+      Write pseudocode to output the highest score and how many times it appears. <span class="badge">6 marks</span>
+    </summary>
+    <div class="mt-3">
+      <p class="text-sm opacity-80 mb-2">Mark-scheme moves: initialise max + count, loop once to find the max,
+      loop again (or use the same pass) to count occurrences, output both.</p>
+<pre><code>Max &larr; Scores[<span class="num">1</span>]
+<span class="kw">FOR</span> i &larr; <span class="num">2</span> <span class="kw">TO</span> <span class="num">20</span>
+  <span class="kw">IF</span> Scores[i] &gt; Max <span class="kw">THEN</span>
+    Max &larr; Scores[i]
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+
+Count &larr; <span class="num">0</span>
+<span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> <span class="num">20</span>
+  <span class="kw">IF</span> Scores[i] = Max <span class="kw">THEN</span>
+    Count &larr; Count + <span class="num">1</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+
+<span class="kw">OUTPUT</span> <span class="str">"Highest: "</span>, Max
+<span class="kw">OUTPUT</span> <span class="str">"Appears: "</span>, Count, <span class="str">" times"</span></code></pre>
+      <p class="text-xs opacity-70 mt-2">Marks: initialise Max [1] &middot; correct loop bounds 1&ndash;20 [1] &middot;
+      compare and update Max [1] &middot; initialise + increment Count [1] &middot; correct comparison [1] &middot;
+      sensible output of both values [1].</p>
+    </div>
+  </details>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      2. Write a Python function that takes a list of integers and returns the average. <span class="badge">4 marks</span>
+    </summary>
+    <div class="mt-3">
+<pre><code><span class="kw">def</span> <span class="fn">average</span>(nums):
+    <span class="kw">if</span> <span class="fn">len</span>(nums) == <span class="num">0</span>:           <span class="com"># avoid div-by-zero</span>
+        <span class="kw">return</span> <span class="num">0</span>
+    total = <span class="num">0</span>
+    <span class="kw">for</span> n <span class="kw">in</span> nums:
+        total += n
+    <span class="kw">return</span> total / <span class="fn">len</span>(nums)</code></pre>
+      <p class="text-xs opacity-70 mt-2">Marks: correct <code>def</code> with parameter [1] &middot; running total [1] &middot;
+      divide by length [1] &middot; <code>return</code> the value (not <code>print</code>) [1].</p>
+    </div>
+  </details>
+</section>
+
+<section id="sec-funcs" class="section">
+  <h2 class="text-2xl font-bold mb-1">Procedures and Functions</h2>
+  <p class="text-sm opacity-80 mb-4">
+    Procedures and functions are <strong>named, reusable blocks</strong> of code. They help with
+    <em>decomposition</em> &mdash; breaking a big problem into smaller, testable pieces.
+  </p>
+
+  <div class="flex flex-wrap gap-2 mb-3">
+    <span class="badge badge-purple">Decomposition</span>
+    <span class="badge badge-blue">Parameters</span>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Procedure vs Function</h3>
+  <table class="trace">
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>Procedure</th>
+        <th>Function</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Purpose</td>
+        <td>Performs an action (prints, modifies data, &hellip;).</td>
+        <td>Calculates and <strong>returns</strong> a value.</td>
+      </tr>
+      <tr>
+        <td>Returns a value?</td>
+        <td>No.</td>
+        <td>Yes &mdash; via <code>RETURN</code>.</td>
+      </tr>
+      <tr>
+        <td>Pseudocode keyword</td>
+        <td><code>PROCEDURE ... ENDPROCEDURE</code></td>
+        <td><code>FUNCTION ... RETURNS T ... ENDFUNCTION</code></td>
+      </tr>
+      <tr>
+        <td>How to call</td>
+        <td><code>CALL ProcName(args)</code></td>
+        <td>Use in an expression: <code>x &larr; FnName(args)</code></td>
+      </tr>
+      <tr>
+        <td>Python</td>
+        <td><code>def name(params):</code> &mdash; no <code>return</code> (or bare <code>return</code>).</td>
+        <td><code>def name(params):</code> with <code>return value</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Procedure example</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">PROCEDURE</span> PrintRow(Width : <span class="kw">INTEGER</span>)
+  <span class="kw">FOR</span> i &larr; <span class="num">1</span> <span class="kw">TO</span> Width
+    <span class="kw">OUTPUT</span> <span class="str">"*"</span>
+  <span class="kw">NEXT</span> i
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">CALL</span> PrintRow(<span class="num">5</span>)</code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code><span class="kw">def</span> <span class="fn">print_row</span>(width):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(width):
+        <span class="fn">print</span>(<span class="str">"*"</span>, end=<span class="str">""</span>)
+    <span class="fn">print</span>()        <span class="com"># move to next line</span>
+
+print_row(<span class="num">5</span>)</code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Function example</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">FUNCTION</span> Square(N : <span class="kw">INTEGER</span>) <span class="kw">RETURNS</span> <span class="kw">INTEGER</span>
+  <span class="kw">RETURN</span> N * N
+<span class="kw">ENDFUNCTION</span>
+
+Answer &larr; Square(<span class="num">7</span>)</code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code><span class="kw">def</span> <span class="fn">square</span>(n):
+    <span class="kw">return</span> n * n
+
+answer = square(<span class="num">7</span>)
+<span class="fn">print</span>(answer)   <span class="com"># 49</span></code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Parameters, arguments, and scope</h3>
+  <div class="card">
+    <ul class="list-disc pl-6 space-y-2">
+      <li>
+        <strong>Parameter</strong> &mdash; the variable in the function/procedure <em>definition</em>.
+        Example: <code>Width</code> in <code>PROCEDURE PrintRow(Width : INTEGER)</code>, or
+        <code>n</code> in <code>def square(n):</code>.
+      </li>
+      <li>
+        <strong>Argument</strong> &mdash; the actual <em>value</em> passed in when the procedure or function is called.
+        Example: the <code>5</code> in <code>CALL PrintRow(5)</code>, or the <code>7</code> in <code>square(7)</code>.
+      </li>
+      <li>
+        <strong>Local variable</strong> &mdash; declared inside the function/procedure.
+        Only exists while that block is running; it cannot be seen from outside.
+      </li>
+      <li>
+        <strong>Global variable</strong> &mdash; declared at the top level of the program; visible everywhere.
+        In Python you can <em>read</em> a global inside a function, but to <em>modify</em> it you must write
+        <code>global name</code> inside the function first.
+      </li>
+    </ul>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Why use procedures and functions?</h3>
+  <div class="card card-accent">
+    <ul class="list-disc pl-6 space-y-1">
+      <li><strong>Code reuse</strong> &mdash; write once, call many times.</li>
+      <li><strong>Easier to test</strong> individual pieces &mdash; supports <em>decomposition</em>.</li>
+      <li><strong>More readable</strong> &mdash; a meaningful name describes a block of logic at a glance.</li>
+      <li><strong>Less duplication</strong> &mdash; one place to fix a bug instead of many.</li>
+      <li><strong>Easier maintenance</strong> &mdash; changes are contained; less risk of breaking unrelated code.</li>
+      <li><strong>Team work</strong> &mdash; different programmers can write different procedures in parallel.</li>
+    </ul>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Multiple parameters &amp; multiple return values</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">FUNCTION</span> MinMax(A : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">10</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>)
+        <span class="kw">RETURNS</span> <span class="kw">INTEGER</span>
+  Lo &larr; A[<span class="num">1</span>]
+  Hi &larr; A[<span class="num">1</span>]
+  <span class="kw">FOR</span> i &larr; <span class="num">2</span> <span class="kw">TO</span> <span class="num">10</span>
+    <span class="kw">IF</span> A[i] &lt; Lo <span class="kw">THEN</span> Lo &larr; A[i] <span class="kw">ENDIF</span>
+    <span class="kw">IF</span> A[i] &gt; Hi <span class="kw">THEN</span> Hi &larr; A[i] <span class="kw">ENDIF</span>
+  <span class="kw">NEXT</span> i
+  <span class="kw">RETURN</span> Hi - Lo          <span class="com">// range</span>
+<span class="kw">ENDFUNCTION</span></code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python (returns a tuple of both)</div>
+<pre><code><span class="kw">def</span> <span class="fn">min_max</span>(a):
+    lo = a[<span class="num">0</span>]
+    hi = a[<span class="num">0</span>]
+    <span class="kw">for</span> n <span class="kw">in</span> a[<span class="num">1</span>:]:
+        <span class="kw">if</span> n &lt; lo: lo = n
+        <span class="kw">if</span> n &gt; hi: hi = n
+    <span class="kw">return</span> lo, hi      <span class="com"># tuple</span>
+
+low, high = min_max([<span class="num">3</span>, <span class="num">7</span>, <span class="num">1</span>, <span class="num">9</span>, <span class="num">4</span>])
+<span class="fn">print</span>(low, high, high - low)</code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-style questions</h3>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      1. Write a pseudocode function <code>CheckRange</code> that takes an integer <code>N</code>
+      and two integers <code>Low</code> and <code>High</code> as parameters, and returns
+      <code>TRUE</code> if <code>N</code> is between <code>Low</code> and <code>High</code> inclusive,
+      <code>FALSE</code> otherwise. <span class="badge">5 marks</span>
+    </summary>
+    <div class="mt-3">
+<pre><code><span class="kw">FUNCTION</span> CheckRange(N : <span class="kw">INTEGER</span>,
+                    Low : <span class="kw">INTEGER</span>,
+                    High : <span class="kw">INTEGER</span>) <span class="kw">RETURNS</span> <span class="kw">BOOLEAN</span>
+  <span class="kw">IF</span> N &gt;= Low <span class="kw">AND</span> N &lt;= High <span class="kw">THEN</span>
+    <span class="kw">RETURN</span> <span class="kw">TRUE</span>
+  <span class="kw">ELSE</span>
+    <span class="kw">RETURN</span> <span class="kw">FALSE</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">ENDFUNCTION</span></code></pre>
+      <p class="text-xs opacity-70 mt-2">Marks: <code>FUNCTION</code> header with three parameters [1] &middot;
+      <code>RETURNS BOOLEAN</code> [1] &middot; correct condition using <code>AND</code> [1] &middot;
+      inclusive comparison (<code>&gt;=</code> and <code>&lt;=</code>) [1] &middot;
+      returns <code>TRUE</code>/<code>FALSE</code> appropriately [1].</p>
+    </div>
+  </details>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      2. State three reasons why programmers use procedures and functions in their code. <span class="badge">3 marks</span>
+    </summary>
+    <div class="mt-3">
+      <ul class="list-disc pl-6 space-y-1">
+        <li><strong>Reusability</strong> &mdash; the same block can be called many times without rewriting.</li>
+        <li><strong>Decomposition / readability</strong> &mdash; breaks a big problem into small named pieces, easier to follow.</li>
+        <li><strong>Easier testing / maintenance</strong> &mdash; each procedure can be tested on its own; a fix in one place propagates.</li>
+      </ul>
+      <p class="text-xs opacity-70 mt-2">Any three sensible reasons gain a mark each. Other valid answers:
+      reduces duplication, supports teamwork, easier debugging.</p>
+    </div>
+  </details>
+</section>
+
+<section id="sec-files" class="section">
+  <h2 class="text-2xl font-bold mb-1">File Handling</h2>
+  <p class="text-sm opacity-80 mb-4">
+    Files give programs <em>persistent storage</em> &mdash; data survives after the program ends.
+    For Paper 2 you need to read, write, and append to plain text files in both pseudocode and Python.
+    Always remember to <strong>open &rarr; use &rarr; close</strong>.
+  </p>
+
+  <div class="flex flex-wrap gap-2 mb-3">
+    <span class="badge badge-purple">I/O</span>
+    <span class="badge badge-blue">Text files</span>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Reading a file</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">OPENFILE</span> <span class="str">"scores.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>
+<span class="kw">WHILE</span> <span class="kw">NOT</span> <span class="kw">EOF</span>(<span class="str">"scores.txt"</span>) <span class="kw">DO</span>
+  <span class="kw">READFILE</span> <span class="str">"scores.txt"</span>, Line
+  <span class="kw">OUTPUT</span> Line
+<span class="kw">ENDWHILE</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"scores.txt"</span></code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>f = <span class="fn">open</span>(<span class="str">"scores.txt"</span>, <span class="str">"r"</span>)
+<span class="kw">for</span> line <span class="kw">in</span> f:
+    <span class="fn">print</span>(line.strip())   <span class="com"># strip removes \n</span>
+f.close()</code></pre>
+    </div>
+  </div>
+  <p class="text-sm opacity-80 mt-2">
+    Idiomatic Python uses a <code>with</code> block (<code>with open("scores.txt") as f: ...</code>)
+    which auto-closes the file even on error. IGCSE mark schemes accept either, but typically expect
+    explicit <code>open</code> and <code>close</code>.
+  </p>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Writing to a file</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">OPENFILE</span> <span class="str">"log.txt"</span> <span class="kw">FOR</span> <span class="kw">WRITE</span>
+<span class="kw">WRITEFILE</span> <span class="str">"log.txt"</span>, <span class="str">"Run complete"</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"log.txt"</span></code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>f = <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"w"</span>)
+f.write(<span class="str">"Run complete\n"</span>)   <span class="com"># add \n yourself!</span>
+f.close()</code></pre>
+    </div>
+  </div>
+  <p class="text-sm opacity-80 mt-2">
+    Opening with <code>"w"</code> <strong>overwrites</strong> any existing file with the same name.
+    Be careful &mdash; data already in the file is lost.
+  </p>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Appending</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">OPENFILE</span> <span class="str">"log.txt"</span> <span class="kw">FOR</span> <span class="kw">APPEND</span>
+<span class="kw">WRITEFILE</span> <span class="str">"log.txt"</span>, <span class="str">"Another entry"</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"log.txt"</span></code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>f = <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>)   <span class="com"># a = append</span>
+f.write(<span class="str">"Another entry\n"</span>)
+f.close()</code></pre>
+    </div>
+  </div>
+  <p class="text-sm opacity-80 mt-2">
+    <code>"a"</code> mode adds to the end of the file and creates it if missing &mdash; existing data is kept.
+  </p>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Worked example: sum numbers from a file</h3>
+  <p class="text-sm opacity-80 mb-2">
+    File <code>data.txt</code> has one integer per line. Read them all and output the total.
+  </p>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <div class="font-semibold mb-2">Pseudocode</div>
+<pre><code><span class="kw">OPENFILE</span> <span class="str">"data.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>
+Total &larr; <span class="num">0</span>
+<span class="kw">WHILE</span> <span class="kw">NOT</span> <span class="kw">EOF</span>(<span class="str">"data.txt"</span>) <span class="kw">DO</span>
+  <span class="kw">READFILE</span> <span class="str">"data.txt"</span>, Num
+  Total &larr; Total + Num
+<span class="kw">ENDWHILE</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"data.txt"</span>
+<span class="kw">OUTPUT</span> Total</code></pre>
+    </div>
+    <div class="card">
+      <div class="font-semibold mb-2">Python</div>
+<pre><code>total = <span class="num">0</span>
+f = <span class="fn">open</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>)
+<span class="kw">for</span> line <span class="kw">in</span> f:
+    total += <span class="fn">int</span>(line.strip())   <span class="com"># cast string to int</span>
+f.close()
+<span class="fn">print</span>(total)</code></pre>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Common file errors</h3>
+  <div class="card card-accent">
+    <ul class="list-disc pl-6 space-y-2">
+      <li>
+        <strong>Forgetting to close the file.</strong>
+        Data written may stay in a buffer and never reach disk. Always <code>f.close()</code>
+        (or use a <code>with</code> block).
+      </li>
+      <li>
+        <strong>Reading a missing file.</strong>
+        <code>open("missing.txt", "r")</code> raises <code>FileNotFoundError</code>.
+        Check existence first or wrap in <code>try / except</code>.
+      </li>
+      <li>
+        <strong>Forgetting <code>\n</code> when writing.</strong>
+        Python's <code>write()</code> does not auto-append a newline &mdash; without it everything ends up on one line.
+      </li>
+      <li>
+        <strong>Reading numbers without casting.</strong>
+        <code>line</code> is a string. <code>"5" + 3</code> raises <code>TypeError</code>.
+        Use <code>int(line.strip())</code> or <code>float(line.strip())</code>.
+      </li>
+      <li>
+        <strong>Opening with <code>"w"</code> when you meant <code>"a"</code>.</strong>
+        <code>"w"</code> wipes existing content &mdash; a frequent and painful mistake.
+      </li>
+    </ul>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-style questions</h3>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      1. A text file <code>grades.txt</code> contains one mark per line.
+      Write a Python program that reads all marks and outputs the average. <span class="badge">6 marks</span>
+    </summary>
+    <div class="mt-3">
+<pre><code>f = <span class="fn">open</span>(<span class="str">"grades.txt"</span>, <span class="str">"r"</span>)
+total = <span class="num">0</span>
+count = <span class="num">0</span>
+<span class="kw">for</span> line <span class="kw">in</span> f:
+    total += <span class="fn">int</span>(line.strip())   <span class="com"># cast each mark</span>
+    count += <span class="num">1</span>
+f.close()
+
+<span class="kw">if</span> count &gt; <span class="num">0</span>:
+    average = total / count
+    <span class="fn">print</span>(<span class="str">"Average:"</span>, average)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"No data"</span>)</code></pre>
+      <p class="text-xs opacity-70 mt-2">Marks: open file for reading [1] &middot; loop through every line [1] &middot;
+      cast string to int [1] &middot; running total + counter [1] &middot; close the file [1] &middot;
+      output total divided by count [1].</p>
+    </div>
+  </details>
+
+  <details class="card mt-2">
+    <summary class="font-semibold cursor-pointer">
+      2. Write pseudocode that reads names from a file <code>friends.txt</code> and writes them
+      in reverse order to <code>reversed.txt</code>. <span class="badge">5 marks</span>
+    </summary>
+    <div class="mt-3">
+<pre><code><span class="kw">DECLARE</span> Names : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">100</span>] <span class="kw">OF</span> <span class="kw">STRING</span>
+Count &larr; <span class="num">0</span>
+
+<span class="com">// 1. Read all names into the array</span>
+<span class="kw">OPENFILE</span> <span class="str">"friends.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>
+<span class="kw">WHILE</span> <span class="kw">NOT</span> <span class="kw">EOF</span>(<span class="str">"friends.txt"</span>) <span class="kw">DO</span>
+  Count &larr; Count + <span class="num">1</span>
+  <span class="kw">READFILE</span> <span class="str">"friends.txt"</span>, Names[Count]
+<span class="kw">ENDWHILE</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"friends.txt"</span>
+
+<span class="com">// 2. Write them out in reverse</span>
+<span class="kw">OPENFILE</span> <span class="str">"reversed.txt"</span> <span class="kw">FOR</span> <span class="kw">WRITE</span>
+<span class="kw">FOR</span> i &larr; Count <span class="kw">TO</span> <span class="num">1</span> <span class="kw">STEP</span> -<span class="num">1</span>
+  <span class="kw">WRITEFILE</span> <span class="str">"reversed.txt"</span>, Names[i]
+<span class="kw">NEXT</span> i
+<span class="kw">CLOSEFILE</span> <span class="str">"reversed.txt"</span></code></pre>
+      <p class="text-xs opacity-70 mt-2">Marks: open input for read + counter logic [1] &middot;
+      read every line into the array [1] &middot; open output file for write [1] &middot;
+      loop from Count down to 1 (STEP -1) [1] &middot; write each name and close both files [1].</p>
+    </div>
+  </details>
+</section>

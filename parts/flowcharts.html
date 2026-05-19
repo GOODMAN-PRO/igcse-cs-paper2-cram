@@ -1,0 +1,596 @@
+<section id="sec-flowcharts" class="section">
+  <h2 class="text-2xl font-bold mb-1">Flowcharts</h2>
+  <p class="text-zinc-400 mb-5">Flowcharts visualise algorithms during the <span class="text-purple-300 font-semibold">Design</span> stage — every box, arrow and diamond maps to a step in your pseudocode.</p>
+
+  <!-- ============================================================= -->
+  <!-- 1. SYMBOLS REFERENCE CARD                                     -->
+  <!-- ============================================================= -->
+  <div class="card mb-5">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Symbols Reference Card</h3>
+      <span class="badge badge-purple">6 shapes — memorise them</span>
+    </div>
+    <p class="text-sm text-zinc-400 mb-4">Each shape has one job. Use the right shape or lose easy marks.</p>
+
+    <div class="grid grid-cols-2 gap-4 text-sm">
+
+      <!-- Terminator -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 rounded-full bg-purple-900/40 border border-purple-700 flex items-center justify-center text-xs font-semibold shrink-0">START / STOP</div>
+        <div>
+          <div class="font-semibold">Terminator</div>
+          <div class="text-zinc-400">Oval / rounded rectangle. Every flowchart begins with <span class="mono">START</span> and ends with <span class="mono">STOP</span>.</div>
+        </div>
+      </div>
+
+      <!-- Process -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 bg-green-900/40 border border-green-700 flex items-center justify-center text-xs font-semibold shrink-0">Total ← 0</div>
+        <div>
+          <div class="font-semibold">Process</div>
+          <div class="text-zinc-400">Rectangle. Used for assignment or calculation, e.g. <span class="mono">Total ← Total + N</span>.</div>
+        </div>
+      </div>
+
+      <!-- Input/Output -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 bg-blue-900/40 border border-blue-700 flex items-center justify-center text-xs font-semibold shrink-0" style="clip-path: polygon(15% 0,100% 0,85% 100%,0 100%)">INPUT / OUTPUT</div>
+        <div>
+          <div class="font-semibold">Input / Output</div>
+          <div class="text-zinc-400">Parallelogram. Used for <span class="mono">INPUT X</span> and <span class="mono">OUTPUT Y</span>.</div>
+        </div>
+      </div>
+
+      <!-- Decision -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 flex items-center justify-center shrink-0">
+          <div class="w-10 h-10 bg-amber-900/40 border border-amber-700 flex items-center justify-center text-[10px]" style="transform: rotate(45deg);">
+            <span style="transform: rotate(-45deg);">X &gt; 5?</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold">Decision</div>
+          <div class="text-zinc-400">Diamond. Contains a condition — splits flow into exactly <strong>two paths</strong> (Yes/No or True/False).</div>
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 flex items-center justify-center shrink-0">
+          <div class="w-9 h-9 rounded-full bg-zinc-700 border border-zinc-500 flex items-center justify-center text-sm font-bold">A</div>
+        </div>
+        <div>
+          <div class="font-semibold">Connector</div>
+          <div class="text-zinc-400">Small circle, labelled A, B, C… Joins flowchart sections (or continues onto another page).</div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex items-center gap-4">
+        <div class="w-28 h-12 flex items-center justify-center text-3xl text-zinc-300 shrink-0">→</div>
+        <div>
+          <div class="font-semibold">Arrow / Flow line</div>
+          <div class="text-zinc-400">Shows direction. Usually top → bottom and left → right. Loops go back upwards.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-4 p-3 rounded-lg bg-purple-950/30 border border-purple-900/60 text-xs text-purple-200">
+      <strong>Exam tip:</strong> if you draw the wrong shape (e.g. a rectangle around <span class="mono">INPUT N</span>) you usually lose the symbol mark even if the logic is right.
+    </div>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- 2. WORKED EXAMPLES — 10 FLOWCHARTS                            -->
+  <!-- ============================================================= -->
+  <h3 class="text-lg font-semibold mb-3">10 Worked examples</h3>
+  <p class="text-sm text-zinc-400 mb-4">Study the diagram first, then expand the pseudocode to check the mapping shape-by-shape.</p>
+
+  <div class="grid grid-cols-2 gap-4 mb-5">
+
+    <!-- ====== 1. Average of 10 numbers ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">1. Average of 10 numbers</h3>
+        <span class="badge badge-blue">Count-controlled loop</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Input ten numbers, accumulate the total, then output the mean.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[Total ← 0]
+  B --> C[Count ← 1]
+  C --> D{Count &lt;= 10?}
+  D -- Yes --> E[/INPUT Number/]
+  E --> F[Total ← Total + Number]
+  F --> G[Count ← Count + 1]
+  G --> D
+  D -- No --> H[Average ← Total / 10]
+  H --> I[/OUTPUT Average/]
+  I --> J([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> Total, Number, Count, Average : <span class="kw">INTEGER</span>
+Total ← <span class="num">0</span>
+<span class="kw">FOR</span> Count ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Number
+  Total ← Total + Number
+<span class="kw">NEXT</span> Count
+Average ← Total / <span class="num">10</span>
+<span class="kw">OUTPUT</span> Average</pre>
+      </details>
+    </div>
+
+    <!-- ====== 2. Validated password ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">2. Validated password</h3>
+        <span class="badge badge-amber">Post-condition loop</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Keep asking until the user types the correct password <span class="mono">"secret"</span>.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT Password/]
+  B --> C{Password = 'secret'?}
+  C -- No --> D[/OUTPUT 'Incorrect, try again'/]
+  D --> B
+  C -- Yes --> E[/OUTPUT 'Access granted'/]
+  E --> F([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> Password : <span class="kw">STRING</span>
+<span class="kw">REPEAT</span>
+  <span class="kw">INPUT</span> Password
+  <span class="kw">IF</span> Password &lt;&gt; <span class="str">"secret"</span> <span class="kw">THEN</span>
+    <span class="kw">OUTPUT</span> <span class="str">"Incorrect, try again"</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">UNTIL</span> Password = <span class="str">"secret"</span>
+<span class="kw">OUTPUT</span> <span class="str">"Access granted"</span></pre>
+      </details>
+    </div>
+
+    <!-- ====== 3. Linear search ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">3. Linear search</h3>
+        <span class="badge badge-green">Flag + loop</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Search an array <span class="mono">List[1..10]</span> for <span class="mono">Target</span>; stop early if found.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT Target/]
+  B --> C[Found ← False]
+  C --> D[Index ← 1]
+  D --> E{Index &lt;= 10 AND Found = False?}
+  E -- Yes --> F{List[Index] = Target?}
+  F -- Yes --> G[Found ← True]
+  G --> H[Position ← Index]
+  H --> I[Index ← Index + 1]
+  F -- No --> I
+  I --> E
+  E -- No --> J{Found = True?}
+  J -- Yes --> K[/OUTPUT Position/]
+  J -- No --> L[/OUTPUT 'Not found'/]
+  K --> M([STOP])
+  L --> M
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> List : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">10</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Target, Index, Position : <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Found : <span class="kw">BOOLEAN</span>
+<span class="kw">INPUT</span> Target
+Found ← <span class="kw">FALSE</span>
+Index ← <span class="num">1</span>
+<span class="kw">WHILE</span> Index &lt;= <span class="num">10</span> <span class="kw">AND</span> Found = <span class="kw">FALSE</span>
+  <span class="kw">IF</span> List[Index] = Target <span class="kw">THEN</span>
+    Found ← <span class="kw">TRUE</span>
+    Position ← Index
+  <span class="kw">ENDIF</span>
+  Index ← Index + <span class="num">1</span>
+<span class="kw">ENDWHILE</span>
+<span class="kw">IF</span> Found = <span class="kw">TRUE</span> <span class="kw">THEN</span> <span class="kw">OUTPUT</span> Position
+<span class="kw">ELSE</span> <span class="kw">OUTPUT</span> <span class="str">"Not found"</span>
+<span class="kw">ENDIF</span></pre>
+      </details>
+    </div>
+
+    <!-- ====== 4. Largest of three ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">4. Largest of three numbers</h3>
+        <span class="badge badge-purple">Nested IF</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Read three values; output the largest using two comparisons.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT A, B, C/]
+  B --> D{A &gt;= B?}
+  D -- Yes --> E{A &gt;= C?}
+  D -- No --> F{B &gt;= C?}
+  E -- Yes --> G[Largest ← A]
+  E -- No --> H[Largest ← C]
+  F -- Yes --> I[Largest ← B]
+  F -- No --> H
+  G --> J[/OUTPUT Largest/]
+  H --> J
+  I --> J
+  J --> K([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> A, B, C, Largest : <span class="kw">INTEGER</span>
+<span class="kw">INPUT</span> A, B, C
+<span class="kw">IF</span> A &gt;= B <span class="kw">THEN</span>
+  <span class="kw">IF</span> A &gt;= C <span class="kw">THEN</span> Largest ← A
+  <span class="kw">ELSE</span> Largest ← C
+  <span class="kw">ENDIF</span>
+<span class="kw">ELSE</span>
+  <span class="kw">IF</span> B &gt;= C <span class="kw">THEN</span> Largest ← B
+  <span class="kw">ELSE</span> Largest ← C
+  <span class="kw">ENDIF</span>
+<span class="kw">ENDIF</span>
+<span class="kw">OUTPUT</span> Largest</pre>
+      </details>
+    </div>
+
+    <!-- ====== 5. Count even numbers ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">5. Count evens in 20 inputs</h3>
+        <span class="badge badge-blue">MOD operator</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Read 20 numbers; count how many are even using <span class="mono">N MOD 2 = 0</span>.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[Count ← 0]
+  B --> C[I ← 1]
+  C --> D{I &lt;= 20?}
+  D -- Yes --> E[/INPUT N/]
+  E --> F{N MOD 2 = 0?}
+  F -- Yes --> G[Count ← Count + 1]
+  G --> H[I ← I + 1]
+  F -- No --> H
+  H --> D
+  D -- No --> J[/OUTPUT Count/]
+  J --> K([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> N, Count, I : <span class="kw">INTEGER</span>
+Count ← <span class="num">0</span>
+<span class="kw">FOR</span> I ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">20</span>
+  <span class="kw">INPUT</span> N
+  <span class="kw">IF</span> N <span class="kw">MOD</span> <span class="num">2</span> = <span class="num">0</span> <span class="kw">THEN</span>
+    Count ← Count + <span class="num">1</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> I
+<span class="kw">OUTPUT</span> Count</pre>
+      </details>
+    </div>
+
+    <!-- ====== 6. Factorial ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">6. Factorial of N</h3>
+        <span class="badge badge-amber">Accumulating product</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Input N, compute <span class="mono">N! = 1×2×3×…×N</span>. Start at 1 (multiplicative identity).</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT N/]
+  B --> C[Fact ← 1]
+  C --> D[I ← 1]
+  D --> E{I &lt;= N?}
+  E -- Yes --> F[Fact ← Fact * I]
+  F --> G[I ← I + 1]
+  G --> E
+  E -- No --> H[/OUTPUT Fact/]
+  H --> J([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> N, Fact, I : <span class="kw">INTEGER</span>
+<span class="kw">INPUT</span> N
+Fact ← <span class="num">1</span>
+<span class="kw">FOR</span> I ← <span class="num">1</span> <span class="kw">TO</span> N
+  Fact ← Fact * I
+<span class="kw">NEXT</span> I
+<span class="kw">OUTPUT</span> Fact</pre>
+      </details>
+    </div>
+
+    <!-- ====== 7. Times table ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">7. Times table for N</h3>
+        <span class="badge badge-green">FOR loop</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Input N; output the lines <span class="mono">1×N</span> through <span class="mono">12×N</span>.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT N/]
+  B --> C[I ← 1]
+  C --> D{I &lt;= 12?}
+  D -- Yes --> E[Result ← I * N]
+  E --> F[/OUTPUT I, ' x ', N, ' = ', Result/]
+  F --> G[I ← I + 1]
+  G --> D
+  D -- No --> H([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> N, I, Result : <span class="kw">INTEGER</span>
+<span class="kw">INPUT</span> N
+<span class="kw">FOR</span> I ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">12</span>
+  Result ← I * N
+  <span class="kw">OUTPUT</span> I, <span class="str">" x "</span>, N, <span class="str">" = "</span>, Result
+<span class="kw">NEXT</span> I</pre>
+      </details>
+    </div>
+
+    <!-- ====== 8. Temperature converter ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">8. Celsius → Fahrenheit (validated)</h3>
+        <span class="badge badge-red">Range check</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Input must be ≥ −273°C (absolute zero). Re-prompt until valid.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT C/]
+  B --> D{C &gt;= -273?}
+  D -- No --> E[/OUTPUT 'Invalid temperature'/]
+  E --> B
+  D -- Yes --> F[F ← C * 9 / 5 + 32]
+  F --> G[/OUTPUT F/]
+  G --> H([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> C, F : <span class="kw">REAL</span>
+<span class="kw">REPEAT</span>
+  <span class="kw">INPUT</span> C
+  <span class="kw">IF</span> C &lt; -<span class="num">273</span> <span class="kw">THEN</span>
+    <span class="kw">OUTPUT</span> <span class="str">"Invalid temperature"</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">UNTIL</span> C &gt;= -<span class="num">273</span>
+F ← C * <span class="num">9</span> / <span class="num">5</span> + <span class="num">32</span>
+<span class="kw">OUTPUT</span> F</pre>
+      </details>
+    </div>
+
+    <!-- ====== 9. ATM withdrawal ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">9. ATM withdrawal</h3>
+        <span class="badge badge-red">Compound validation</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">Amount must be > 0 and ≤ balance. If valid, deduct and show new balance.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT Balance/]
+  B --> C[/INPUT Amount/]
+  C --> D{Amount &gt; 0?}
+  D -- No --> E[/OUTPUT 'Amount must be positive'/]
+  E --> Z([STOP])
+  D -- Yes --> F{Amount &lt;= Balance?}
+  F -- No --> G[/OUTPUT 'Insufficient funds'/]
+  G --> Z
+  F -- Yes --> H[Balance ← Balance - Amount]
+  H --> I[/OUTPUT 'New balance: ', Balance/]
+  I --> Z
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> Balance, Amount : <span class="kw">REAL</span>
+<span class="kw">INPUT</span> Balance, Amount
+<span class="kw">IF</span> Amount &lt;= <span class="num">0</span> <span class="kw">THEN</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Amount must be positive"</span>
+<span class="kw">ELSE</span>
+  <span class="kw">IF</span> Amount &gt; Balance <span class="kw">THEN</span>
+    <span class="kw">OUTPUT</span> <span class="str">"Insufficient funds"</span>
+  <span class="kw">ELSE</span>
+    Balance ← Balance - Amount
+    <span class="kw">OUTPUT</span> <span class="str">"New balance: "</span>, Balance
+  <span class="kw">ENDIF</span>
+<span class="kw">ENDIF</span></pre>
+      </details>
+    </div>
+
+    <!-- ====== 10. Bubble sort pass ====== -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">10. Bubble sort — one outer pass</h3>
+        <span class="badge badge-purple">Swap logic</span>
+      </div>
+      <p class="text-sm text-zinc-400 mb-3">A single sweep over <span class="mono">List[1..5]</span> swapping adjacent items if out of order.</p>
+      <div class="mermaid">
+flowchart TD
+  A([START]) --> B[I ← 1]
+  B --> C{I &lt;= 4?}
+  C -- Yes --> D{List[I] &gt; List[I+1]?}
+  D -- Yes --> E[Temp ← List[I]]
+  E --> F[List[I] ← List[I+1]]
+  F --> G[List[I+1] ← Temp]
+  G --> H[I ← I + 1]
+  D -- No --> H
+  H --> C
+  C -- No --> J[/OUTPUT List/]
+  J --> K([STOP])
+      </div>
+      <details class="mt-3">
+        <summary class="cursor-pointer text-sm text-purple-300 hover:text-purple-200">Show equivalent pseudocode</summary>
+<pre class="mt-2"><span class="kw">DECLARE</span> List : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">5</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> I, Temp : <span class="kw">INTEGER</span>
+<span class="kw">FOR</span> I ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">4</span>
+  <span class="kw">IF</span> List[I] &gt; List[I+<span class="num">1</span>] <span class="kw">THEN</span>
+    Temp ← List[I]
+    List[I] ← List[I+<span class="num">1</span>]
+    List[I+<span class="num">1</span>] ← Temp
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> I
+<span class="kw">OUTPUT</span> List</pre>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- 3. HOW TO DRAW + HOW TO READ                                  -->
+  <!-- ============================================================= -->
+  <div class="grid grid-cols-2 gap-4 mb-5">
+
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">How to draw a flowchart</h3>
+        <span class="badge badge-purple">Exam method</span>
+      </div>
+      <ul class="text-sm text-zinc-300 space-y-2 mt-3">
+        <li>· Always begin with <span class="mono text-purple-300">START</span> and end with <span class="mono text-purple-300">STOP</span> — both in <strong>ovals</strong>.</li>
+        <li>· Use <strong>arrows</strong> to show direction. Default flow is <em>top → bottom</em>, <em>left → right</em>; loops curve back upwards.</li>
+        <li>· Every <strong>decision diamond</strong> splits into exactly <strong>two paths</strong>, labelled Yes/No or True/False.</li>
+        <li>· <strong>Inputs and outputs</strong> always use the <strong>parallelogram</strong>. Don't put them in a rectangle.</li>
+        <li>· <strong>Calculations and assignments</strong> use the <strong>rectangle</strong>: <span class="mono">Total ← Total + N</span>.</li>
+        <li>· Keep symbols roughly the same size and aligned on a grid — examiners mark for clarity.</li>
+        <li>· Plan on paper first; rub out before committing — every line should land at one shape.</li>
+        <li>· Use <strong>connectors</strong> (A, B…) only if your diagram is large and arrows would cross the page.</li>
+      </ul>
+    </div>
+
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">How to read a flowchart</h3>
+        <span class="badge badge-blue">Trace method</span>
+      </div>
+      <ul class="text-sm text-zinc-300 space-y-2 mt-3">
+        <li>· Treat it like a <strong>trace table</strong> — start at <span class="mono text-purple-300">START</span> and follow the arrows.</li>
+        <li>· When you reach a <strong>decision diamond</strong>, evaluate the condition with current values and follow the matching label.</li>
+        <li>· Each <strong>process box</strong> updates a variable — write the new value next to its column in your trace.</li>
+        <li>· Each <strong>I/O parallelogram</strong>: take the next input value from the question, or record the output in your OUTPUT column.</li>
+        <li>· Loops repeat the arrows back upwards — keep going around until the decision condition fails.</li>
+        <li>· Stop only when you reach <span class="mono text-purple-300">STOP</span>. Then list the final outputs in order.</li>
+      </ul>
+      <div class="mt-4 p-3 rounded-lg bg-blue-950/30 border border-blue-900/60 text-xs text-blue-200">
+        <strong>Tip:</strong> mark each arrow you've travelled with a tick — it stops you re-entering a loop body in the wrong place.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- 4. EXAM-STYLE QUESTIONS                                       -->
+  <!-- ============================================================= -->
+  <div class="card mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Exam-style questions</h3>
+      <span class="badge badge-amber">Try first, then check</span>
+    </div>
+    <p class="text-sm text-zinc-400 mb-4">Cover the answer, attempt on paper, then expand.</p>
+
+    <!-- Q1 -->
+    <details class="mb-3 p-3 rounded-lg border border-zinc-800 bg-zinc-900/40">
+      <summary class="cursor-pointer font-semibold text-sm">
+        Q1. Draw a flowchart that inputs a number and outputs <span class="mono">'positive'</span>, <span class="mono">'negative'</span> or <span class="mono">'zero'</span>.
+        <span class="badge badge-purple ml-2">6 marks</span>
+      </summary>
+      <div class="mt-3 text-sm text-zinc-300">
+        <p class="mb-2 text-zinc-400"><strong>Mark scheme highlights</strong> — 1 mark each for: START/STOP ovals · INPUT parallelogram · first decision (<span class="mono">N &gt; 0</span>) · second decision (<span class="mono">N &lt; 0</span>) · three correct OUTPUTs · arrows joining all three branches to STOP.</p>
+        <div class="mermaid">
+flowchart TD
+  A([START]) --> B[/INPUT N/]
+  B --> C{N &gt; 0?}
+  C -- Yes --> D[/OUTPUT 'positive'/]
+  C -- No --> E{N &lt; 0?}
+  E -- Yes --> F[/OUTPUT 'negative'/]
+  E -- No --> G[/OUTPUT 'zero'/]
+  D --> H([STOP])
+  F --> H
+  G --> H
+        </div>
+      </div>
+    </details>
+
+    <!-- Q2 -->
+    <details class="mb-3 p-3 rounded-lg border border-zinc-800 bg-zinc-900/40">
+      <summary class="cursor-pointer font-semibold text-sm">
+        Q2. Describe what this flowchart does.
+        <span class="badge badge-purple ml-2">3 marks</span>
+      </summary>
+      <div class="mt-3 text-sm text-zinc-300">
+        <div class="mermaid">
+flowchart TD
+  A([START]) --> B[Largest ← 0]
+  B --> C[I ← 1]
+  C --> D{I &lt;= 10?}
+  D -- Yes --> E[/INPUT N/]
+  E --> F{N &gt; Largest?}
+  F -- Yes --> G[Largest ← N]
+  G --> H[I ← I + 1]
+  F -- No --> H
+  H --> D
+  D -- No --> J[/OUTPUT Largest/]
+  J --> K([STOP])
+        </div>
+        <div class="mt-3 p-3 rounded-lg bg-green-950/30 border border-green-900/60">
+          <p class="font-semibold text-green-200 mb-1">Model answer</p>
+          <ul class="space-y-1 text-zinc-200">
+            <li>· The flowchart inputs <strong>10 numbers</strong> in turn. <span class="text-zinc-400">(1)</span></li>
+            <li>· It keeps track of the <strong>largest value seen so far</strong> in the variable <span class="mono">Largest</span>, updating it whenever a bigger number is read. <span class="text-zinc-400">(1)</span></li>
+            <li>· After all 10 numbers it <strong>outputs the largest</strong> number. <span class="text-zinc-400">(1)</span></li>
+          </ul>
+          <p class="text-xs text-zinc-400 mt-2"><em>Caveat:</em> initialising <span class="mono">Largest ← 0</span> would fail if all inputs are negative — a better version reads the first number into <span class="mono">Largest</span> before the loop. Mentioning this scores no extra marks but shows understanding.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- Q3 -->
+    <details class="mb-1 p-3 rounded-lg border border-zinc-800 bg-zinc-900/40">
+      <summary class="cursor-pointer font-semibold text-sm">
+        Q3. Convert this flowchart to pseudocode.
+        <span class="badge badge-purple ml-2">5 marks</span>
+      </summary>
+      <div class="mt-3 text-sm text-zinc-300">
+        <p class="mb-2 text-zinc-400">The flowchart inputs 30 marks, counts how many are a pass (≥ 50), and outputs the count.</p>
+        <div class="mermaid">
+flowchart TD
+  A([START]) --> B[Pass ← 0]
+  B --> C[I ← 1]
+  C --> D{I &lt;= 30?}
+  D -- Yes --> E[/INPUT Mark/]
+  E --> F{Mark &gt;= 50?}
+  F -- Yes --> G[Pass ← Pass + 1]
+  G --> H[I ← I + 1]
+  F -- No --> H
+  H --> D
+  D -- No --> J[/OUTPUT Pass/]
+  J --> K([STOP])
+        </div>
+        <div class="mt-3 p-3 rounded-lg bg-green-950/30 border border-green-900/60">
+          <p class="font-semibold text-green-200 mb-2">Model pseudocode answer</p>
+<pre><span class="kw">DECLARE</span> Mark, Pass, I : <span class="kw">INTEGER</span>
+Pass ← <span class="num">0</span>                          <span class="com">// 1 mark — initialisation</span>
+<span class="kw">FOR</span> I ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">30</span>                  <span class="com">// 1 mark — count-controlled loop</span>
+  <span class="kw">INPUT</span> Mark                     <span class="com">// 1 mark — input inside loop</span>
+  <span class="kw">IF</span> Mark &gt;= <span class="num">50</span> <span class="kw">THEN</span>            <span class="com">// 1 mark — correct condition</span>
+    Pass ← Pass + <span class="num">1</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> I
+<span class="kw">OUTPUT</span> Pass                       <span class="com">// 1 mark — output outside loop</span></pre>
+          <p class="text-xs text-zinc-400 mt-2"><strong>Common slips:</strong> putting <span class="mono">OUTPUT</span> inside the loop, forgetting <span class="mono">ENDIF</span>/<span class="mono">NEXT</span>, or initialising <span class="mono">Pass</span> inside the loop (resets every iteration).</p>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- Final reminder strip -->
+  <div class="card card-accent">
+    <div class="flex items-start gap-3">
+      <span class="badge badge-amber mt-1">Last-minute</span>
+      <p class="text-sm text-zinc-300"><strong>Six shapes only:</strong> oval (start/stop), rectangle (process), parallelogram (I/O), diamond (decision), circle (connector), arrow (flow). Wrong shape = lost mark. Every flowchart you draw in the exam should reach a <span class="mono">STOP</span> — no dead ends, no unlabelled arrows out of diamonds.</p>
+    </div>
+  </div>
+
+</section>

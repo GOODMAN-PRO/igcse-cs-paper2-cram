@@ -1,0 +1,626 @@
+<section id="sec-pseudocode" class="section">
+  <h2 class="text-2xl font-bold mb-1">Pseudocode Reference (Cambridge style)</h2>
+  <p class="text-sm mb-4">The exact Cambridge IGCSE 0478/0984 pseudocode conventions — keywords, syntax, and worked patterns you can lift straight into Paper 2 answers.</p>
+
+  <div class="flex flex-wrap gap-2 mb-4">
+    <span class="badge badge-purple">UPPERCASE keywords</span>
+    <span class="badge badge-blue">PascalCase identifiers</span>
+    <span class="badge badge-green">Arrays start at 1</span>
+    <span class="badge badge-amber">Use ← for assignment</span>
+    <span class="badge badge-red">Indent loop &amp; IF bodies</span>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- 1. Variables and Constants -->
+    <div class="card card-accent">
+      <h3 class="font-semibold mb-2">1. Variables &amp; Constants</h3>
+      <p class="text-sm mb-2">Declare every variable before use with <span class="mono">DECLARE</span>. Use <span class="mono">←</span> for assignment, never <span class="mono">=</span>. Constants are fixed at declaration.</p>
+<pre><span class="com">// Declaration: DECLARE name : TYPE</span>
+<span class="kw">DECLARE</span> Counter : <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Price : <span class="kw">REAL</span>
+<span class="kw">DECLARE</span> Initial : <span class="kw">CHAR</span>
+<span class="kw">DECLARE</span> Name : <span class="kw">STRING</span>
+<span class="kw">DECLARE</span> Found : <span class="kw">BOOLEAN</span>
+<span class="kw">DECLARE</span> Birthday : <span class="kw">DATE</span>
+
+<span class="com">// Assignment uses the left arrow</span>
+Counter <span class="kw">←</span> <span class="num">0</span>
+Price <span class="kw">←</span> <span class="num">4.99</span>
+Initial <span class="kw">←</span> <span class="str">'A'</span>
+Name <span class="kw">←</span> <span class="str">"Alex"</span>
+Found <span class="kw">←</span> <span class="kw">FALSE</span>
+Birthday <span class="kw">←</span> <span class="num">19</span>/<span class="num">05</span>/<span class="num">2026</span>
+
+<span class="com">// Constants — value fixed at declaration</span>
+<span class="kw">CONSTANT</span> Pi = <span class="num">3.14159</span>
+<span class="kw">CONSTANT</span> MaxSize = <span class="num">100</span>
+<span class="kw">CONSTANT</span> Greeting = <span class="str">"Hello"</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-amber">Tip</span> Identifiers are case-sensitive in markschemes — stay consistent.</p>
+    </div>
+
+    <!-- 2. Input / Output -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">2. Input / Output</h3>
+      <p class="text-sm mb-2"><span class="mono">INPUT</span> reads from the user; <span class="mono">OUTPUT</span> writes to the screen. Strings are joined with commas in OUTPUT lists.</p>
+<pre><span class="com">// Plain input</span>
+<span class="kw">INPUT</span> Name
+<span class="kw">INPUT</span> Age
+
+<span class="com">// Input with a prompt (Cambridge accepts both forms)</span>
+<span class="kw">OUTPUT</span> <span class="str">"Enter your name: "</span>
+<span class="kw">INPUT</span> Name
+
+<span class="com">// Simple output</span>
+<span class="kw">OUTPUT</span> Name
+<span class="kw">OUTPUT</span> <span class="str">"The answer is "</span>, Answer
+
+<span class="com">// Multi-item output (comma-separated list)</span>
+<span class="kw">OUTPUT</span> <span class="str">"Hello, "</span>, Name, <span class="str">"!"</span>
+<span class="kw">OUTPUT</span> <span class="str">"Score: "</span>, Score, <span class="str">" out of "</span>, Total
+
+<span class="com">// Worked snippet</span>
+<span class="kw">OUTPUT</span> <span class="str">"Enter age: "</span>
+<span class="kw">INPUT</span> Age
+<span class="kw">OUTPUT</span> <span class="str">"You are "</span>, Age, <span class="str">" years old."</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-blue">Note</span> <span class="mono">OUTPUT</span> automatically moves to a new line at the end.</p>
+    </div>
+
+    <!-- 3. Selection -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">3. Selection (IF &amp; CASE)</h3>
+      <p class="text-sm mb-2">Two structures: <span class="mono">IF…THEN…ELSE…ENDIF</span> for binary/nested choices, <span class="mono">CASE OF</span> for many discrete values.</p>
+<pre><span class="com">// Simple IF</span>
+<span class="kw">IF</span> Age >= <span class="num">18</span> <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Adult"</span>
+<span class="kw">ENDIF</span>
+
+<span class="com">// IF…ELSE</span>
+<span class="kw">IF</span> Mark >= <span class="num">50</span> <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Pass"</span>
+<span class="kw">ELSE</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Fail"</span>
+<span class="kw">ENDIF</span>
+
+<span class="com">// Nested IF — grade boundaries</span>
+<span class="kw">IF</span> Mark >= <span class="num">80</span> <span class="kw">THEN</span>
+   Grade <span class="kw">←</span> <span class="str">'A'</span>
+<span class="kw">ELSE</span>
+   <span class="kw">IF</span> Mark >= <span class="num">70</span> <span class="kw">THEN</span>
+      Grade <span class="kw">←</span> <span class="str">'B'</span>
+   <span class="kw">ELSE</span>
+      <span class="kw">IF</span> Mark >= <span class="num">60</span> <span class="kw">THEN</span>
+         Grade <span class="kw">←</span> <span class="str">'C'</span>
+      <span class="kw">ELSE</span>
+         <span class="kw">IF</span> Mark >= <span class="num">50</span> <span class="kw">THEN</span>
+            Grade <span class="kw">←</span> <span class="str">'D'</span>
+         <span class="kw">ELSE</span>
+            Grade <span class="kw">←</span> <span class="str">'F'</span>
+         <span class="kw">ENDIF</span>
+      <span class="kw">ENDIF</span>
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDIF</span>
+
+<span class="com">// CASE — cleaner alternative</span>
+<span class="kw">CASE OF</span> Grade
+   <span class="str">'A'</span> : <span class="kw">OUTPUT</span> <span class="str">"Excellent"</span>
+   <span class="str">'B'</span> : <span class="kw">OUTPUT</span> <span class="str">"Very good"</span>
+   <span class="str">'C'</span> : <span class="kw">OUTPUT</span> <span class="str">"Good"</span>
+   <span class="str">'D'</span> : <span class="kw">OUTPUT</span> <span class="str">"Pass"</span>
+   <span class="str">'F'</span> : <span class="kw">OUTPUT</span> <span class="str">"Fail"</span>
+   <span class="kw">OTHERWISE</span> : <span class="kw">OUTPUT</span> <span class="str">"Invalid grade"</span>
+<span class="kw">ENDCASE</span>
+
+<span class="com">// CASE with ranges and lists</span>
+<span class="kw">CASE OF</span> Mark
+   <span class="num">80</span> <span class="kw">TO</span> <span class="num">100</span> : Grade <span class="kw">←</span> <span class="str">'A'</span>
+   <span class="num">70</span> <span class="kw">TO</span> <span class="num">79</span>  : Grade <span class="kw">←</span> <span class="str">'B'</span>
+   <span class="num">60</span> <span class="kw">TO</span> <span class="num">69</span>  : Grade <span class="kw">←</span> <span class="str">'C'</span>
+   <span class="num">50</span> <span class="kw">TO</span> <span class="num">59</span>  : Grade <span class="kw">←</span> <span class="str">'D'</span>
+   <span class="kw">OTHERWISE</span>: Grade <span class="kw">←</span> <span class="str">'F'</span>
+<span class="kw">ENDCASE</span></pre>
+    </div>
+
+    <!-- 4. Iteration -->
+    <div class="card card-accent">
+      <h3 class="font-semibold mb-2">4. Iteration — three loop types</h3>
+      <p class="text-sm mb-2">Cambridge expects you to choose the correct loop. <span class="mono">FOR</span> for known counts, <span class="mono">WHILE</span> for pre-test, <span class="mono">REPEAT</span> for post-test.</p>
+<pre><span class="com">// FOR — count-controlled (known number of iterations)</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+   <span class="kw">OUTPUT</span> i
+<span class="kw">NEXT</span> i
+
+<span class="com">// FOR with STEP — count downwards or in fixed jumps</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">10</span> <span class="kw">TO</span> <span class="num">1</span> <span class="kw">STEP</span> -<span class="num">1</span>
+   <span class="kw">OUTPUT</span> i
+<span class="kw">NEXT</span> i
+
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">2</span> <span class="kw">TO</span> <span class="num">20</span> <span class="kw">STEP</span> <span class="num">2</span>
+   <span class="kw">OUTPUT</span> i        <span class="com">// 2, 4, 6, … 20</span>
+<span class="kw">NEXT</span> i
+
+<span class="com">// WHILE — pre-test (may run zero times)</span>
+Total <span class="kw">←</span> <span class="num">0</span>
+<span class="kw">INPUT</span> Number
+<span class="kw">WHILE</span> Number <> -<span class="num">1</span> <span class="kw">DO</span>
+   Total <span class="kw">←</span> Total + Number
+   <span class="kw">INPUT</span> Number
+<span class="kw">ENDWHILE</span>
+<span class="kw">OUTPUT</span> <span class="str">"Total: "</span>, Total
+
+<span class="com">// REPEAT — post-test (always runs at least once)</span>
+<span class="kw">REPEAT</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Enter password: "</span>
+   <span class="kw">INPUT</span> Password
+<span class="kw">UNTIL</span> Password = <span class="str">"secret123"</span></pre>
+    </div>
+
+    <!-- When to use which loop -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">4b. When to use which loop</h3>
+      <p class="text-sm mb-2">Pick by reading the question wording. Examiners look for the correct construct, not just a working answer.</p>
+      <ul class="text-sm list-disc list-inside space-y-1">
+        <li><span class="badge badge-blue">FOR</span> "do this 10 times", "for each pupil in class of 30", "every element of the array" — number of iterations is known.</li>
+        <li><span class="badge badge-green">WHILE</span> "keep going while temperature is above 20", "until the user enters STOP" (test first). Condition may already be false ⇒ body skipped.</li>
+        <li><span class="badge badge-amber">REPEAT</span> "ask until input is valid", validation loops, menu prompts. Body must execute at least once.</li>
+        <li><span class="badge badge-purple">Switch FOR → WHILE</span> if the count depends on user input that you don't yet have.</li>
+      </ul>
+<pre><span class="com">// Validation pattern — REPEAT is ideal</span>
+<span class="kw">REPEAT</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Enter age (0-120): "</span>
+   <span class="kw">INPUT</span> Age
+<span class="kw">UNTIL</span> Age >= <span class="num">0</span> <span class="kw">AND</span> Age <= <span class="num">120</span>
+
+<span class="com">// Sentinel pattern — WHILE is ideal</span>
+<span class="kw">INPUT</span> Value
+<span class="kw">WHILE</span> Value <> <span class="num">0</span> <span class="kw">DO</span>
+   Sum <span class="kw">←</span> Sum + Value
+   <span class="kw">INPUT</span> Value
+<span class="kw">ENDWHILE</span></pre>
+    </div>
+
+    <!-- 5. Arrays -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">5. Arrays (1D &amp; 2D)</h3>
+      <p class="text-sm mb-2">Arrays are <strong>1-indexed</strong> by default in Cambridge pseudocode. <span class="mono">ARRAY[1:n]</span> means indices 1 through n inclusive.</p>
+<pre><span class="com">// 1-D array — 30 INTEGER marks</span>
+<span class="kw">DECLARE</span> Marks : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">30</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+
+<span class="com">// Assigning into elements</span>
+Marks[<span class="num">1</span>] <span class="kw">←</span> <span class="num">75</span>
+Marks[<span class="num">2</span>] <span class="kw">←</span> <span class="num">82</span>
+Marks[<span class="num">30</span>] <span class="kw">←</span> <span class="num">60</span>
+
+<span class="com">// Reading every element with FOR</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">30</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Enter mark "</span>, i, <span class="str">": "</span>
+   <span class="kw">INPUT</span> Marks[i]
+<span class="kw">NEXT</span> i
+
+<span class="com">// Summing array contents</span>
+Total <span class="kw">←</span> <span class="num">0</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">30</span>
+   Total <span class="kw">←</span> Total + Marks[i]
+<span class="kw">NEXT</span> i
+Average <span class="kw">←</span> Total / <span class="num">30</span>
+
+<span class="com">// 2-D array — 5x5 grid of CHAR</span>
+<span class="kw">DECLARE</span> Grid : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">5</span>, <span class="num">1</span>:<span class="num">5</span>] <span class="kw">OF</span> <span class="kw">CHAR</span>
+
+Grid[<span class="num">1</span>, <span class="num">1</span>] <span class="kw">←</span> <span class="str">'X'</span>
+Grid[<span class="num">3</span>, <span class="num">4</span>] <span class="kw">←</span> <span class="str">'O'</span>
+
+<span class="com">// Nested loop to fill a 2-D array</span>
+<span class="kw">FOR</span> Row <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+   <span class="kw">FOR</span> Col <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+      Grid[Row, Col] <span class="kw">←</span> <span class="str">'.'</span>
+   <span class="kw">NEXT</span> Col
+<span class="kw">NEXT</span> Row
+
+<span class="com">// Searching a 1-D array (linear search)</span>
+Found <span class="kw">←</span> <span class="kw">FALSE</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">30</span>
+   <span class="kw">IF</span> Marks[i] = Target <span class="kw">THEN</span>
+      Found <span class="kw">←</span> <span class="kw">TRUE</span>
+      Position <span class="kw">←</span> i
+   <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i</pre>
+      <p class="text-xs mt-2"><span class="badge badge-red">Watch out</span> Using <span class="mono">Marks[0]</span> is out-of-bounds for <span class="mono">ARRAY[1:30]</span> — start at 1.</p>
+    </div>
+
+    <!-- 6. Procedures -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">6. Procedures (no return value)</h3>
+      <p class="text-sm mb-2">A procedure performs an action. Parameters are typed. Call with <span class="mono">CALL</span> and the procedure name.</p>
+<pre><span class="com">// Procedure with one parameter</span>
+<span class="kw">PROCEDURE</span> <span class="fn">PrintHello</span>(Name : <span class="kw">STRING</span>)
+   <span class="kw">OUTPUT</span> <span class="str">"Hello, "</span>, Name
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="com">// Calling it</span>
+<span class="kw">CALL</span> <span class="fn">PrintHello</span>(<span class="str">"Alex"</span>)
+<span class="kw">CALL</span> <span class="fn">PrintHello</span>(<span class="str">"Sam"</span>)
+
+<span class="com">// Procedure with no parameters</span>
+<span class="kw">PROCEDURE</span> <span class="fn">DrawLine</span>
+   <span class="kw">OUTPUT</span> <span class="str">"----------"</span>
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">CALL</span> <span class="fn">DrawLine</span>
+
+<span class="com">// Procedure with multiple parameters</span>
+<span class="kw">PROCEDURE</span> <span class="fn">PrintBill</span>(Item : <span class="kw">STRING</span>, Price : <span class="kw">REAL</span>)
+   <span class="kw">OUTPUT</span> Item, <span class="str">" costs $"</span>, Price
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">CALL</span> <span class="fn">PrintBill</span>(<span class="str">"Coffee"</span>, <span class="num">3.50</span>)
+<span class="kw">CALL</span> <span class="fn">PrintBill</span>(<span class="str">"Cake"</span>, <span class="num">4.25</span>)</pre>
+      <p class="text-xs mt-2"><span class="badge badge-purple">Key idea</span> Procedures use <span class="mono">CALL</span>. Functions don't — they appear inside expressions.</p>
+    </div>
+
+    <!-- 7. Functions -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">7. Functions (returns a value)</h3>
+      <p class="text-sm mb-2">A function computes and returns a value. Use it inside expressions or assignments — never with <span class="mono">CALL</span>.</p>
+<pre><span class="com">// Function returning an INTEGER</span>
+<span class="kw">FUNCTION</span> <span class="fn">Square</span>(N : <span class="kw">INTEGER</span>) <span class="kw">RETURNS</span> <span class="kw">INTEGER</span>
+   <span class="kw">RETURN</span> N * N
+<span class="kw">ENDFUNCTION</span>
+
+<span class="com">// Using it in an assignment</span>
+Answer <span class="kw">←</span> <span class="fn">Square</span>(<span class="num">7</span>)        <span class="com">// Answer = 49</span>
+
+<span class="com">// Using it inside an expression</span>
+Total <span class="kw">←</span> <span class="fn">Square</span>(<span class="num">3</span>) + <span class="fn">Square</span>(<span class="num">4</span>)   <span class="com">// 9 + 16 = 25</span>
+
+<span class="com">// Using it inside an OUTPUT</span>
+<span class="kw">OUTPUT</span> <span class="str">"7 squared = "</span>, <span class="fn">Square</span>(<span class="num">7</span>)
+
+<span class="com">// Function with REAL parameter and return</span>
+<span class="kw">FUNCTION</span> <span class="fn">CircleArea</span>(R : <span class="kw">REAL</span>) <span class="kw">RETURNS</span> <span class="kw">REAL</span>
+   <span class="kw">RETURN</span> <span class="num">3.14159</span> * R * R
+<span class="kw">ENDFUNCTION</span>
+
+Area <span class="kw">←</span> <span class="fn">CircleArea</span>(<span class="num">5.0</span>)
+
+<span class="com">// Function returning BOOLEAN</span>
+<span class="kw">FUNCTION</span> <span class="fn">IsEven</span>(N : <span class="kw">INTEGER</span>) <span class="kw">RETURNS</span> <span class="kw">BOOLEAN</span>
+   <span class="kw">IF</span> N <span class="kw">MOD</span> <span class="num">2</span> = <span class="num">0</span> <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="kw">TRUE</span>
+   <span class="kw">ELSE</span>
+      <span class="kw">RETURN</span> <span class="kw">FALSE</span>
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDFUNCTION</span>
+
+<span class="kw">IF</span> <span class="fn">IsEven</span>(Number) <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Even"</span>
+<span class="kw">ENDIF</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-red">Common mistake</span> Writing <span class="mono">CALL Square(7)</span> — wrong, it's a function so just use <span class="mono">Square(7)</span>.</p>
+    </div>
+
+    <!-- 8. String Operations -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">8. String Operations</h3>
+      <p class="text-sm mb-2">Cambridge string functions are 1-indexed. Memorise the four below and the <span class="mono">&amp;</span> concatenation operator.</p>
+<pre><span class="com">// LENGTH — number of characters</span>
+<span class="kw">DECLARE</span> Word : <span class="kw">STRING</span>
+Word <span class="kw">←</span> <span class="str">"Computer"</span>
+N <span class="kw">←</span> <span class="fn">LENGTH</span>(Word)          <span class="com">// N = 8</span>
+
+<span class="com">// LCASE — convert to lowercase</span>
+Lower <span class="kw">←</span> <span class="fn">LCASE</span>(<span class="str">"HELLO"</span>)     <span class="com">// "hello"</span>
+
+<span class="com">// UCASE — convert to uppercase</span>
+Upper <span class="kw">←</span> <span class="fn">UCASE</span>(<span class="str">"hello"</span>)     <span class="com">// "HELLO"</span>
+
+<span class="com">// SUBSTRING(s, start, length) — 1-indexed</span>
+Word <span class="kw">←</span> <span class="str">"Computer"</span>
+Part <span class="kw">←</span> <span class="fn">SUBSTRING</span>(Word, <span class="num">1</span>, <span class="num">3</span>)   <span class="com">// "Com"</span>
+Mid  <span class="kw">←</span> <span class="fn">SUBSTRING</span>(Word, <span class="num">4</span>, <span class="num">3</span>)   <span class="com">// "put"</span>
+End  <span class="kw">←</span> <span class="fn">SUBSTRING</span>(Word, <span class="num">7</span>, <span class="num">2</span>)   <span class="com">// "er"</span>
+
+<span class="com">// Concatenation with &amp;</span>
+<span class="kw">DECLARE</span> FirstName : <span class="kw">STRING</span>
+<span class="kw">DECLARE</span> LastName  : <span class="kw">STRING</span>
+FirstName <span class="kw">←</span> <span class="str">"Alex"</span>
+LastName  <span class="kw">←</span> <span class="str">"Smith"</span>
+FullName <span class="kw">←</span> FirstName &amp; <span class="str">" "</span> &amp; LastName
+<span class="com">// FullName = "Alex Smith"</span>
+
+<span class="com">// Worked example: extract first 3 chars</span>
+<span class="kw">INPUT</span> Word
+<span class="kw">IF</span> <span class="fn">LENGTH</span>(Word) >= <span class="num">3</span> <span class="kw">THEN</span>
+   Code <span class="kw">←</span> <span class="fn">UCASE</span>(<span class="fn">SUBSTRING</span>(Word, <span class="num">1</span>, <span class="num">3</span>))
+   <span class="kw">OUTPUT</span> <span class="str">"Code: "</span>, Code
+<span class="kw">ELSE</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Word too short"</span>
+<span class="kw">ENDIF</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-amber">Indexing</span> <span class="mono">SUBSTRING("Hello", 1, 1) = "H"</span> — the first character is at position 1, not 0.</p>
+    </div>
+
+    <!-- 9. Operators -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">9. Operators</h3>
+      <p class="text-sm mb-2">Three families: arithmetic, comparison, logical. <span class="mono">DIV</span> and <span class="mono">MOD</span> always trip students up — see the table.</p>
+<pre><span class="com">// Arithmetic: + - * / DIV MOD</span>
+A <span class="kw">←</span> <span class="num">7</span> + <span class="num">2</span>            <span class="com">// 9</span>
+B <span class="kw">←</span> <span class="num">7</span> - <span class="num">2</span>            <span class="com">// 5</span>
+C <span class="kw">←</span> <span class="num">7</span> * <span class="num">2</span>            <span class="com">// 14</span>
+D <span class="kw">←</span> <span class="num">7</span> / <span class="num">2</span>            <span class="com">// 3.5  (REAL division)</span>
+
+<span class="com">// DIV — integer division (drops remainder)</span>
+E <span class="kw">←</span> <span class="num">7</span> <span class="kw">DIV</span> <span class="num">2</span>          <span class="com">// 3</span>
+F <span class="kw">←</span> <span class="num">15</span> <span class="kw">DIV</span> <span class="num">4</span>         <span class="com">// 3</span>
+G <span class="kw">←</span> <span class="num">100</span> <span class="kw">DIV</span> <span class="num">3</span>        <span class="com">// 33</span>
+
+<span class="com">// MOD — remainder of integer division</span>
+H <span class="kw">←</span> <span class="num">7</span> <span class="kw">MOD</span> <span class="num">2</span>          <span class="com">// 1</span>
+I <span class="kw">←</span> <span class="num">15</span> <span class="kw">MOD</span> <span class="num">4</span>         <span class="com">// 3</span>
+J <span class="kw">←</span> <span class="num">100</span> <span class="kw">MOD</span> <span class="num">3</span>        <span class="com">// 1</span>
+
+<span class="com">// Comparison: returns BOOLEAN</span>
+<span class="com">//   =   equal</span>
+<span class="com">//   <>  not equal</span>
+<span class="com">//   <   less than</span>
+<span class="com">//   >   greater than</span>
+<span class="com">//   <=  less than or equal</span>
+<span class="com">//   >=  greater than or equal</span>
+
+<span class="kw">IF</span> Score >= <span class="num">50</span> <span class="kw">THEN</span> ...
+<span class="kw">IF</span> Name <> <span class="str">"Alex"</span> <span class="kw">THEN</span> ...
+
+<span class="com">// Logical: AND, OR, NOT</span>
+<span class="kw">IF</span> Age >= <span class="num">13</span> <span class="kw">AND</span> Age <= <span class="num">19</span> <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Teenager"</span>
+<span class="kw">ENDIF</span>
+
+<span class="kw">IF</span> Day = <span class="str">"Sat"</span> <span class="kw">OR</span> Day = <span class="str">"Sun"</span> <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Weekend"</span>
+<span class="kw">ENDIF</span>
+
+<span class="kw">IF</span> <span class="kw">NOT</span> Found <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Item missing"</span>
+<span class="kw">ENDIF</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-green">Useful pattern</span> <span class="mono">N MOD 2 = 0</span> tests for even; <span class="mono">N MOD 10</span> gives the last digit.</p>
+    </div>
+
+    <!-- 10. File Handling -->
+    <div class="card card-accent">
+      <h3 class="font-semibold mb-2">10. File Handling</h3>
+      <p class="text-sm mb-2">Files must be opened in a mode, used, then closed. The three modes are <span class="mono">READ</span>, <span class="mono">WRITE</span>, <span class="mono">APPEND</span>.</p>
+<pre><span class="com">// Open a file in one of three modes</span>
+<span class="kw">OPENFILE</span> <span class="str">"data.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>      <span class="com">// read existing</span>
+<span class="kw">OPENFILE</span> <span class="str">"data.txt"</span> <span class="kw">FOR</span> <span class="kw">WRITE</span>     <span class="com">// overwrite/create</span>
+<span class="kw">OPENFILE</span> <span class="str">"data.txt"</span> <span class="kw">FOR</span> <span class="kw">APPEND</span>    <span class="com">// add to end</span>
+
+<span class="com">// Read one line into a variable</span>
+<span class="kw">READFILE</span> <span class="str">"data.txt"</span>, LineVariable
+
+<span class="com">// Write a line</span>
+<span class="kw">WRITEFILE</span> <span class="str">"data.txt"</span>, <span class="str">"text to write"</span>
+
+<span class="com">// Always close when done</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"data.txt"</span>
+
+<span class="com">// EOF() returns TRUE when at end of file</span>
+<span class="com">// Full read-and-print pattern:</span>
+<span class="kw">OPENFILE</span> <span class="str">"names.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>
+<span class="kw">WHILE</span> <span class="kw">NOT</span> <span class="fn">EOF</span>(<span class="str">"names.txt"</span>) <span class="kw">DO</span>
+   <span class="kw">READFILE</span> <span class="str">"names.txt"</span>, Line
+   <span class="kw">OUTPUT</span> Line
+<span class="kw">ENDWHILE</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"names.txt"</span>
+
+<span class="com">// Writing several lines</span>
+<span class="kw">OPENFILE</span> <span class="str">"log.txt"</span> <span class="kw">FOR</span> <span class="kw">WRITE</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+   <span class="kw">WRITEFILE</span> <span class="str">"log.txt"</span>, <span class="str">"Entry "</span> &amp; i
+<span class="kw">NEXT</span> i
+<span class="kw">CLOSEFILE</span> <span class="str">"log.txt"</span>
+
+<span class="com">// Append to an existing log</span>
+<span class="kw">OPENFILE</span> <span class="str">"log.txt"</span> <span class="kw">FOR</span> <span class="kw">APPEND</span>
+<span class="kw">WRITEFILE</span> <span class="str">"log.txt"</span>, <span class="str">"new event"</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"log.txt"</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-red">Don't forget</span> <span class="mono">CLOSEFILE</span> — easy mark lost in markschemes.</p>
+    </div>
+
+    <!-- 11. Data Types Deep Dive -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">11. Data Types Deep Dive</h3>
+      <p class="text-sm mb-2">Six built-in types. Watch the quotes: single for CHAR, double for STRING.</p>
+<pre><span class="com">// INTEGER — whole numbers (positive, negative, zero)</span>
+<span class="kw">DECLARE</span> Score : <span class="kw">INTEGER</span>
+Score <span class="kw">←</span> <span class="num">42</span>
+Score <span class="kw">←</span> -<span class="num">7</span>
+
+<span class="com">// REAL — decimal/fractional numbers</span>
+<span class="kw">DECLARE</span> Temp : <span class="kw">REAL</span>
+Temp <span class="kw">←</span> <span class="num">36.6</span>
+Temp <span class="kw">←</span> -<span class="num">2.5</span>
+Temp <span class="kw">←</span> <span class="num">3.0</span>      <span class="com">// still REAL, not INTEGER</span>
+
+<span class="com">// CHAR — exactly ONE character, single quotes</span>
+<span class="kw">DECLARE</span> Grade : <span class="kw">CHAR</span>
+Grade <span class="kw">←</span> <span class="str">'A'</span>
+Initial <span class="kw">←</span> <span class="str">'Z'</span>
+Digit <span class="kw">←</span> <span class="str">'7'</span>     <span class="com">// the character '7', not the number</span>
+
+<span class="com">// STRING — text, double quotes</span>
+<span class="kw">DECLARE</span> Name : <span class="kw">STRING</span>
+Name <span class="kw">←</span> <span class="str">"Alex"</span>
+Message <span class="kw">←</span> <span class="str">"Hello, world!"</span>
+Empty <span class="kw">←</span> <span class="str">""</span>          <span class="com">// empty string is fine</span>
+
+<span class="com">// BOOLEAN — TRUE or FALSE only</span>
+<span class="kw">DECLARE</span> Active : <span class="kw">BOOLEAN</span>
+Active <span class="kw">←</span> <span class="kw">TRUE</span>
+Active <span class="kw">←</span> <span class="kw">FALSE</span>
+
+<span class="com">// DATE — dd/mm/yyyy</span>
+<span class="kw">DECLARE</span> Today : <span class="kw">DATE</span>
+Today <span class="kw">←</span> <span class="num">19</span>/<span class="num">05</span>/<span class="num">2026</span>
+Birthday <span class="kw">←</span> <span class="num">01</span>/<span class="num">01</span>/<span class="num">2010</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-purple">Quote rule</span> <span class="mono">'A'</span> is CHAR. <span class="mono">"A"</span> is STRING. They're not the same type.</p>
+    </div>
+
+    <!-- 12. Operator Precedence -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">12. Operator Precedence</h3>
+      <p class="text-sm mb-2">When a line mixes operators, evaluate in this order (highest first):</p>
+      <ol class="text-sm list-decimal list-inside space-y-1">
+        <li><span class="mono">( )</span> — parentheses</li>
+        <li><span class="mono">^</span> — exponentiation (if used)</li>
+        <li><span class="mono">*</span>, <span class="mono">/</span>, <span class="mono">DIV</span>, <span class="mono">MOD</span></li>
+        <li><span class="mono">+</span>, <span class="mono">-</span></li>
+        <li><span class="mono">=  &lt;&gt;  &lt;  &gt;  &lt;=  &gt;=</span> — comparison</li>
+        <li><span class="mono">NOT</span></li>
+        <li><span class="mono">AND</span></li>
+        <li><span class="mono">OR</span></li>
+      </ol>
+<pre><span class="com">// Worked examples — left-to-right within a level</span>
+<span class="num">5</span> + <span class="num">3</span> * <span class="num">2</span>             <span class="com">// = 5 + 6     = 11</span>
+(<span class="num">5</span> + <span class="num">3</span>) * <span class="num">2</span>           <span class="com">// = 8 * 2     = 16</span>
+<span class="num">20</span> - <span class="num">6</span> / <span class="num">2</span>            <span class="com">// = 20 - 3    = 17</span>
+<span class="num">10</span> <span class="kw">DIV</span> <span class="num">3</span> + <span class="num">1</span>          <span class="com">// = 3 + 1     = 4</span>
+<span class="num">10</span> <span class="kw">MOD</span> <span class="num">3</span> * <span class="num">2</span>          <span class="com">// = 1 * 2     = 2</span>
+
+<span class="com">// Comparison + logical</span>
+A > <span class="num">5</span> <span class="kw">AND</span> B < <span class="num">10</span>     <span class="com">// compare first, then AND</span>
+<span class="kw">NOT</span> X = Y               <span class="com">// equals first, then NOT</span>
+
+<span class="com">// Use brackets to make intent explicit</span>
+<span class="kw">IF</span> (Age >= <span class="num">13</span>) <span class="kw">AND</span> (Age <= <span class="num">19</span>) <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Teen"</span>
+<span class="kw">ENDIF</span></pre>
+      <p class="text-xs mt-2"><span class="badge badge-green">Safe rule</span> If in doubt, add brackets. Examiners reward clarity.</p>
+    </div>
+
+    <!-- Comments & Layout -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">Bonus: Comments &amp; Layout</h3>
+      <p class="text-sm mb-2">Cambridge accepts both inline comments and well-formatted indentation. Add comments to earn structure marks.</p>
+<pre><span class="com">// This is a single-line comment</span>
+Counter <span class="kw">←</span> <span class="num">0</span>     <span class="com">// inline comment after a statement</span>
+
+<span class="com">// Indent the body of every block by ~3 spaces</span>
+<span class="kw">IF</span> A > B <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> A      <span class="com">// indented</span>
+<span class="kw">ELSE</span>
+   <span class="kw">OUTPUT</span> B      <span class="com">// indented</span>
+<span class="kw">ENDIF</span>
+
+<span class="com">// Nest indentation when blocks nest</span>
+<span class="kw">FOR</span> i <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+   <span class="kw">FOR</span> j <span class="kw">←</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+      <span class="kw">IF</span> i = j <span class="kw">THEN</span>
+         <span class="kw">OUTPUT</span> i, <span class="str">","</span>, j
+      <span class="kw">ENDIF</span>
+   <span class="kw">NEXT</span> j
+<span class="kw">NEXT</span> i</pre>
+    </div>
+
+    <!-- Validation & Verification mini-patterns -->
+    <div class="card">
+      <h3 class="font-semibold mb-2">Bonus: Validation Patterns</h3>
+      <p class="text-sm mb-2">Three checks Cambridge expects you to recognise. Use REPEAT for each.</p>
+<pre><span class="com">// Range check — between two limits</span>
+<span class="kw">REPEAT</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Mark (0-100): "</span>
+   <span class="kw">INPUT</span> Mark
+<span class="kw">UNTIL</span> Mark >= <span class="num">0</span> <span class="kw">AND</span> Mark <= <span class="num">100</span>
+
+<span class="com">// Length check — string of correct length</span>
+<span class="kw">REPEAT</span>
+   <span class="kw">OUTPUT</span> <span class="str">"4-digit PIN: "</span>
+   <span class="kw">INPUT</span> Pin
+<span class="kw">UNTIL</span> <span class="fn">LENGTH</span>(Pin) = <span class="num">4</span>
+
+<span class="com">// Presence check — not empty</span>
+<span class="kw">REPEAT</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Name: "</span>
+   <span class="kw">INPUT</span> Name
+<span class="kw">UNTIL</span> Name <> <span class="str">""</span>
+
+<span class="com">// Type/format check via parsing isn't part of</span>
+<span class="com">// Cambridge pseudocode — assume INPUT gives</span>
+<span class="com">// you the declared type.</span></pre>
+    </div>
+
+  </div>
+
+  <!-- Quick-glance summary table -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Quick-glance summary — all loop types side by side</h3>
+  <div class="card">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left border-b">
+          <th class="py-2 pr-3">Loop</th>
+          <th class="py-2 pr-3">When test happens</th>
+          <th class="py-2 pr-3">Min iterations</th>
+          <th class="py-2 pr-3">Best for</th>
+          <th class="py-2">Syntax sketch</th>
+        </tr>
+      </thead>
+      <tbody class="align-top">
+        <tr class="border-b">
+          <td class="py-2 pr-3"><span class="badge badge-blue">FOR</span></td>
+          <td class="py-2 pr-3">Count is fixed</td>
+          <td class="py-2 pr-3">0 (if start &gt; end)</td>
+          <td class="py-2 pr-3">Known repetitions, array traversal</td>
+          <td class="py-2"><span class="mono">FOR i ← 1 TO 10 … NEXT i</span></td>
+        </tr>
+        <tr class="border-b">
+          <td class="py-2 pr-3"><span class="badge badge-blue">FOR STEP</span></td>
+          <td class="py-2 pr-3">Count is fixed, custom step</td>
+          <td class="py-2 pr-3">0</td>
+          <td class="py-2 pr-3">Counting down, every Nth element</td>
+          <td class="py-2"><span class="mono">FOR i ← 10 TO 1 STEP -1 … NEXT i</span></td>
+        </tr>
+        <tr class="border-b">
+          <td class="py-2 pr-3"><span class="badge badge-green">WHILE</span></td>
+          <td class="py-2 pr-3">Before each iteration (pre-test)</td>
+          <td class="py-2 pr-3">0</td>
+          <td class="py-2 pr-3">Sentinel input, condition may already be false</td>
+          <td class="py-2"><span class="mono">WHILE cond DO … ENDWHILE</span></td>
+        </tr>
+        <tr>
+          <td class="py-2 pr-3"><span class="badge badge-amber">REPEAT</span></td>
+          <td class="py-2 pr-3">After each iteration (post-test)</td>
+          <td class="py-2 pr-3">1 (always)</td>
+          <td class="py-2 pr-3">Input validation, retry menus</td>
+          <td class="py-2"><span class="mono">REPEAT … UNTIL cond</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Master keyword cheat-sheet -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Master keyword cheat-sheet</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card">
+      <h4 class="font-semibold mb-2 text-sm">Declarations &amp; assignment</h4>
+      <p class="text-xs"><span class="mono">DECLARE</span>, <span class="mono">CONSTANT</span>, <span class="mono">←</span>, <span class="mono">ARRAY[ : ] OF</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Types</h4>
+      <p class="text-xs"><span class="mono">INTEGER</span>, <span class="mono">REAL</span>, <span class="mono">CHAR</span>, <span class="mono">STRING</span>, <span class="mono">BOOLEAN</span>, <span class="mono">DATE</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">I/O</h4>
+      <p class="text-xs"><span class="mono">INPUT</span>, <span class="mono">OUTPUT</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Selection</h4>
+      <p class="text-xs"><span class="mono">IF</span>, <span class="mono">THEN</span>, <span class="mono">ELSE</span>, <span class="mono">ENDIF</span>, <span class="mono">CASE OF</span>, <span class="mono">OTHERWISE</span>, <span class="mono">ENDCASE</span></p>
+    </div>
+    <div class="card">
+      <h4 class="font-semibold mb-2 text-sm">Iteration</h4>
+      <p class="text-xs"><span class="mono">FOR</span>, <span class="mono">TO</span>, <span class="mono">STEP</span>, <span class="mono">NEXT</span>, <span class="mono">WHILE</span>, <span class="mono">DO</span>, <span class="mono">ENDWHILE</span>, <span class="mono">REPEAT</span>, <span class="mono">UNTIL</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Subroutines</h4>
+      <p class="text-xs"><span class="mono">PROCEDURE</span>, <span class="mono">ENDPROCEDURE</span>, <span class="mono">CALL</span>, <span class="mono">FUNCTION</span>, <span class="mono">RETURNS</span>, <span class="mono">RETURN</span>, <span class="mono">ENDFUNCTION</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Files</h4>
+      <p class="text-xs"><span class="mono">OPENFILE</span>, <span class="mono">READ</span>, <span class="mono">WRITE</span>, <span class="mono">APPEND</span>, <span class="mono">READFILE</span>, <span class="mono">WRITEFILE</span>, <span class="mono">CLOSEFILE</span>, <span class="mono">EOF()</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Built-in functions</h4>
+      <p class="text-xs"><span class="mono">LENGTH()</span>, <span class="mono">LCASE()</span>, <span class="mono">UCASE()</span>, <span class="mono">SUBSTRING()</span></p>
+      <h4 class="font-semibold mt-3 mb-2 text-sm">Operators</h4>
+      <p class="text-xs"><span class="mono">+ - * /</span> <span class="mono">DIV</span> <span class="mono">MOD</span> <span class="mono">= &lt;&gt; &lt; &gt; &lt;= &gt;=</span> <span class="mono">AND</span> <span class="mono">OR</span> <span class="mono">NOT</span> <span class="mono">&amp;</span></p>
+    </div>
+  </div>
+
+  <p class="text-xs mt-4 opacity-70">Reminder: keywords go in <strong>UPPERCASE</strong>, identifiers in <strong>PascalCase</strong>, indent block bodies, use <span class="mono">←</span> (not <span class="mono">=</span>) for assignment, and remember arrays start at <strong>1</strong>.</p>
+</section>

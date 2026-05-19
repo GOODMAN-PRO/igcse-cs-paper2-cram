@@ -1,0 +1,721 @@
+<section id="sec-search" class="section">
+  <h2 class="text-2xl font-bold mb-1">Searching Algorithms</h2>
+  <p class="text-sm text-zinc-400 mb-4">Two methods you must know cold: <span class="badge badge-purple">Linear</span> and <span class="badge badge-blue">Binary</span>. Know the pseudocode, the trade-offs, and how to trace each by hand.</p>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- LINEAR SEARCH CARD -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Linear Search</h3>
+        <span class="badge badge-purple">Sequential</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-3">Check each element from start to end, one at a time, until the target is found or the list ends.</p>
+
+      <ul class="text-sm text-zinc-300 space-y-1 mb-3 list-disc list-inside">
+        <li>Works on <span class="font-semibold text-green-300">unsorted</span> data — major advantage</li>
+        <li>Worst case: up to <span class="mono text-amber-300">n</span> comparisons (target last or absent)</li>
+        <li>Best case: <span class="mono text-amber-300">1</span> comparison (target first)</li>
+        <li>Time complexity (informal): linear — doubles list, doubles time</li>
+      </ul>
+
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-1">Pseudocode</div>
+<pre><span class="kw">Found</span> ← <span class="kw">False</span>
+<span class="kw">Index</span> ← <span class="num">1</span>
+<span class="kw">WHILE</span> Index &lt;= n <span class="kw">AND</span> Found = <span class="kw">False</span> <span class="kw">DO</span>
+  <span class="kw">IF</span> List[Index] = Target <span class="kw">THEN</span>
+    Found ← <span class="kw">True</span>
+    Position ← Index
+  <span class="kw">ENDIF</span>
+  Index ← Index + <span class="num">1</span>
+<span class="kw">ENDWHILE</span>
+<span class="kw">IF</span> Found = <span class="kw">True</span> <span class="kw">THEN</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Found at position "</span>, Position
+<span class="kw">ELSE</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Not found"</span>
+<span class="kw">ENDIF</span></pre>
+
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mt-3 mb-1">Python equivalent</div>
+<pre><span class="kw">def</span> <span class="fn">linear_search</span>(lst, target):
+    <span class="kw">for</span> i, value <span class="kw">in</span> enumerate(lst):
+        <span class="kw">if</span> value == target:
+            <span class="kw">return</span> i  <span class="com"># index found</span>
+    <span class="kw">return</span> -<span class="num">1</span>      <span class="com"># not found</span></pre>
+    </div>
+
+    <!-- BINARY SEARCH CARD -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Binary Search</h3>
+        <span class="badge badge-blue">Divide &amp; Conquer</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-3">List <span class="font-semibold text-red-300">MUST be sorted</span>. Look at the middle item; eliminate half the list each step.</p>
+
+      <ul class="text-sm text-zinc-300 space-y-1 mb-3 list-disc list-inside">
+        <li><span class="font-semibold text-red-300">Precondition:</span> data must be in order</li>
+        <li>Time complexity: <span class="mono text-amber-300">O(log n)</span> — much faster for large lists</li>
+        <li>1024 items → at most 10 comparisons</li>
+        <li>1,000,000 items → at most 20 comparisons</li>
+      </ul>
+
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-1">Pseudocode</div>
+<pre><span class="kw">Low</span> ← <span class="num">1</span>
+<span class="kw">High</span> ← n
+<span class="kw">Found</span> ← <span class="kw">False</span>
+<span class="kw">WHILE</span> Low &lt;= High <span class="kw">AND</span> Found = <span class="kw">False</span> <span class="kw">DO</span>
+  Mid ← (Low + High) <span class="kw">DIV</span> <span class="num">2</span>
+  <span class="kw">IF</span> List[Mid] = Target <span class="kw">THEN</span>
+    Found ← <span class="kw">True</span>
+    Position ← Mid
+  <span class="kw">ELSE</span>
+    <span class="kw">IF</span> List[Mid] &lt; Target <span class="kw">THEN</span>
+      Low ← Mid + <span class="num">1</span>
+    <span class="kw">ELSE</span>
+      High ← Mid - <span class="num">1</span>
+    <span class="kw">ENDIF</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">ENDWHILE</span></pre>
+
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mt-3 mb-1">Python equivalent</div>
+<pre><span class="kw">def</span> <span class="fn">binary_search</span>(lst, target):
+    low, high = <span class="num">0</span>, len(lst) - <span class="num">1</span>
+    <span class="kw">while</span> low &lt;= high:
+        mid = (low + high) // <span class="num">2</span>
+        <span class="kw">if</span> lst[mid] == target:
+            <span class="kw">return</span> mid
+        <span class="kw">elif</span> lst[mid] &lt; target:
+            low = mid + <span class="num">1</span>
+        <span class="kw">else</span>:
+            high = mid - <span class="num">1</span>
+    <span class="kw">return</span> -<span class="num">1</span></pre>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Linear vs Binary — Comparison</h3>
+  <table class="trace">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Linear Search</th>
+        <th>Binary Search</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="font-semibold">Data must be sorted?</td>
+        <td class="text-green-300">No — works on any order</td>
+        <td class="text-red-300">Yes — must be sorted first</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Speed on large lists</td>
+        <td class="text-red-300">Slow — checks one-by-one</td>
+        <td class="text-green-300">Fast — halves the search space</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Complexity (worst case)</td>
+        <td><span class="mono text-amber-300">O(n)</span></td>
+        <td><span class="mono text-amber-300">O(log n)</span></td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Simplicity</td>
+        <td class="text-green-300">Very simple to code</td>
+        <td class="text-amber-300">More complex (Low/High/Mid)</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">When to use</td>
+        <td>Small lists or unsorted data</td>
+        <td>Large sorted lists / repeat searches</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Comparisons for 1024 items (worst)</td>
+        <td><span class="mono text-amber-300">1024</span></td>
+        <td><span class="mono text-amber-300">10</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- LINEAR WALKTHROUGH -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Linear Search Walkthrough</h3>
+  <div class="card">
+    <p class="text-sm text-zinc-300 mb-2">List: <span class="mono text-amber-300">[4, 8, 2, 7, 1, 9, 3]</span> &nbsp; · &nbsp; Target: <span class="mono text-amber-300">7</span></p>
+    <table class="trace">
+      <thead>
+        <tr>
+          <th>Iteration</th>
+          <th>Index</th>
+          <th>List[Index]</th>
+          <th>= Target?</th>
+          <th>Found</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>1</td><td>4</td><td>No</td><td>False</td><td>Index ← 2</td></tr>
+        <tr><td>2</td><td>2</td><td>8</td><td>No</td><td>False</td><td>Index ← 3</td></tr>
+        <tr><td>3</td><td>3</td><td>2</td><td>No</td><td>False</td><td>Index ← 4</td></tr>
+        <tr class="correct" style="background:#052e16;color:#86efac"><td>4</td><td>4</td><td>7</td><td><strong>Yes</strong></td><td>True</td><td>Position ← 4, loop ends</td></tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-zinc-300 mt-2">Output: <span class="mono text-green-300">"Found at position 4"</span> after <span class="font-semibold">4 comparisons</span>.</p>
+  </div>
+
+  <!-- BINARY WALKTHROUGH -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Binary Search Walkthrough</h3>
+  <div class="card">
+    <p class="text-sm text-zinc-300 mb-2">List: <span class="mono text-amber-300">[1, 3, 5, 7, 9, 11, 13, 15]</span> (positions 1–8) &nbsp; · &nbsp; Target: <span class="mono text-amber-300">9</span></p>
+    <table class="trace">
+      <thead>
+        <tr>
+          <th>Iteration</th>
+          <th>Low</th>
+          <th>High</th>
+          <th>Mid = (L+H) DIV 2</th>
+          <th>List[Mid]</th>
+          <th>Compare</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+          <td>8</td>
+          <td>(1+8) DIV 2 = 4</td>
+          <td>7</td>
+          <td>7 &lt; 9</td>
+          <td>Low ← 5</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>5</td>
+          <td>8</td>
+          <td>(5+8) DIV 2 = 6</td>
+          <td>11</td>
+          <td>11 &gt; 9</td>
+          <td>High ← 5</td>
+        </tr>
+        <tr class="correct" style="background:#052e16;color:#86efac">
+          <td>3</td>
+          <td>5</td>
+          <td>5</td>
+          <td>(5+5) DIV 2 = 5</td>
+          <td>9</td>
+          <td><strong>9 = 9</strong></td>
+          <td>Found at position 5</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-zinc-300 mt-2">Output: <span class="mono text-green-300">"Found at position 5"</span> in only <span class="font-semibold">3 comparisons</span> — linear search would have taken 5.</p>
+  </div>
+
+  <!-- EXAM QUESTIONS -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-Style Questions</h3>
+
+  <details>
+    <summary>Q1 — Write pseudocode for a linear search of an array of 15 integers for a target value. <span class="badge badge-amber">5 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-2">Mark scheme expects: input target, Found flag initialised False, loop 1 to 15, IF compare, set Found True &amp; record position, output result for both cases.</p>
+<pre><span class="kw">DECLARE</span> Numbers : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">15</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Target, Index, Position : <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Found : <span class="kw">BOOLEAN</span>
+
+<span class="com">// (Assume Numbers already populated)</span>
+<span class="kw">OUTPUT</span> <span class="str">"Enter target: "</span>
+<span class="kw">INPUT</span> Target
+
+Found ← <span class="kw">False</span>
+Index ← <span class="num">1</span>
+<span class="kw">WHILE</span> Index &lt;= <span class="num">15</span> <span class="kw">AND</span> Found = <span class="kw">False</span> <span class="kw">DO</span>
+  <span class="kw">IF</span> Numbers[Index] = Target <span class="kw">THEN</span>
+    Found ← <span class="kw">True</span>
+    Position ← Index
+  <span class="kw">ENDIF</span>
+  Index ← Index + <span class="num">1</span>
+<span class="kw">ENDWHILE</span>
+
+<span class="kw">IF</span> Found = <span class="kw">True</span> <span class="kw">THEN</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Found at position "</span>, Position
+<span class="kw">ELSE</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Not found"</span>
+<span class="kw">ENDIF</span></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2 — Explain why binary search cannot be used on an unsorted array. <span class="badge badge-amber">2 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-1"><strong>Model answer:</strong></p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Binary search relies on comparing the target with the middle element and then discarding the half that cannot contain the target. (1)</li>
+        <li>If the array is not sorted, you cannot guarantee the target is in the lower or upper half from a single comparison, so the algorithm may eliminate the wrong half and miss the value. (1)</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3 — State two advantages and one disadvantage of binary search compared to linear search. <span class="badge badge-amber">3 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-1"><strong>Advantages (any 2):</strong></p>
+      <ul class="list-disc list-inside space-y-1 mb-2">
+        <li>Faster on large lists — eliminates half each step (O(log n) vs O(n)).</li>
+        <li>Fewer comparisons on average and in the worst case.</li>
+        <li>More efficient when the same list is searched repeatedly.</li>
+      </ul>
+      <p class="mb-1"><strong>Disadvantage (any 1):</strong></p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Requires the data to be sorted first — sorting adds extra cost.</li>
+        <li>More complex to code (Low/High/Mid logic) and harder to debug.</li>
+        <li>For very small lists or unsorted data, linear is just as fast or faster overall.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section id="sec-sort" class="section">
+  <h2 class="text-2xl font-bold mb-1">Sorting — Bubble Sort</h2>
+  <p class="text-sm text-zinc-400 mb-4">The only sort you must know for IGCSE. Get the <span class="badge badge-purple">nested loop</span>, the <span class="badge badge-blue">swap with Temp</span>, and the <span class="badge badge-green">Swapped flag</span> for early termination locked in.</p>
+
+  <div class="card card-accent mb-4">
+    <h3 class="text-lg font-semibold mb-2">How it works</h3>
+    <ol class="text-sm text-zinc-300 space-y-1 list-decimal list-inside">
+      <li>Go through the list comparing each <span class="font-semibold">adjacent pair</span>.</li>
+      <li>If a pair is out of order, <span class="font-semibold">swap them</span> (using a Temp variable).</li>
+      <li>After one full pass, the largest remaining unsorted value has "bubbled" to the end.</li>
+      <li>Repeat: each subsequent pass needs one fewer comparison (the tail is already sorted).</li>
+      <li>If a pass completes with <span class="font-semibold text-green-300">no swaps</span>, the list is sorted — exit early.</li>
+    </ol>
+    <p class="text-xs text-zinc-400 mt-3"><span class="badge badge-amber">Why "bubble"?</span> Large values rise to the top end of the list like air bubbles in water.</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- BUBBLE PSEUDOCODE -->
+    <div class="card">
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-1">Pseudocode (with Swapped flag)</div>
+<pre><span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> n - <span class="num">1</span>
+  Swapped ← <span class="kw">False</span>
+  <span class="kw">FOR</span> j ← <span class="num">1</span> <span class="kw">TO</span> n - i
+    <span class="kw">IF</span> List[j] &gt; List[j+<span class="num">1</span>] <span class="kw">THEN</span>
+      Temp ← List[j]
+      List[j] ← List[j+<span class="num">1</span>]
+      List[j+<span class="num">1</span>] ← Temp
+      Swapped ← <span class="kw">True</span>
+    <span class="kw">ENDIF</span>
+  <span class="kw">NEXT</span> j
+  <span class="kw">IF</span> Swapped = <span class="kw">False</span> <span class="kw">THEN</span>
+    <span class="com">// Early termination — list is sorted</span>
+    <span class="kw">EXIT FOR</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i</pre>
+      <p class="text-xs text-zinc-400 mt-2">Note: <span class="mono">n - i</span> ensures we don't recompare items already in their final position.</p>
+    </div>
+
+    <!-- BUBBLE PYTHON -->
+    <div class="card">
+      <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-1">Python equivalent</div>
+<pre><span class="kw">def</span> <span class="fn">bubble_sort</span>(lst):
+    n = len(lst)
+    <span class="kw">for</span> i <span class="kw">in</span> range(n - <span class="num">1</span>):
+        swapped = <span class="kw">False</span>
+        <span class="kw">for</span> j <span class="kw">in</span> range(n - <span class="num">1</span> - i):
+            <span class="kw">if</span> lst[j] &gt; lst[j + <span class="num">1</span>]:
+                <span class="com"># tuple swap — no Temp needed</span>
+                lst[j], lst[j + <span class="num">1</span>] = lst[j + <span class="num">1</span>], lst[j]
+                swapped = <span class="kw">True</span>
+        <span class="kw">if</span> <span class="kw">not</span> swapped:
+            <span class="kw">break</span>  <span class="com"># early exit</span>
+    <span class="kw">return</span> lst
+
+<span class="com"># Example</span>
+<span class="kw">print</span>(bubble_sort([<span class="num">5</span>, <span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>]))
+<span class="com"># → [1, 2, 4, 5]</span></pre>
+    </div>
+  </div>
+
+  <!-- WORKED TRACE -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Full Worked Trace — Sort <span class="mono text-amber-300">[5, 2, 4, 1]</span></h3>
+  <div class="card">
+    <p class="text-sm text-zinc-300 mb-2">Each row shows one adjacent-pair comparison. The compared pair is in <strong>bold</strong>.</p>
+    <table class="trace">
+      <thead>
+        <tr>
+          <th>Pass</th>
+          <th>Step</th>
+          <th>List before</th>
+          <th>Compare</th>
+          <th>Swap?</th>
+          <th>List after</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="6" style="background:#1a1a24;color:#c084fc;font-weight:600">Initial: [5, 2, 4, 1]</td></tr>
+
+        <tr><td rowspan="3">1</td><td>1</td><td>[<strong>5,2</strong>,4,1]</td><td>5 &gt; 2</td><td class="correct" style="background:#052e16;color:#86efac">Yes</td><td>[2,5,4,1]</td></tr>
+        <tr><td>2</td><td>[2,<strong>5,4</strong>,1]</td><td>5 &gt; 4</td><td class="correct" style="background:#052e16;color:#86efac">Yes</td><td>[2,4,5,1]</td></tr>
+        <tr><td>3</td><td>[2,4,<strong>5,1</strong>]</td><td>5 &gt; 1</td><td class="correct" style="background:#052e16;color:#86efac">Yes</td><td>[2,4,1,<span class="text-amber-300">5</span>]</td></tr>
+        <tr><td colspan="6" class="text-zinc-400" style="text-align:left;padding-left:1rem">End of Pass 1 — <strong>3 swaps</strong>. <span class="text-amber-300">5</span> is now in its final position.</td></tr>
+
+        <tr><td rowspan="2">2</td><td>1</td><td>[<strong>2,4</strong>,1,5]</td><td>2 &lt; 4</td><td>No</td><td>[2,4,1,5]</td></tr>
+        <tr><td>2</td><td>[2,<strong>4,1</strong>,5]</td><td>4 &gt; 1</td><td class="correct" style="background:#052e16;color:#86efac">Yes</td><td>[2,1,<span class="text-amber-300">4</span>,5]</td></tr>
+        <tr><td colspan="6" class="text-zinc-400" style="text-align:left;padding-left:1rem">End of Pass 2 — <strong>1 swap</strong>. <span class="text-amber-300">4</span> now in final position.</td></tr>
+
+        <tr><td rowspan="1">3</td><td>1</td><td>[<strong>2,1</strong>,4,5]</td><td>2 &gt; 1</td><td class="correct" style="background:#052e16;color:#86efac">Yes</td><td>[1,<span class="text-amber-300">2</span>,4,5]</td></tr>
+        <tr><td colspan="6" class="text-zinc-400" style="text-align:left;padding-left:1rem">End of Pass 3 — <strong>1 swap</strong>.</td></tr>
+
+        <tr><td>4</td><td>—</td><td>[1,2,4,5]</td><td colspan="2" class="text-green-300">No swaps in this pass</td><td>[1,2,4,5]</td></tr>
+        <tr><td colspan="6" class="correct" style="background:#052e16;color:#86efac;text-align:left;padding-left:1rem"><strong>Done!</strong> Swapped flag = False → list is sorted. Final: <span class="mono">[1, 2, 4, 5]</span></td></tr>
+      </tbody>
+    </table>
+
+    <table class="trace mt-3">
+      <thead>
+        <tr><th>Pass</th><th>List at end of pass</th><th>Swaps</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Start</td><td class="mono">[5, 2, 4, 1]</td><td>—</td></tr>
+        <tr><td>1</td><td class="mono">[2, 4, 1, 5]</td><td>3</td></tr>
+        <tr><td>2</td><td class="mono">[2, 1, 4, 5]</td><td>1</td></tr>
+        <tr><td>3</td><td class="mono">[1, 2, 4, 5]</td><td>1</td></tr>
+        <tr class="correct" style="background:#052e16;color:#86efac"><td>4</td><td class="mono">[1, 2, 4, 5]</td><td>0 → stop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-4">
+    <div class="card">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge badge-green">Advantages</span>
+      </div>
+      <ul class="text-sm text-zinc-300 space-y-1 list-disc list-inside">
+        <li>Very simple to code and explain.</li>
+        <li>In-place — no extra array needed (small memory use).</li>
+        <li>With Swapped flag, detects an already-sorted list in one pass.</li>
+        <li>Stable — equal items keep their relative order.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge badge-red">Disadvantages</span>
+      </div>
+      <ul class="text-sm text-zinc-300 space-y-1 list-disc list-inside">
+        <li>Slow on large lists — worst-case <span class="mono text-amber-300">O(n²)</span>.</li>
+        <li>Many comparisons even when only a few items are out of place.</li>
+        <li>Not used in production — quicksort/mergesort are faster.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAM QUESTIONS -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-Style Questions</h3>
+
+  <details>
+    <summary>Q1 — Write pseudocode for a bubble sort on an array of 10 integers in ascending order. <span class="badge badge-amber">6 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-2">Mark scheme: outer FOR loop, Swapped flag init, inner FOR loop with correct bounds (<span class="mono">n - i</span>), compare adjacent pair, swap using Temp, set Swapped True, early-exit on no swaps.</p>
+<pre><span class="kw">DECLARE</span> Numbers : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">10</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> i, j, Temp : <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Swapped : <span class="kw">BOOLEAN</span>
+
+<span class="com">// (Assume Numbers already populated)</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">9</span>
+  Swapped ← <span class="kw">False</span>
+  <span class="kw">FOR</span> j ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span> - i
+    <span class="kw">IF</span> Numbers[j] &gt; Numbers[j+<span class="num">1</span>] <span class="kw">THEN</span>
+      Temp ← Numbers[j]
+      Numbers[j] ← Numbers[j+<span class="num">1</span>]
+      Numbers[j+<span class="num">1</span>] ← Temp
+      Swapped ← <span class="kw">True</span>
+    <span class="kw">ENDIF</span>
+  <span class="kw">NEXT</span> j
+  <span class="kw">IF</span> Swapped = <span class="kw">False</span> <span class="kw">THEN</span>
+    <span class="kw">EXIT FOR</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2 — Given the array [7, 3, 5, 1], show the state of the array after each complete pass of bubble sort. <span class="badge badge-amber">4 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-2"><strong>Walkthrough:</strong></p>
+      <table class="trace">
+        <thead>
+          <tr><th>Pass</th><th>Step-by-step</th><th>Array after pass</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Start</td><td>—</td><td class="mono">[7, 3, 5, 1]</td></tr>
+          <tr><td>1</td><td>(7,3)→swap [3,7,5,1]; (7,5)→swap [3,5,7,1]; (7,1)→swap [3,5,1,7]</td><td class="mono">[3, 5, 1, 7]</td></tr>
+          <tr><td>2</td><td>(3,5)→no; (5,1)→swap [3,1,5,7]; (5,7)→no</td><td class="mono">[3, 1, 5, 7]</td></tr>
+          <tr><td>3</td><td>(3,1)→swap [1,3,5,7]; (3,5)→no</td><td class="mono">[1, 3, 5, 7]</td></tr>
+          <tr class="correct" style="background:#052e16;color:#86efac"><td>4</td><td>(1,3)→no — no swaps → stop</td><td class="mono">[1, 3, 5, 7]</td></tr>
+        </tbody>
+      </table>
+      <p class="mt-2 text-xs text-zinc-400">1 mark per correct pass state.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q3 — State an advantage and a disadvantage of bubble sort. <span class="badge badge-amber">2 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>Advantage:</strong> Simple to understand and implement / requires no extra memory (in-place) / can detect an already-sorted list in one pass using the Swapped flag.</li>
+        <li><strong>Disadvantage:</strong> Slow for large data sets — worst case O(n²) comparisons / inefficient compared with quicksort or merge sort.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section id="sec-methods" class="section">
+  <h2 class="text-2xl font-bold mb-1">Standard Methods of Solution</h2>
+  <p class="text-sm text-zinc-400 mb-4">Five tiny patterns you must be able to write from memory: <span class="badge badge-purple">Totalling</span> <span class="badge badge-blue">Counting</span> <span class="badge badge-green">Max</span> <span class="badge badge-green">Min</span> <span class="badge badge-amber">Average</span>. Most Paper 2 questions combine 2–3 of these.</p>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- TOTALLING -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Totalling (Sum)</h3>
+        <span class="badge badge-purple">Σ</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-2">Add every input value to a running total. <strong>Always initialise Total to 0</strong> before the loop.</p>
+<pre>Total ← <span class="num">0</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  Total ← Total + Num
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Total</pre>
+    </div>
+
+    <!-- COUNTING -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Counting (Conditional)</h3>
+        <span class="badge badge-blue">#</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-2">Increment a counter <strong>only when a condition is met</strong>. Initialise Count to 0.</p>
+<pre>Count ← <span class="num">0</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; <span class="num">50</span> <span class="kw">THEN</span>
+    Count ← Count + <span class="num">1</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Count</pre>
+    </div>
+
+    <!-- MAX -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Finding Maximum</h3>
+        <span class="badge badge-green">↑</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-2">Initialise Max to the <strong>first value</strong>, then compare every later value.</p>
+<pre><span class="kw">INPUT</span> Max          <span class="com">// first value</span>
+<span class="kw">FOR</span> i ← <span class="num">2</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Max</pre>
+    </div>
+
+    <!-- MIN -->
+    <div class="card card-accent">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Finding Minimum</h3>
+        <span class="badge badge-green">↓</span>
+      </div>
+      <p class="text-sm text-zinc-300 mb-2">Same structure as Max — but compare with <span class="mono">&lt; Min</span>.</p>
+<pre><span class="kw">INPUT</span> Min          <span class="com">// first value</span>
+<span class="kw">FOR</span> i ← <span class="num">2</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &lt; Min <span class="kw">THEN</span>
+    Min ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Min</pre>
+    </div>
+  </div>
+
+  <!-- AVERAGE -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Finding the Average</h3>
+  <div class="card">
+    <p class="text-sm text-zinc-300 mb-2">Combine <span class="badge badge-purple">totalling</span> with division by the count of inputs at the end. Be careful: divide <strong>after</strong> the loop, not inside it.</p>
+<pre>Total ← <span class="num">0</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  Total ← Total + Num
+<span class="kw">NEXT</span> i
+Average ← Total / <span class="num">10</span>
+<span class="kw">OUTPUT</span> Average</pre>
+    <p class="text-xs text-zinc-400 mt-2"><span class="badge badge-amber">Tip</span> If the number of values is variable, count them in a separate counter and divide by that — never hard-code the divisor.</p>
+  </div>
+
+  <!-- COMBINED -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Combined: Max, Min &amp; Average in One Pass</h3>
+  <div class="card card-accent">
+    <p class="text-sm text-zinc-300 mb-2">A typical Paper 2 question asks for multiple results from a single loop. Pattern: <strong>read first value → set Max and Min to it → loop the remaining values</strong>.</p>
+<pre>Total ← <span class="num">0</span>
+
+<span class="com">// Read first value and use it to seed Max and Min</span>
+<span class="kw">INPUT</span> Num
+Max ← Num
+Min ← Num
+Total ← Total + Num
+
+<span class="kw">FOR</span> i ← <span class="num">2</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  Total ← Total + Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max ← Num
+  <span class="kw">ENDIF</span>
+  <span class="kw">IF</span> Num &lt; Min <span class="kw">THEN</span>
+    Min ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+
+Average ← Total / <span class="num">10</span>
+
+<span class="kw">OUTPUT</span> <span class="str">"Maximum: "</span>, Max
+<span class="kw">OUTPUT</span> <span class="str">"Minimum: "</span>, Min
+<span class="kw">OUTPUT</span> <span class="str">"Average: "</span>, Average</pre>
+    <p class="text-xs text-zinc-400 mt-2">Notice we only loop from 2 to 10 — the first value was already consumed before the loop. This is the safest pattern.</p>
+  </div>
+
+  <!-- GOTCHA CARD -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Important Gotcha</h3>
+  <div class="card" style="border-color:#7f1d1d;background:linear-gradient(135deg,#2e0510 0%,#101018 60%)">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="badge badge-red">DANGER</span>
+      <h4 class="font-bold text-red-200">Don't initialise Max to 0 (or Min to a huge number) — initialise to the FIRST value!</h4>
+    </div>
+    <ul class="text-sm text-zinc-200 space-y-2 list-disc list-inside">
+      <li>If you set <span class="mono">Max ← 0</span> and all inputs are negative (e.g. temperatures <span class="mono">-12, -5, -8</span>), the algorithm reports <span class="mono text-red-300">0</span> — which is not in the list and is wrong.</li>
+      <li>If you set <span class="mono">Min ← 999</span> and all inputs are larger (e.g. <span class="mono">1200, 1500, 1100</span>), the algorithm reports <span class="mono text-red-300">999</span> — again not even a real input.</li>
+      <li><strong>Fix:</strong> read the first input <em>before</em> the loop and assign it to both <span class="mono">Max</span> and <span class="mono">Min</span>. Then loop from index 2 onwards.</li>
+    </ul>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+      <div>
+        <div class="text-xs font-semibold text-red-300 uppercase tracking-wide mb-1">Wrong</div>
+<pre>Max ← <span class="num">0</span>
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i  <span class="com">// Breaks for all-negative input</span></pre>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-green-300 uppercase tracking-wide mb-1">Correct</div>
+<pre><span class="kw">INPUT</span> Max
+<span class="kw">FOR</span> i ← <span class="num">2</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i  <span class="com">// Robust</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAM QUESTIONS -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-Style Questions</h3>
+
+  <details>
+    <summary>Q1 — Write pseudocode that inputs 20 numbers and outputs the largest and the average. Use a single loop. <span class="badge badge-amber">6 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-2">Mark scheme: initialise Total to 0, seed Max from first input, loop remaining 19, accumulate Total, conditional Max update, divide by 20 after loop, output both results.</p>
+<pre><span class="kw">DECLARE</span> Numbers, Total, Max, Num, i : <span class="kw">INTEGER</span>
+<span class="kw">DECLARE</span> Average : <span class="kw">REAL</span>
+
+Total ← <span class="num">0</span>
+
+<span class="com">// Seed Max with first value</span>
+<span class="kw">INPUT</span> Num
+Max ← Num
+Total ← Total + Num
+
+<span class="kw">FOR</span> i ← <span class="num">2</span> <span class="kw">TO</span> <span class="num">20</span>
+  <span class="kw">INPUT</span> Num
+  Total ← Total + Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max ← Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+
+Average ← Total / <span class="num">20</span>
+
+<span class="kw">OUTPUT</span> <span class="str">"Largest: "</span>, Max
+<span class="kw">OUTPUT</span> <span class="str">"Average: "</span>, Average</pre>
+      <p class="text-xs text-zinc-400 mt-2">Watch out for: initialising Max to 0 (loses a mark on neg-only test data); dividing inside the loop; declaring Average as INTEGER (truncates).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Q2 — Write pseudocode that inputs marks for 30 students and outputs how many scored above 50. <span class="badge badge-amber">4 marks</span></summary>
+    <div class="text-sm text-zinc-300 mt-2">
+      <p class="mb-2">Mark scheme: Count initialised 0, loop 1 to 30, input Mark, IF condition strictly greater than 50, increment count, output count after loop.</p>
+<pre><span class="kw">DECLARE</span> Count, Mark, i : <span class="kw">INTEGER</span>
+
+Count ← <span class="num">0</span>
+
+<span class="kw">FOR</span> i ← <span class="num">1</span> <span class="kw">TO</span> <span class="num">30</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Enter mark for student "</span>, i
+  <span class="kw">INPUT</span> Mark
+  <span class="kw">IF</span> Mark &gt; <span class="num">50</span> <span class="kw">THEN</span>
+    Count ← Count + <span class="num">1</span>
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+
+<span class="kw">OUTPUT</span> <span class="str">"Students scoring above 50: "</span>, Count</pre>
+      <p class="text-xs text-zinc-400 mt-2">Read the question wording carefully: "<em>above</em> 50" means <span class="mono">&gt; 50</span>; "<em>50 or above</em>" means <span class="mono">&gt;= 50</span>.</p>
+    </div>
+  </details>
+
+  <!-- QUICK RECALL -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Quick Recall — All Five Patterns</h3>
+  <table class="trace">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Init</th>
+        <th>Inside loop</th>
+        <th>After loop</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="font-semibold">Totalling</td>
+        <td><span class="mono">Total ← 0</span></td>
+        <td><span class="mono">Total ← Total + Num</span></td>
+        <td><span class="mono">OUTPUT Total</span></td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Counting</td>
+        <td><span class="mono">Count ← 0</span></td>
+        <td><span class="mono">IF cond THEN Count ← Count + 1</span></td>
+        <td><span class="mono">OUTPUT Count</span></td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Maximum</td>
+        <td><span class="mono">Max ← first value</span></td>
+        <td><span class="mono">IF Num &gt; Max THEN Max ← Num</span></td>
+        <td><span class="mono">OUTPUT Max</span></td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Minimum</td>
+        <td><span class="mono">Min ← first value</span></td>
+        <td><span class="mono">IF Num &lt; Min THEN Min ← Num</span></td>
+        <td><span class="mono">OUTPUT Min</span></td>
+      </tr>
+      <tr>
+        <td class="font-semibold">Average</td>
+        <td><span class="mono">Total ← 0</span></td>
+        <td><span class="mono">Total ← Total + Num</span></td>
+        <td><span class="mono">Average ← Total / Count<br>OUTPUT Average</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+</content>
+</invoke>

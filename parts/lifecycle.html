@@ -1,0 +1,379 @@
+<section id="sec-lifecycle" class="section">
+  <h2 class="text-2xl font-bold mb-1">Program Development Life Cycle</h2>
+  <p class="text-zinc-400 mb-4">The structured, iterative process used by programmers to turn a real-world problem into a working, tested program — examined heavily on Paper 2.</p>
+
+  <!-- Overview: 4 stages -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">The Four Stages at a Glance</h3>
+  <div class="grid grid-cols-4 gap-4">
+    <div class="card card-accent">
+      <div class="badge badge-purple mb-2">Stage 1</div>
+      <div class="font-semibold">Analysis</div>
+      <p class="text-sm text-zinc-400 mt-1">Understand the problem. Gather requirements. Identify inputs, processes, outputs and storage.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="badge badge-blue mb-2">Stage 2</div>
+      <div class="font-semibold">Design</div>
+      <p class="text-sm text-zinc-400 mt-1">Plan the solution using structure diagrams, flowcharts and pseudocode.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="badge badge-green mb-2">Stage 3</div>
+      <div class="font-semibold">Coding</div>
+      <p class="text-sm text-zinc-400 mt-1">Translate the design into a high-level programming language (Python, Java, VB).</p>
+    </div>
+    <div class="card card-accent">
+      <div class="badge badge-amber mb-2">Stage 4</div>
+      <div class="font-semibold">Testing</div>
+      <p class="text-sm text-zinc-400 mt-1">Run the program with carefully chosen test data to find and fix errors.</p>
+    </div>
+  </div>
+
+  <!-- Stage 1: Analysis -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Stage 1 — Analysis (in depth)</h3>
+  <div class="card">
+    <div class="badge badge-purple mb-2">Analysis</div>
+    <p class="text-sm">Analysis is about <span class="font-semibold">understanding the problem fully before writing any code</span>. It involves four key activities:</p>
+    <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+      <li><span class="font-semibold">Requirements gathering</span> — interview the client/user, study the existing system, read documents, identify what the program <em>must</em> do (functional requirements) and <em>how well</em> it must do it (non-functional, e.g. speed, security).</li>
+      <li><span class="font-semibold">Abstraction</span> — keeping only the relevant details and <em>ignoring/hiding</em> the rest. E.g. for a payroll program you keep pay rate and hours worked; you ignore the employee's eye colour.</li>
+      <li><span class="font-semibold">Decomposition</span> — breaking the big problem into smaller, manageable sub-problems that can each be solved separately.</li>
+      <li><span class="font-semibold">Identifying Inputs / Processes / Outputs / Storage</span> — every program is essentially I → P → O, often with files/databases for persistent storage.</li>
+    </ul>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Worked example — Online Ordering System</h4>
+    <table class="trace">
+      <thead>
+        <tr><th>Inputs</th><th>Processes</th><th>Outputs</th><th>Storage</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Customer login (username, password)<br>Product selections<br>Quantity<br>Delivery address<br>Payment card details</td>
+          <td>Authenticate user<br>Calculate subtotal<br>Apply discount/VAT<br>Validate card<br>Generate order ID</td>
+          <td>Order confirmation screen<br>Email receipt<br>Invoice (PDF)<br>Stock-update message to warehouse</td>
+          <td>Customer database<br>Product/stock database<br>Orders database<br>Transaction log file</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-xs text-zinc-400 mt-2">Tip: in the exam, list items as short noun phrases — examiners mark per item, not per sentence.</p>
+  </div>
+
+  <!-- Stage 2: Design -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Stage 2 — Design (in depth)</h3>
+  <div class="card">
+    <div class="badge badge-blue mb-2">Design</div>
+    <p class="text-sm">Design takes the analysis output and produces a <span class="font-semibold">plan that a programmer can follow</span>. Three standard tools are examined:</p>
+
+    <div class="grid grid-cols-3 gap-4 mt-3">
+      <div class="card card-accent">
+        <div class="font-semibold">Structure diagram</div>
+        <p class="text-sm text-zinc-400 mt-1">A <em>top-down</em>, hierarchical tree showing how the whole system is broken into modules and sub-modules.</p>
+        <p class="text-xs text-purple-300 mt-2">Use when: planning <em>overall architecture</em> at the start of design.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Flowchart</div>
+        <p class="text-sm text-zinc-400 mt-1">A visual diagram of the algorithm using standard symbols (start/stop, process, decision, input/output).</p>
+        <p class="text-xs text-purple-300 mt-2">Use when: showing <em>flow of control</em>, especially loops and decisions.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Pseudocode</div>
+        <p class="text-sm text-zinc-400 mt-1">Text-based, language-independent description of the algorithm using keywords like IF, WHILE, FOR.</p>
+        <p class="text-xs text-purple-300 mt-2">Use when: writing <em>detailed step-by-step logic</em> just before coding.</p>
+      </div>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Sample pseudocode (login validation)</h4>
+<pre>
+<span class="kw">INPUT</span> username
+<span class="kw">INPUT</span> password
+<span class="kw">IF</span> username = <span class="str">"admin"</span> <span class="kw">AND</span> password = <span class="str">"1234"</span> <span class="kw">THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Access granted"</span>
+<span class="kw">ELSE</span>
+   <span class="kw">OUTPUT</span> <span class="str">"Access denied"</span>
+<span class="kw">ENDIF</span>
+</pre>
+  </div>
+
+  <!-- Stage 3: Coding -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Stage 3 — Coding (in depth)</h3>
+  <div class="card">
+    <div class="badge badge-green mb-2">Coding</div>
+    <p class="text-sm">Coding is the <span class="font-semibold">translation of the design into a high-level programming language</span> such as Python, Java or Visual Basic. A high-level language is chosen because it is easier to read, write and maintain than machine code.</p>
+    <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+      <li><span class="font-semibold">Modular coding</span> — splitting the program into <em>procedures</em> (which carry out a task) and <em>functions</em> (which carry out a task and return a value). Each module corresponds to one box on the structure diagram.</li>
+      <li><span class="font-semibold">Benefits of modules:</span> easier to test, easier to debug, can be reused, can be written by different team members in parallel, easier to maintain.</li>
+      <li><span class="font-semibold">Code conventions:</span> meaningful identifiers, comments, indentation, constants for fixed values.</li>
+    </ul>
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Example — modular pseudocode</h4>
+<pre>
+<span class="kw">PROCEDURE</span> <span class="fn">Greet</span>(name : <span class="kw">STRING</span>)
+   <span class="kw">OUTPUT</span> <span class="str">"Hello "</span>, name
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">FUNCTION</span> <span class="fn">Square</span>(x : <span class="kw">INTEGER</span>) <span class="kw">RETURNS</span> <span class="kw">INTEGER</span>
+   <span class="kw">RETURN</span> x * x
+<span class="kw">ENDFUNCTION</span>
+
+<span class="com">// Main program</span>
+<span class="fn">Greet</span>(<span class="str">"Alex"</span>)
+<span class="kw">OUTPUT</span> <span class="fn">Square</span>(<span class="num">7</span>)
+</pre>
+  </div>
+
+  <!-- Stage 4: Testing -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Stage 4 — Testing (in depth)</h3>
+  <div class="card">
+    <div class="badge badge-amber mb-2">Testing</div>
+    <p class="text-sm">Testing checks that the program does what it should and copes with bad input. Four kinds of test data are defined by the syllabus.</p>
+
+    <div class="grid grid-cols-4 gap-4 mt-3">
+      <div class="card card-accent">
+        <div class="badge badge-green mb-2">Normal</div>
+        <p class="text-sm">Sensible values <em>well inside</em> the accepted range. Should be accepted.</p>
+        <p class="text-xs text-purple-300 mt-2">Range 1–100 → <span class="mono">42</span></p>
+      </div>
+      <div class="card card-accent">
+        <div class="badge badge-blue mb-2">Boundary</div>
+        <p class="text-sm">Values <em>on the edge</em> of the accepted range. Largest accepted &amp; smallest accepted.</p>
+        <p class="text-xs text-purple-300 mt-2">Range 1–100 → <span class="mono">1</span> or <span class="mono">100</span></p>
+      </div>
+      <div class="card card-accent">
+        <div class="badge badge-amber mb-2">Extreme</div>
+        <p class="text-sm">The <em>most extreme valid values</em> at each end of the accepted range (often same as boundary).</p>
+        <p class="text-xs text-purple-300 mt-2">Range 1–100 → <span class="mono">1</span> and <span class="mono">100</span></p>
+      </div>
+      <div class="card card-accent">
+        <div class="badge badge-red mb-2">Erroneous</div>
+        <p class="text-sm">Values the program should <em>reject</em> — wrong type or out of range.</p>
+        <p class="text-xs text-purple-300 mt-2">Range 1–100 → <span class="mono">-5</span>, <span class="mono">101</span>, <span class="mono">"abc"</span></p>
+      </div>
+    </div>
+
+    <p class="text-sm mt-4"><span class="font-semibold">Boundary vs Extreme — key distinction:</span> Boundary data tests just inside and just outside the limit (e.g. 0, 1, 100, 101). Extreme data tests the largest and smallest values that are still accepted (1 and 100). In the IGCSE answers, the boundary <em>just inside</em> and the extreme can be the same number.</p>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Worked example — test table for a "percentage mark 0–100" input</h4>
+    <table class="trace">
+      <thead>
+        <tr><th>Test data</th><th>Type</th><th>Expected result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="mono">57</span></td><td>Normal</td><td>Accepted</td></tr>
+        <tr><td><span class="mono">0</span></td><td>Boundary (low)</td><td>Accepted</td></tr>
+        <tr><td><span class="mono">100</span></td><td>Boundary / Extreme (high)</td><td>Accepted</td></tr>
+        <tr><td><span class="mono">-1</span></td><td>Erroneous</td><td>Rejected with error message</td></tr>
+        <tr><td><span class="mono">101</span></td><td>Erroneous</td><td>Rejected with error message</td></tr>
+        <tr><td><span class="mono">"hello"</span></td><td>Erroneous (wrong type)</td><td>Rejected with error message</td></tr>
+      </tbody>
+    </table>
+
+    <p class="text-sm mt-3"><span class="font-semibold">Iterative testing:</span> testing is <em>not</em> a one-off step at the end. When a test fails, the programmer returns to coding (and sometimes design or analysis) to fix the cause, then re-tests. This loop continues until all tests pass.</p>
+  </div>
+
+  <!-- Iterative diagram -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">The Cycle is Iterative</h3>
+  <div class="card">
+    <p class="text-sm mb-3">The four stages form a cycle: bugs send you back to coding, design flaws send you back to design, and missed requirements send you all the way back to analysis.</p>
+    <div class="mermaid">
+flowchart LR
+  A[Analysis] --> B[Design]
+  B --> C[Coding]
+  C --> D[Testing]
+  D -- bugs found --> C
+  D -- design flaw --> B
+  D -- requirements wrong --> A
+    </div>
+  </div>
+
+  <!-- Types of errors -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Types of Programming Errors</h3>
+  <div class="card">
+    <p class="text-sm mb-3">Three classes of error appear on Paper 2 — make sure you can <em>define</em> each and <em>give an example</em>.</p>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card card-accent">
+        <div class="badge badge-red mb-2">Syntax error</div>
+        <p class="text-sm">A break of the rules (grammar) of the programming language. Detected by the <em>compiler or interpreter</em> before/while the program runs — the program will not execute.</p>
+        <p class="text-xs text-purple-300 mt-2">Example:</p>
+<pre>
+<span class="kw">IF</span> x &gt; <span class="num">10</span>      <span class="com">// missing THEN</span>
+   <span class="kw">OUTPUT</span> <span class="str">"big"</span>
+<span class="kw">ENDIF</span>
+</pre>
+        <p class="text-xs text-zinc-400 mt-1">Or in Python: <span class="mono">print("hi"</span> — missing closing bracket.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="badge badge-amber mb-2">Logic error</div>
+        <p class="text-sm">The program <em>runs without crashing</em> but produces the <em>wrong output</em>. The instructions are valid but they do the wrong thing.</p>
+        <p class="text-xs text-purple-300 mt-2">Example: an average function that uses <span class="mono">total / 2</span> instead of <span class="mono">total / n</span>, or <span class="mono">IF age &gt; 18</span> instead of <span class="mono">IF age &gt;= 18</span>.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="badge badge-purple mb-2">Runtime error</div>
+        <p class="text-sm">The program starts running but <em>crashes (aborts) during execution</em> because it tries to do something impossible.</p>
+        <p class="text-xs text-purple-300 mt-2">Example: division by zero (<span class="mono">x / 0</span>), accessing array element <span class="mono">a[20]</span> when array only has 10 elements, or trying to open a file that does not exist.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam questions -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-style Questions</h3>
+
+  <div class="card">
+    <p class="text-sm font-semibold">Q1. State the four stages of the program development life cycle and describe what happens at each. [8]</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-purple-300 text-sm">Show model answer</summary>
+      <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+        <li><span class="font-semibold">Analysis</span> — the problem is investigated; requirements are gathered from the user; abstraction and decomposition are applied; inputs, processes, outputs and storage are identified. [2]</li>
+        <li><span class="font-semibold">Design</span> — a solution is planned using tools such as structure diagrams, flowcharts and pseudocode; data structures and module interfaces are defined. [2]</li>
+        <li><span class="font-semibold">Coding</span> — the design is translated into a high-level programming language; the program is written as procedures/functions (modular coding). [2]</li>
+        <li><span class="font-semibold">Testing</span> — the program is run with normal, boundary, extreme and erroneous test data to find errors; failed tests trigger a return to coding/design (iterative). [2]</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card mt-3">
+    <p class="text-sm font-semibold">Q2. A program asks the user to enter a percentage mark in the range 0 to 100 inclusive. Give one example each of normal, boundary, extreme and erroneous test data. [4]</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-purple-300 text-sm">Show model answer</summary>
+      <ul class="list-disc pl-5 space-y-1 text-sm mt-2">
+        <li>Normal: <span class="mono">57</span> (any value clearly inside 0–100). [1]</li>
+        <li>Boundary: <span class="mono">0</span> or <span class="mono">100</span> (a value exactly on the limit). [1]</li>
+        <li>Extreme: <span class="mono">0</span> or <span class="mono">100</span> (largest/smallest accepted value). [1]</li>
+        <li>Erroneous: <span class="mono">-5</span>, <span class="mono">101</span> or <span class="mono">"abc"</span> (value the program should reject). [1]</li>
+      </ul>
+      <p class="text-xs text-zinc-400 mt-2">Note: examiners accept the same numeric value (e.g. 100) for both boundary and extreme provided each example is labelled correctly.</p>
+    </details>
+  </div>
+
+  <div class="card mt-3">
+    <p class="text-sm font-semibold">Q3. Describe the difference between a syntax error and a logic error, giving one example of each. [4]</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-purple-300 text-sm">Show model answer</summary>
+      <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+        <li><span class="font-semibold">Syntax error</span> — breaks the grammar/rules of the programming language and is detected by the compiler/interpreter so the program will not run. [1] Example: <span class="mono">IF x &gt; 10</span> with no <span class="mono">THEN</span> keyword, or a missing closing bracket. [1]</li>
+        <li><span class="font-semibold">Logic error</span> — the program runs successfully but produces the wrong output because the algorithm is incorrect. [1] Example: writing <span class="mono">average = total / 2</span> instead of <span class="mono">total / count</span>, so the average is wrong. [1]</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section id="sec-ct" class="section">
+  <h2 class="text-2xl font-bold mb-1">Computational Thinking</h2>
+  <p class="text-zinc-400 mb-4">The three problem-solving skills every IGCSE candidate must be able to define, apply and exemplify: abstraction, decomposition and algorithmic thinking.</p>
+
+  <!-- 3-card grid -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">The Three Skills</h3>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="card card-accent">
+      <div class="badge badge-purple mb-2">Abstraction</div>
+      <p class="text-sm">Removing or hiding <span class="font-semibold">unnecessary detail</span> so that only the information needed to solve the problem remains.</p>
+      <p class="text-xs text-purple-300 mt-2">Example: the London Tube map shows stations and lines but ignores exact distances, curves and surface geography — those details are irrelevant for finding a route.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="badge badge-blue mb-2">Decomposition</div>
+      <p class="text-sm">Breaking a <span class="font-semibold">large complex problem</span> into smaller, more manageable sub-problems that can be solved one at a time.</p>
+      <p class="text-xs text-purple-300 mt-2">Example: a quiz app decomposes into: user login, question bank, scoring engine, results screen and user interface.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="badge badge-green mb-2">Algorithmic thinking</div>
+      <p class="text-sm">Working out a <span class="font-semibold">clear, ordered sequence of steps</span> (an algorithm) that solves the problem and can be repeated reliably.</p>
+      <p class="text-xs text-purple-300 mt-2">Example: writing the precise steps to make a cup of tea — kettle on, wait for boil, pour into cup with teabag, wait, remove bag, add milk.</p>
+    </div>
+  </div>
+
+  <!-- Worked example: vending machine -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Worked Example — Vending Machine Controller</h3>
+  <div class="card">
+    <p class="text-sm mb-3">Suppose we are asked to build the software that controls a vending machine. We apply <span class="font-semibold">decomposition</span> to break the problem down, then <span class="font-semibold">abstraction</span> to keep only the relevant details, then <span class="font-semibold">algorithmic thinking</span> for each module.</p>
+
+    <h4 class="font-semibold mt-2 mb-2 text-purple-300">Top-level decomposition (structure diagram)</h4>
+    <div class="mermaid">
+flowchart TD
+  A[Vending Machine] --> B[Accept Money]
+  A --> C[Select Product]
+  A --> D[Dispense Product]
+  A --> E[Give Change]
+  B --> B1[Read Coin]
+  B --> B2[Validate Coin]
+  B --> B3[Add to Balance]
+  C --> C1[Display Menu]
+  C --> C2[Read Selection]
+  C --> C3[Check Stock]
+  D --> D1[Activate Motor]
+  D --> D2[Update Stock]
+  E --> E1[Calculate Change]
+  E --> E2[Release Coins]
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Abstraction in this problem</h4>
+    <p class="text-sm">We <em>ignore</em>: the colour of the machine, the brand of the cans, the music it plays, the weight of the coins. We <em>keep</em>: coin value, product ID, product price, stock level, balance held, change owed.</p>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Algorithm for "Accept Money" (pseudocode)</h4>
+<pre>
+balance &#x2190; <span class="num">0</span>
+<span class="kw">WHILE</span> balance &lt; price <span class="kw">DO</span>
+   <span class="kw">INPUT</span> coin
+   <span class="kw">IF</span> <span class="fn">ValidCoin</span>(coin) = <span class="kw">TRUE</span> <span class="kw">THEN</span>
+      balance &#x2190; balance + coin
+   <span class="kw">ELSE</span>
+      <span class="kw">OUTPUT</span> <span class="str">"Coin rejected"</span>
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDWHILE</span>
+<span class="kw">OUTPUT</span> <span class="str">"Balance reached"</span>
+</pre>
+    <p class="text-xs text-zinc-400 mt-2">Each leaf box in the structure diagram becomes a small procedure or function during the coding stage — a direct link between Computational Thinking and the Program Development Life Cycle.</p>
+  </div>
+
+  <!-- Structure diagrams explained -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Structure Diagrams Explained</h3>
+  <div class="card">
+    <p class="text-sm">A <span class="font-semibold">structure diagram</span> is the most common way to present decomposition on paper. Key features:</p>
+    <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+      <li><span class="font-semibold">Top-down</span> — the whole system sits at the top; the diagram becomes more detailed as you go down.</li>
+      <li><span class="font-semibold">Hierarchical</span> — boxes are organised in levels (parent → child), with each child being a sub-task of its parent.</li>
+      <li><span class="font-semibold">Modules, not code</span> — each box describes <em>what</em> is done, not <em>how</em>. Algorithms come later (in pseudocode/flowcharts).</li>
+      <li><span class="font-semibold">Planning tool</span> — used during the <em>Design</em> stage of the life cycle to give the team an overview before writing detailed algorithms.</li>
+      <li><span class="font-semibold">Reusable modules</span> — a module that appears in more than one place (e.g. "Validate Coin") can be written once and reused.</li>
+    </ul>
+    <p class="text-sm mt-3"><span class="font-semibold">Difference from a flowchart:</span> a structure diagram shows <em>what modules exist and how they relate</em>; a flowchart shows <em>the order in which steps execute</em>, including loops and decisions.</p>
+  </div>
+
+  <!-- Exam questions -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Exam-style Questions</h3>
+
+  <div class="card">
+    <p class="text-sm font-semibold">Q1. Define abstraction and decomposition. Give an example of each from real-world software design. [4]</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-purple-300 text-sm">Show model answer</summary>
+      <ul class="list-disc pl-5 space-y-2 text-sm mt-2">
+        <li><span class="font-semibold">Abstraction</span> — the process of removing or hiding unnecessary detail so that only the information relevant to solving the problem remains. [1] Example: a map app stores only road junctions, road names and one-way directions; it ignores building colours and road surface materials. [1]</li>
+        <li><span class="font-semibold">Decomposition</span> — breaking a complex problem into smaller sub-problems that can be solved individually. [1] Example: an e-commerce site is decomposed into login, product catalogue, shopping basket, payment and order tracking modules. [1]</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card mt-3">
+    <p class="text-sm font-semibold">Q2. A school wants to build a library borrowing system. Decompose the problem into sub-problems using a structure diagram. [5]</p>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-purple-300 text-sm">Show model answer</summary>
+      <p class="text-sm mt-2">A suitable structure diagram (1 mark for sensible top-level system, 1 mark each for up to four reasonable sub-modules):</p>
+      <div class="mermaid">
+flowchart TD
+  L[Library Borrowing System] --> M[Manage Members]
+  L --> B[Manage Books]
+  L --> C[Borrow Book]
+  L --> R[Return Book]
+  L --> F[Fines &amp; Reports]
+  M --> M1[Add Member]
+  M --> M2[Update Member]
+  B --> B1[Add Book]
+  B --> B2[Search Catalogue]
+  C --> C1[Check Member ID]
+  C --> C2[Check Stock]
+  C --> C3[Record Loan]
+  R --> R1[Check Due Date]
+  R --> R2[Update Stock]
+  F --> F1[Calculate Fines]
+  F --> F2[Print Overdue List]
+      </div>
+      <p class="text-xs text-zinc-400 mt-2">Marks awarded for: (a) the system at the top, (b) sensible top-level modules (Manage Members, Manage Books, Borrow, Return, Fines), (c) at least one level of sub-modules, (d) hierarchy shown with lines, (e) labels written as actions/tasks rather than data.</p>
+    </details>
+  </div>
+</section>

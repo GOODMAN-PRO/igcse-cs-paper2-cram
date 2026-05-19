@@ -1,0 +1,703 @@
+<section id="sec-sql" class="section">
+  <h2 class="text-2xl font-bold mb-1">Databases &amp; SQL</h2>
+  <p class="text-zinc-400 mb-4">In IGCSE 0478/0984 you write <span class="font-semibold">single-table SQL queries</span> using SELECT, FROM, WHERE, ORDER BY, the aggregate functions and (in the 2026 syllabus) GROUP BY — applied to a flat table given in the question.</p>
+
+  <!-- ============================================================== -->
+  <!-- 1. Database Terminology                                          -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Database Terminology</h3>
+  <div class="card">
+    <div class="badge badge-purple mb-2">Vocab</div>
+    <p class="text-sm">Examiners deduct marks for sloppy use of "row" when you mean "record", or "field" when you mean "data type". Learn these precisely.</p>
+    <div class="grid grid-cols-2 gap-4 mt-3">
+      <div class="card card-accent">
+        <div class="font-semibold">Table</div>
+        <p class="text-sm text-zinc-400 mt-1">A structured collection of data, organised in <span class="font-semibold">rows and columns</span>. Each table stores information about one type of entity (e.g. PRODUCT, STUDENT, BOOK).</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Record (row)</div>
+        <p class="text-sm text-zinc-400 mt-1">A single entry in a table — <span class="font-semibold">one entity</span>, e.g. one product. All the values for one item, read left to right.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Field (column)</div>
+        <p class="text-sm text-zinc-400 mt-1">A single <span class="font-semibold">attribute</span> — one property of an entity, e.g. <code>Price</code>. Every record has a value for every field (possibly NULL).</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Primary key</div>
+        <p class="text-sm text-zinc-400 mt-1">A field (or combination of fields) that <span class="font-semibold">uniquely identifies each record</span>. Two rules: <em>no duplicates</em> and <em>never NULL</em>. Example: <code>ProductID</code>.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Foreign key</div>
+        <p class="text-sm text-zinc-400 mt-1">A field in one table that <span class="font-semibold">references the primary key of another table</span>, linking the two. IGCSE 2026 is mostly single-table, but the vocabulary is examinable.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Database</div>
+        <p class="text-sm text-zinc-400 mt-1">A collection of <span class="font-semibold">related tables</span>, organised so that data can be efficiently stored, retrieved and updated. Managed by software called a <em>DBMS</em>.</p>
+      </div>
+    </div>
+    <p class="text-xs text-zinc-400 mt-3">Tip: in exam answers always say "<span class="font-semibold">record</span>" not "row" and "<span class="font-semibold">field</span>" not "column" — those are the marker's keywords.</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 2. Data Types                                                    -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Data Types in Databases</h3>
+  <div class="card">
+    <div class="badge badge-blue mb-2">Types</div>
+    <p class="text-sm">When you design a table you must give each field an appropriate data type. The IGCSE syllabus uses the same names you'll find in real SQL.</p>
+    <table class="trace mt-3">
+      <thead>
+        <tr><th>Data type</th><th>Stores</th><th>Example value</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>TEXT</code> / <code>VARCHAR(n)</code></td>
+          <td>Strings — variable-length characters up to <code>n</code></td>
+          <td><code>"Laptop X1"</code></td>
+        </tr>
+        <tr>
+          <td><code>INTEGER</code></td>
+          <td>Whole numbers (positive or negative, no decimal point)</td>
+          <td><code>12</code></td>
+        </tr>
+        <tr>
+          <td><code>REAL</code> / <code>DECIMAL</code> / <code>FLOAT</code></td>
+          <td>Decimal (real) numbers — money, measurements, averages</td>
+          <td><code>899.99</code></td>
+        </tr>
+        <tr>
+          <td><code>DATE</code></td>
+          <td>Calendar dates in <code>YYYY-MM-DD</code> form</td>
+          <td><code>"2026-05-19"</code></td>
+        </tr>
+        <tr>
+          <td><code>BOOLEAN</code></td>
+          <td>Logical values — only TRUE or FALSE</td>
+          <td><code>TRUE</code></td>
+        </tr>
+        <tr>
+          <td><code>TIME</code></td>
+          <td>Times of day in <code>HH:MM:SS</code> form (less common in IGCSE)</td>
+          <td><code>"14:30:00"</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-xs text-zinc-400 mt-2">Choosing the right type matters: storing <code>Price</code> as TEXT means you can't add it up; storing <code>Stock</code> as REAL allows nonsensical "12.7 units".</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 3. Sample PRODUCT table                                          -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Sample Table — <code>PRODUCT</code></h3>
+  <div class="card">
+    <div class="badge badge-green mb-2">Reference data</div>
+    <p class="text-sm">Every SQL query below operates on this table. Treat it as the table the examiner gives you in the paper. <span class="font-semibold">Primary key:</span> <code>ProductID</code>.</p>
+
+    <h4 class="font-semibold mt-3 mb-2 text-purple-300">Schema</h4>
+    <table class="trace">
+      <thead>
+        <tr><th>Field</th><th>Data type</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>ProductID</code></td><td>TEXT</td><td>Primary key — unique, never NULL</td></tr>
+        <tr><td><code>Name</code></td><td>TEXT</td><td>The product's name</td></tr>
+        <tr><td><code>Category</code></td><td>TEXT</td><td>One of: Electronics, Grocery, Furniture</td></tr>
+        <tr><td><code>Price</code></td><td>REAL</td><td>Price per unit, in &pound;</td></tr>
+        <tr><td><code>Stock</code></td><td>INTEGER</td><td>Units in the warehouse</td></tr>
+        <tr><td><code>Supplier</code></td><td>TEXT</td><td>Name of the supplying company</td></tr>
+        <tr><td><code>Available</code></td><td>BOOLEAN</td><td>TRUE if currently for sale</td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Records (10 rows)</h4>
+    <table class="trace">
+      <thead>
+        <tr>
+          <th>ProductID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Supplier</th><th>Available</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>P001</td><td>Laptop X1</td><td>Electronics</td><td>899.99</td><td>12</td><td>TechCorp</td><td>TRUE</td></tr>
+        <tr><td>P002</td><td>Coffee Beans 1kg</td><td>Grocery</td><td>12.50</td><td>50</td><td>BeanCo</td><td>TRUE</td></tr>
+        <tr><td>P003</td><td>Bluetooth Headphones</td><td>Electronics</td><td>79.00</td><td>0</td><td>AudioPlus</td><td>FALSE</td></tr>
+        <tr><td>P004</td><td>Office Chair</td><td>Furniture</td><td>249.99</td><td>8</td><td>ChairWorks</td><td>TRUE</td></tr>
+        <tr><td>P005</td><td>Tea Bags 100ct</td><td>Grocery</td><td>4.99</td><td>120</td><td>BeanCo</td><td>TRUE</td></tr>
+        <tr><td>P006</td><td>Smartphone Z9</td><td>Electronics</td><td>599.00</td><td>25</td><td>TechCorp</td><td>TRUE</td></tr>
+        <tr><td>P007</td><td>Desk Lamp</td><td>Furniture</td><td>39.99</td><td>30</td><td>LightWorks</td><td>TRUE</td></tr>
+        <tr><td>P008</td><td>Olive Oil 500ml</td><td>Grocery</td><td>8.99</td><td>75</td><td>MediFoods</td><td>TRUE</td></tr>
+        <tr><td>P009</td><td>USB Cable</td><td>Electronics</td><td>5.99</td><td>200</td><td>AudioPlus</td><td>TRUE</td></tr>
+        <tr><td>P010</td><td>Standing Desk</td><td>Furniture</td><td>449.00</td><td>3</td><td>ChairWorks</td><td>FALSE</td></tr>
+      </tbody>
+    </table>
+    <p class="text-xs text-zinc-400 mt-2">Notice: P003 has 0 stock and is marked FALSE; P010 is a low-stock item also marked FALSE — they are typical "edge" rows that catch out students who don't read carefully.</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 4. SQL Queries — build-up                                        -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">SQL Queries — Build-Up</h3>
+  <p class="text-sm text-zinc-400 mb-3">Each card shows a query in increasing complexity. Click "What this returns" to reveal the expected result rows.</p>
+
+  <!-- ------------- Basic SELECT --------------------------------- -->
+  <h4 class="font-semibold mt-4 mb-2 text-purple-300">Basic SELECT</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">1 — Select all</div>
+      <div class="text-sm mb-2">Return every field of every record. <code>*</code> is the wildcard meaning "all fields".</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">All 10 records with all 7 fields — the entire PRODUCT table unchanged.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">2 — Specific fields</div>
+      <div class="text-sm mb-2">List the column names you want, separated by commas.</div>
+<pre><span class="kw">SELECT</span> Name, Price <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">10 rows, each showing only <code>Name</code> and <code>Price</code>: Laptop X1 / 899.99, Coffee Beans 1kg / 12.50, Bluetooth Headphones / 79.00, … Standing Desk / 449.00.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">3 — DISTINCT</div>
+      <div class="text-sm mb-2">Eliminate duplicate values — useful for getting the list of unique categories, suppliers, etc.</div>
+<pre><span class="kw">SELECT DISTINCT</span> Category <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">3 rows: <code>Electronics</code>, <code>Grocery</code>, <code>Furniture</code> — the unique category values, no repeats.</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- WHERE clause --------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">WHERE clause — filtering records</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-blue mb-2">4 — Simple WHERE</div>
+      <div class="text-sm mb-2">Filter by an exact text match. Text values <span class="font-semibold">must be in quotes</span>.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Category = <span class="str">"Electronics"</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">4 records: P001 Laptop X1, P003 Bluetooth Headphones, P006 Smartphone Z9, P009 USB Cable.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-blue mb-2">5 — Numeric comparison</div>
+      <div class="text-sm mb-2">Compare numeric fields with <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Numbers are <span class="font-semibold">not</span> quoted.</div>
+<pre><span class="kw">SELECT</span> Name, Price <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Price &lt; <span class="num">50</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">5 rows where Price &lt; 50: Coffee Beans 1kg / 12.50, Tea Bags 100ct / 4.99, Desk Lamp / 39.99, Olive Oil 500ml / 8.99, USB Cable / 5.99.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-blue mb-2">6 — Inequality</div>
+      <div class="text-sm mb-2"><code>&lt;&gt;</code> is the standard SQL "not equal to" operator. Use it to exclude a value.</div>
+<pre><span class="kw">SELECT</span> Name <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Stock &lt;&gt; <span class="num">0</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">9 names — every product except <em>Bluetooth Headphones</em> (the only one whose Stock = 0).</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- AND / OR ------------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">Combining conditions — AND, OR</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-green mb-2">7 — AND</div>
+      <div class="text-sm mb-2"><code>AND</code> means <span class="font-semibold">both</span> conditions must be true.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Category = <span class="str">"Grocery"</span>
+  <span class="kw">AND</span> Price &lt; <span class="num">10</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">2 records: P005 Tea Bags 100ct (4.99) and P008 Olive Oil 500ml (8.99). Coffee Beans is Grocery but costs 12.50 so it's excluded.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-green mb-2">8 — OR</div>
+      <div class="text-sm mb-2"><code>OR</code> means <span class="font-semibold">at least one</span> condition is true.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Category = <span class="str">"Electronics"</span>
+   <span class="kw">OR</span> Category = <span class="str">"Furniture"</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">7 records — every product except the 3 Grocery items (Coffee Beans, Tea Bags, Olive Oil).</p>
+      </details>
+    </div>
+
+    <div class="card col-span-2">
+      <div class="badge badge-green mb-2">9 — AND + OR with parentheses</div>
+      <div class="text-sm mb-2">Mix <code>AND</code>/<code>OR</code> carefully — use parentheses to force the evaluation order. Without them, <code>AND</code> binds tighter than <code>OR</code> and your query may filter the wrong rows.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Available = <span class="kw">TRUE</span>
+  <span class="kw">AND</span> (Price &lt; <span class="num">50</span> <span class="kw">OR</span> Stock &gt; <span class="num">100</span>);</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">Available items that are <em>either</em> cheap (&lt; 50) <em>or</em> abundantly stocked (&gt; 100): P002 Coffee Beans (price 12.50), P005 Tea Bags (price 4.99 <em>and</em> stock 120), P007 Desk Lamp (39.99), P008 Olive Oil (8.99), P009 USB Cable (5.99, stock 200) — 5 records.</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- LIKE / pattern matching ---------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">Pattern matching — LIKE</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">10 — LIKE with %</div>
+      <div class="text-sm mb-2"><code>%</code> matches <span class="font-semibold">any number</span> of characters (including zero).</div>
+<pre><span class="kw">SELECT</span> Name <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Name <span class="kw">LIKE</span> <span class="str">"S%"</span>;
+<span class="com">-- names starting with capital S</span></pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">2 rows: <em>Smartphone Z9</em>, <em>Standing Desk</em>.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">11 — LIKE with _</div>
+      <div class="text-sm mb-2"><code>_</code> matches <span class="font-semibold">exactly one</span> character. The pattern <code>"P00_"</code> is 4 characters: P, 0, 0, then any single character.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> ProductID <span class="kw">LIKE</span> <span class="str">"P00_"</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">9 records — P001 through P009. P010 is excluded because its ID is 4 characters but the last is not a single-position match (the IDs are length 4, so this actually returns all 10? Note: ProductID values are P001…P010, all length 4, so <code>P00_</code> matches P001–P009 and <code>P0__</code> would be needed for P010.) The result is 9 rows (P001–P009).</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">12 — LIKE with both sides %</div>
+      <div class="text-sm mb-2"><code>%text%</code> matches anything <span class="font-semibold">containing</span> the substring. LIKE is normally case-insensitive in IGCSE answers.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Name <span class="kw">LIKE</span> <span class="str">"%oil%"</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 record: <em>Olive Oil 500ml</em> — the only name containing the letters "oil".</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- BETWEEN / IN --------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">Ranges and lists — BETWEEN, IN</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-blue mb-2">13 — BETWEEN</div>
+      <div class="text-sm mb-2"><code>BETWEEN x AND y</code> is shorthand for <code>&gt;= x AND &lt;= y</code> — <span class="font-semibold">inclusive at both ends</span>.</div>
+<pre><span class="kw">SELECT</span> Name, Price <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Price <span class="kw">BETWEEN</span> <span class="num">5</span> <span class="kw">AND</span> <span class="num">50</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">4 rows: Coffee Beans 1kg / 12.50, Desk Lamp / 39.99, Olive Oil 500ml / 8.99, USB Cable / 5.99. (Tea Bags at 4.99 is just below 5, so excluded.)</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-blue mb-2">14 — IN</div>
+      <div class="text-sm mb-2"><code>IN (list)</code> is shorthand for chained ORs — match any value in the list.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Supplier <span class="kw">IN</span> (<span class="str">"TechCorp"</span>, <span class="str">"BeanCo"</span>);</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">4 records: P001 Laptop X1, P002 Coffee Beans, P005 Tea Bags, P006 Smartphone Z9.</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- ORDER BY ------------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">Sorting — ORDER BY</h4>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">15 — Ascending</div>
+      <div class="text-sm mb-2"><code>ASC</code> = smallest → largest (or A → Z). It's the default.</div>
+<pre><span class="kw">SELECT</span> Name, Price <span class="kw">FROM</span> PRODUCT
+<span class="kw">ORDER BY</span> Price <span class="kw">ASC</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">10 rows in price order: Tea Bags / 4.99, USB Cable / 5.99, Olive Oil / 8.99, Coffee Beans / 12.50, Desk Lamp / 39.99, Bluetooth Headphones / 79.00, Office Chair / 249.99, Standing Desk / 449.00, Smartphone Z9 / 599.00, Laptop X1 / 899.99.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">16 — Descending</div>
+      <div class="text-sm mb-2"><code>DESC</code> = largest → smallest. Useful for "top N" style queries.</div>
+<pre><span class="kw">SELECT</span> Name, Stock <span class="kw">FROM</span> PRODUCT
+<span class="kw">ORDER BY</span> Stock <span class="kw">DESC</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">10 rows in stock order, highest first: USB Cable / 200, Tea Bags / 120, Olive Oil / 75, Coffee Beans / 50, Desk Lamp / 30, Smartphone Z9 / 25, Laptop X1 / 12, Office Chair / 8, Standing Desk / 3, Bluetooth Headphones / 0.</p>
+      </details>
+    </div>
+
+    <div class="card col-span-2">
+      <div class="badge badge-purple mb-2">17 — Multiple sort keys</div>
+      <div class="text-sm mb-2">List sort fields in priority order. The second key only matters when the first key ties.</div>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT
+<span class="kw">ORDER BY</span> Category <span class="kw">ASC</span>, Price <span class="kw">DESC</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">All 10 rows grouped by category alphabetically (Electronics, Furniture, Grocery), and inside each group sorted by Price highest-first. So Electronics: Laptop X1 (899.99), Smartphone Z9 (599.00), Bluetooth Headphones (79.00), USB Cable (5.99); Furniture: Standing Desk (449.00), Office Chair (249.99), Desk Lamp (39.99); Grocery: Coffee Beans (12.50), Olive Oil (8.99), Tea Bags (4.99).</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- Aggregates ----------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">Aggregate functions</h4>
+  <p class="text-sm text-zinc-400 mb-3">Aggregates take many rows and return <span class="font-semibold">one number</span>. They go inside <code>SELECT</code>, not in <code>WHERE</code>.</p>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">18 — COUNT(*)</div>
+      <div class="text-sm mb-2">Counts the number of records in the result. <code>*</code> counts rows regardless of NULLs.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 value: <code>10</code> — the total number of products in the table.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">19 — COUNT with WHERE</div>
+      <div class="text-sm mb-2">Filter first with <code>WHERE</code>, then count the remaining rows.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Category = <span class="str">"Electronics"</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 value: <code>4</code> (Laptop X1, Bluetooth Headphones, Smartphone Z9, USB Cable).</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">20 — SUM</div>
+      <div class="text-sm mb-2">Adds up the values of a numeric field.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">SUM</span>(Stock) <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 value: <code>523</code> = 12 + 50 + 0 + 8 + 120 + 25 + 30 + 75 + 200 + 3.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">21 — SUM with expression</div>
+      <div class="text-sm mb-2">You can apply arithmetic inside an aggregate — here we calculate the <em>total value</em> of stock on hand (price &times; quantity) for available products only.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">SUM</span>(Price * Stock) <span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Available = <span class="kw">TRUE</span>;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 value — the total &pound;-value of available stock: 899.99&times;12 + 12.50&times;50 + 249.99&times;8 + 4.99&times;120 + 599.00&times;25 + 39.99&times;30 + 8.99&times;75 + 5.99&times;200 (skipping P003 and P010 which are FALSE).</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">22 — AVG</div>
+      <div class="text-sm mb-2">Mean (average) of a numeric field. Equivalent to <code>SUM / COUNT</code>.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">AVG</span>(Price) <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 value: about <code>234.94</code> — sum of all 10 prices divided by 10.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-amber mb-2">23 — MIN / MAX</div>
+      <div class="text-sm mb-2">Smallest and largest values. You can select multiple aggregates in one query.</div>
+<pre><span class="kw">SELECT</span> <span class="fn">MIN</span>(Price), <span class="fn">MAX</span>(Price) <span class="kw">FROM</span> PRODUCT;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <p class="text-sm text-zinc-400 mt-2">1 row, 2 values: <code>4.99</code> (Tea Bags) and <code>899.99</code> (Laptop X1).</p>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ------------- GROUP BY ------------------------------------- -->
+  <h4 class="font-semibold mt-6 mb-2 text-purple-300">GROUP BY (new in 2026 syllabus)</h4>
+  <div class="card mb-4">
+    <p class="text-sm"><code>GROUP BY</code> splits the table into groups based on a field, then applies an aggregate <span class="font-semibold">per group</span>. You get one row per distinct group value.</p>
+    <p class="text-xs text-zinc-400 mt-2">Rule: every field in the <code>SELECT</code> list must either be the field you're grouping by, or be inside an aggregate function.</p>
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">24 — GROUP BY with COUNT</div>
+      <div class="text-sm mb-2">Count records in each category.</div>
+<pre><span class="kw">SELECT</span> Category, <span class="fn">COUNT</span>(*)
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">GROUP BY</span> Category;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <table class="trace mt-2">
+          <thead><tr><th>Category</th><th>COUNT(*)</th></tr></thead>
+          <tbody>
+            <tr><td>Electronics</td><td>4</td></tr>
+            <tr><td>Furniture</td><td>3</td></tr>
+            <tr><td>Grocery</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="badge badge-purple mb-2">25 — GROUP BY with SUM</div>
+      <div class="text-sm mb-2">Total stock per supplier.</div>
+<pre><span class="kw">SELECT</span> Supplier, <span class="fn">SUM</span>(Stock)
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">GROUP BY</span> Supplier;</pre>
+      <details class="mt-2">
+        <summary class="text-purple-300 text-sm cursor-pointer">What this returns</summary>
+        <table class="trace mt-2">
+          <thead><tr><th>Supplier</th><th>SUM(Stock)</th></tr></thead>
+          <tbody>
+            <tr><td>TechCorp</td><td>37</td></tr>
+            <tr><td>BeanCo</td><td>170</td></tr>
+            <tr><td>AudioPlus</td><td>200</td></tr>
+            <tr><td>ChairWorks</td><td>11</td></tr>
+            <tr><td>LightWorks</td><td>30</td></tr>
+            <tr><td>MediFoods</td><td>75</td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 5. DDL                                                           -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">DDL — Data Definition Language</h3>
+  <div class="card">
+    <div class="badge badge-blue mb-2">Schema commands</div>
+    <p class="text-sm">SQL is split into two main parts:</p>
+    <ul class="list-disc pl-5 space-y-1 text-sm mt-2">
+      <li><span class="font-semibold">DDL — Data Definition Language</span>: defines and changes the <em>structure</em> of tables. Commands: <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code>.</li>
+      <li><span class="font-semibold">DML — Data Manipulation Language</span>: works with the <em>data</em> in tables. Commands: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> (this is what we've been doing).</li>
+    </ul>
+
+    <div class="grid grid-cols-3 gap-4 mt-3">
+      <div class="card card-accent">
+        <div class="font-semibold"><code>CREATE TABLE</code></div>
+        <p class="text-sm text-zinc-400 mt-1">Defines a new table: name, fields, data types, and constraints such as <code>PRIMARY KEY</code> and <code>NOT NULL</code>.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold"><code>ALTER TABLE</code></div>
+        <p class="text-sm text-zinc-400 mt-1">Modifies an <em>existing</em> table — typically <code>ADD</code> a new field, change a data type, or drop a column.</p>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold"><code>DROP TABLE</code></div>
+        <p class="text-sm text-zinc-400 mt-1">Permanently deletes the table and all its data. Irreversible — examiners love asking why this is dangerous.</p>
+      </div>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2 text-purple-300">Example — creating the PRODUCT table</h4>
+<pre><span class="kw">CREATE TABLE</span> PRODUCT (
+  ProductID TEXT <span class="kw">PRIMARY KEY</span>,
+  Name TEXT <span class="kw">NOT NULL</span>,
+  Category TEXT,
+  Price REAL,
+  Stock INTEGER,
+  Available BOOLEAN
+);</pre>
+
+    <p class="text-xs text-zinc-400 mt-2">Notes: each field is <code>name TYPE [constraints]</code>, separated by commas; <code>PRIMARY KEY</code> follows the type of the field that is the key; <code>NOT NULL</code> forces a value to be supplied; a semicolon ends the statement.</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 6. Cheat Sheet                                                   -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">SQL Cheat Sheet</h3>
+  <div class="card">
+    <div class="badge badge-green mb-2">One-glance reference</div>
+
+    <h4 class="font-semibold mt-2 mb-2 text-purple-300">Anatomy of a SELECT query</h4>
+<pre><span class="kw">SELECT</span> &lt;fields&gt;
+<span class="kw">FROM</span> &lt;table&gt;
+<span class="kw">WHERE</span> &lt;condition&gt;
+<span class="kw">GROUP BY</span> &lt;field&gt;
+<span class="kw">ORDER BY</span> &lt;field&gt; <span class="kw">ASC</span>|<span class="kw">DESC</span>;</pre>
+    <p class="text-xs text-zinc-400 mt-2">Clauses always appear in this order. Only <code>SELECT</code> and <code>FROM</code> are required; the rest are optional.</p>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+      <div class="card card-accent">
+        <div class="font-semibold">Aggregate functions</div>
+        <ul class="list-disc pl-5 text-sm text-zinc-400 mt-1 space-y-1">
+          <li><code>SUM(field)</code> — total of numeric values</li>
+          <li><code>COUNT(*)</code> — number of records</li>
+          <li><code>AVG(field)</code> — mean</li>
+          <li><code>MIN(field)</code> — smallest value</li>
+          <li><code>MAX(field)</code> — largest value</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Wildcards (with LIKE)</div>
+        <ul class="list-disc pl-5 text-sm text-zinc-400 mt-1 space-y-1">
+          <li><code>%</code> — any sequence of characters (zero or more)</li>
+          <li><code>_</code> — exactly one character</li>
+          <li><code>"%abc%"</code> — contains "abc"</li>
+          <li><code>"abc%"</code> — starts with "abc"</li>
+          <li><code>"%abc"</code> — ends with "abc"</li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Comparison &amp; logical operators</div>
+        <ul class="list-disc pl-5 text-sm text-zinc-400 mt-1 space-y-1">
+          <li><code>=</code> equals (single <code>=</code>)</li>
+          <li><code>&lt;&gt;</code> not equal to</li>
+          <li><code>&lt; &gt; &lt;= &gt;=</code> ordering</li>
+          <li><code>AND OR NOT</code> — boolean connectives</li>
+          <li><code>IN (...)</code>, <code>BETWEEN x AND y</code>, <code>LIKE pattern</code></li>
+        </ul>
+      </div>
+      <div class="card card-accent">
+        <div class="font-semibold">Common keywords (uppercase by convention)</div>
+        <ul class="list-disc pl-5 text-sm text-zinc-400 mt-1 space-y-1">
+          <li><code>SELECT FROM WHERE</code> — retrieve</li>
+          <li><code>ORDER BY ASC DESC</code> — sort</li>
+          <li><code>GROUP BY</code> — categorise</li>
+          <li><code>DISTINCT</code> — remove duplicates</li>
+          <li><code>CREATE / ALTER / DROP TABLE</code> — schema</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 7. Common Mistakes                                               -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Common SQL Mistakes</h3>
+  <div class="card">
+    <div class="badge badge-amber mb-2">Lose-mark traps</div>
+    <table class="trace">
+      <thead>
+        <tr><th>Mistake</th><th>Wrong</th><th>Correct</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Forgetting quotes around text values — every year examiners report this as the most common error.</td>
+          <td><code>WHERE Category = Electronics</code></td>
+          <td><code>WHERE Category = "Electronics"</code></td>
+        </tr>
+        <tr>
+          <td>Using <code>==</code> for equality (a habit from Python/Java). SQL uses a single <code>=</code>.</td>
+          <td><code>WHERE Price == 50</code></td>
+          <td><code>WHERE Price = 50</code></td>
+        </tr>
+        <tr>
+          <td>Using <code>!=</code> instead of <code>&lt;&gt;</code>. <code>&lt;&gt;</code> is the standard, exam-safe operator; <code>!=</code> works in some dialects only.</td>
+          <td><code>WHERE Stock != 0</code></td>
+          <td><code>WHERE Stock &lt;&gt; 0</code></td>
+        </tr>
+        <tr>
+          <td>Clauses in the wrong order — <code>ORDER BY</code> must come <em>after</em> <code>WHERE</code>.</td>
+          <td><code>SELECT * FROM PRODUCT ORDER BY Price WHERE Stock &gt; 0;</code></td>
+          <td><code>SELECT * FROM PRODUCT WHERE Stock &gt; 0 ORDER BY Price;</code></td>
+        </tr>
+        <tr>
+          <td>Missing semicolon at the end of a query — some markschemes accept this, but the safe habit is to always include it.</td>
+          <td><code>SELECT * FROM PRODUCT</code></td>
+          <td><code>SELECT * FROM PRODUCT;</code></td>
+        </tr>
+        <tr>
+          <td>Putting an aggregate inside <code>WHERE</code> — illegal. Aggregates go in <code>SELECT</code> (or filtered with <code>HAVING</code> after GROUP BY).</td>
+          <td><code>WHERE SUM(Stock) &gt; 100</code></td>
+          <td><code>SELECT SUM(Stock) FROM ... GROUP BY ...;</code></td>
+        </tr>
+        <tr>
+          <td>Quoting numbers — numbers are <em>never</em> quoted; quotes turn them into strings, breaking comparisons.</td>
+          <td><code>WHERE Price &lt; "50"</code></td>
+          <td><code>WHERE Price &lt; 50</code></td>
+        </tr>
+        <tr>
+          <td>Using <code>LIKE</code> without wildcards — works, but is exactly equivalent to <code>=</code>, so pointless.</td>
+          <td><code>WHERE Name LIKE "Laptop X1"</code></td>
+          <td><code>WHERE Name LIKE "Laptop%"</code> (or use <code>=</code>)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-xs text-zinc-400 mt-2">Read your query back out loud word-by-word before submitting — most syntax slips show up immediately.</p>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 8. Multi-part Exam Question                                      -->
+  <!-- ============================================================== -->
+  <h3 class="text-lg font-semibold mt-6 mb-2">Multi-part Exam Question (~12 marks)</h3>
+  <div class="card">
+    <div class="badge badge-purple mb-2">Practice — full question</div>
+    <p class="text-sm mb-3">The table <code>PRODUCT</code> shown earlier is stored in a database. Write SQL queries to answer each of the following. Each part is worth 2 marks.</p>
+
+    <ol class="list-decimal pl-5 space-y-2 text-sm">
+      <li><span class="font-semibold">(a)</span> Output the names of all products priced above &pound;100.</li>
+      <li><span class="font-semibold">(b)</span> Output the total stock value (Price &times; Stock summed) for all available products.</li>
+      <li><span class="font-semibold">(c)</span> Output the supplier with the highest total stock. (Use GROUP BY.)</li>
+      <li><span class="font-semibold">(d)</span> Output all products in the "Electronics" category, sorted by price from highest to lowest.</li>
+      <li><span class="font-semibold">(e)</span> Output the average price of products in each category.</li>
+      <li><span class="font-semibold">(f)</span> Output all products whose name contains the word "Bean" or "Coffee".</li>
+    </ol>
+
+    <details class="mt-4">
+      <summary class="text-purple-300 cursor-pointer font-semibold">Model answers (click to reveal)</summary>
+
+      <h4 class="font-semibold mt-3 mb-1 text-purple-300">(a) Names of products priced above &pound;100 — 2 marks</h4>
+<pre><span class="kw">SELECT</span> Name
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Price &gt; <span class="num">100</span>;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for <code>SELECT Name FROM PRODUCT</code>; 1 for the correct <code>WHERE Price &gt; 100</code>. Result: Laptop X1, Office Chair, Smartphone Z9, Standing Desk (4 rows).</p>
+
+      <h4 class="font-semibold mt-4 mb-1 text-purple-300">(b) Total stock value of available products — 2 marks</h4>
+<pre><span class="kw">SELECT</span> <span class="fn">SUM</span>(Price * Stock)
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Available = <span class="kw">TRUE</span>;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for the <code>SUM(Price * Stock)</code> aggregate; 1 for the <code>WHERE Available = TRUE</code> filter. Excludes P003 and P010 which are FALSE.</p>
+
+      <h4 class="font-semibold mt-4 mb-1 text-purple-300">(c) Supplier with the highest total stock — 2 marks</h4>
+<pre><span class="kw">SELECT</span> Supplier, <span class="fn">SUM</span>(Stock)
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">GROUP BY</span> Supplier
+<span class="kw">ORDER BY</span> <span class="fn">SUM</span>(Stock) <span class="kw">DESC</span>;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for the <code>GROUP BY Supplier</code>; 1 for the <code>ORDER BY SUM(Stock) DESC</code>. The first row of the output is the answer — <em>AudioPlus</em>, with 200 units (Bluetooth Headphones 0 + USB Cable 200). Showing the first row only would normally be done with <code>LIMIT 1</code>, but IGCSE does not require <code>LIMIT</code> — the ordered list is accepted.</p>
+
+      <h4 class="font-semibold mt-4 mb-1 text-purple-300">(d) Electronics products sorted by price descending — 2 marks</h4>
+<pre><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Category = <span class="str">"Electronics"</span>
+<span class="kw">ORDER BY</span> Price <span class="kw">DESC</span>;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for the <code>WHERE Category = "Electronics"</code>; 1 for <code>ORDER BY Price DESC</code>. Result order: Laptop X1 (899.99), Smartphone Z9 (599.00), Bluetooth Headphones (79.00), USB Cable (5.99).</p>
+
+      <h4 class="font-semibold mt-4 mb-1 text-purple-300">(e) Average price per category — 2 marks</h4>
+<pre><span class="kw">SELECT</span> Category, <span class="fn">AVG</span>(Price)
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">GROUP BY</span> Category;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for the <code>AVG(Price)</code> aggregate selected alongside <code>Category</code>; 1 for the <code>GROUP BY Category</code>. Result: Electronics &asymp; 395.99, Furniture &asymp; 246.33, Grocery &asymp; 8.83.</p>
+
+      <h4 class="font-semibold mt-4 mb-1 text-purple-300">(f) Products whose name contains "Bean" or "Coffee" — 2 marks</h4>
+<pre><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> PRODUCT
+<span class="kw">WHERE</span> Name <span class="kw">LIKE</span> <span class="str">"%Bean%"</span>
+   <span class="kw">OR</span> Name <span class="kw">LIKE</span> <span class="str">"%Coffee%"</span>;</pre>
+      <p class="text-sm text-zinc-400 mt-1">Marks: 1 for using <code>LIKE</code> with the <code>%...%</code> wildcards on both sides; 1 for combining the two patterns with <code>OR</code>. Result: P002 Coffee Beans 1kg (matches both patterns — returned once).</p>
+    </details>
+
+    <p class="text-xs text-zinc-400 mt-4">Exam strategy: write the query on the dotted lines exactly as you would in code — keywords in CAPITALS, text in double quotes, numbers without quotes, a semicolon at the end. Don't write English sentences explaining the query unless the question asks for an explanation.</p>
+  </div>
+
+</section>

@@ -1,0 +1,595 @@
+<section id="sec-errors" class="section">
+  <h2 class="text-2xl font-bold mb-1">Identify Errors in Code</h2>
+  <p class="text-sm text-zinc-400 mb-4">A code-with-errors question is virtually <strong>guaranteed</strong> on Paper 2. You will be given a pseudocode or Python snippet containing 2&ndash;4 bugs and asked to identify the line, explain the bug, and write a corrected line. Work through these 10 problems &mdash; if you can fix all of them, you are exam-ready for this style of question.</p>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 1 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode that should sum 10 numbers and output the total.</p>
+<pre><span class="com">// Sum 10 numbers</span>
+Total <span class="kw">&larr;</span> <span class="num">0</span>
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  <span class="kw">INPUT</span> Num
+  Total = Total + Num
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Total</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> Line 5 uses <code>=</code> for assignment. In pseudocode, <code>=</code> is only for comparison (equality). Assignment is always <code>&larr;</code>. The examiner will dock you a mark every time you do this.</p>
+        <p class="mt-2"><strong>Corrected line:</strong></p>
+<pre>  Total <span class="kw">&larr;</span> Total + Num</pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 2 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode that should find the largest of 5 input numbers (which may be negative).</p>
+<pre>Max <span class="kw">&larr;</span> <span class="num">0</span>
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span>
+    Max <span class="kw">&larr;</span> Num
+  <span class="kw">ENDIF</span>
+<span class="kw">NEXT</span> i
+<span class="kw">OUTPUT</span> Max</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> <code>Max</code> is initialised to <code>0</code>. If every input is negative (e.g. &minus;5, &minus;9, &minus;2, &minus;7, &minus;1) then <code>0</code> stays as the maximum &mdash; but <code>0</code> was never actually input. The "max so far" must be a real input.</p>
+        <p class="mt-2"><strong>Fix:</strong> read the first number outside the loop, set <code>Max</code> to it, then loop 4 more times:</p>
+<pre><span class="kw">INPUT</span> Num
+Max <span class="kw">&larr;</span> Num
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">2</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">INPUT</span> Num
+  <span class="kw">IF</span> Num &gt; Max <span class="kw">THEN</span> Max <span class="kw">&larr;</span> Num
+<span class="kw">NEXT</span> i</pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 3 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Python that should average 10 marks.</p>
+<pre><span class="kw">total</span> = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    mark = <span class="fn">input</span>(<span class="str">"Mark: "</span>)
+    total = total + mark
+<span class="fn">print</span>(total / <span class="num">10</span>)</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> <code>input()</code> always returns a <em>string</em>. Adding a string to the integer <code>total</code> raises <code>TypeError: unsupported operand type(s) for +: 'int' and 'str'</code>. You must cast to <code>int</code>.</p>
+        <p class="mt-2"><strong>Corrected line:</strong></p>
+<pre>    mark = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Mark: "</span>))</pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 4 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">A Python bubble sort attempt.</p>
+<pre>nums = [<span class="num">5</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">1</span>, <span class="num">9</span>]
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(nums)):
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(nums)):
+        <span class="kw">if</span> nums[j] &gt; nums[j+<span class="num">1</span>]:
+            nums[j], nums[j+<span class="num">1</span>] = nums[j+<span class="num">1</span>], nums[j]</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> When <code>j = len(nums)-1 = 4</code>, the line <code>nums[j+1]</code> accesses index <code>5</code> &mdash; out of range &mdash; raising <code>IndexError</code>. The inner loop must stop one short.</p>
+        <p class="mt-2"><strong>Fix:</strong></p>
+<pre>    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(nums) - <span class="num">1</span> - i):</pre>
+        <p class="mt-2 text-zinc-400">Subtracting <code>i</code> is also an efficiency improvement (the last <code>i</code> items are already sorted on each pass).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 5 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode declaring and filling an array of 5 integers.</p>
+<pre><span class="kw">DECLARE</span> Arr : <span class="kw">ARRAY</span>[<span class="num">1</span>:<span class="num">5</span>] <span class="kw">OF</span> <span class="kw">INTEGER</span>
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">0</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">INPUT</span> Arr[i]
+<span class="kw">NEXT</span> i</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Two bugs:</strong></p>
+        <ol class="list-decimal list-inside space-y-1">
+          <li>Pseudocode arrays declared as <code>ARRAY[1:5]</code> are <strong>1-indexed</strong>. <code>Arr[0]</code> does not exist &mdash; accessing it is an error.</li>
+          <li>The loop runs <code>0,1,2,3,4,5</code> &mdash; that is <strong>6 iterations</strong>, but the array only has 5 slots.</li>
+        </ol>
+        <p class="mt-2"><strong>Fix:</strong></p>
+<pre><span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span></pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 6 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode that should ask for a password and keep asking until the user gets it right.</p>
+<pre><span class="kw">REPEAT</span>
+  <span class="kw">INPUT</span> Password
+<span class="kw">UNTIL</span> Password &lt;&gt; <span class="str">"secret"</span></pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> <code>UNTIL</code> in pseudocode means "loop ends when this condition becomes TRUE". The condition <code>Password &lt;&gt; "secret"</code> is true when the password is <em>wrong</em>, so the loop exits on the first wrong guess &mdash; the opposite of what was wanted.</p>
+        <p class="mt-2"><strong>Fix:</strong></p>
+<pre><span class="kw">UNTIL</span> Password = <span class="str">"secret"</span></pre>
+        <p class="mt-2 text-zinc-400">Remember: <code>REPEAT &hellip; UNTIL &lt;exit condition&gt;</code>. The condition is what makes the loop <em>stop</em>, not continue.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 7 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Python that should sum the integers 1 to 10 inclusive (answer should be 55).</p>
+<pre>total = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">10</span>):
+    total = total + i
+<span class="fn">print</span>(total)  <span class="com"># prints 45, expected 55</span></pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> <code>range(a, b)</code> in Python is <strong>exclusive of b</strong>. <code>range(1, 10)</code> gives <code>1, 2, &hellip;, 9</code> &mdash; sum is 45. To include 10, the upper bound must be 11.</p>
+        <p class="mt-2"><strong>Fix:</strong></p>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):</pre>
+        <p class="mt-2 text-zinc-400">Contrast with pseudocode: <code>FOR i &larr; 1 TO 10</code> is inclusive of both ends.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 8 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode that should output the numbers 1 to 5.</p>
+<pre><span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">5</span>
+  <span class="kw">OUTPUT</span> i
+<span class="kw">ENDIF</span></pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> The loop is closed with <code>ENDIF</code>. That keyword closes an <code>IF &hellip; THEN</code> block. A <code>FOR</code> loop closes with <code>NEXT i</code>.</p>
+        <p class="mt-2"><strong>Fix:</strong></p>
+<pre><span class="kw">NEXT</span> i</pre>
+        <p class="mt-2 text-zinc-400">Quick reference of closers: <code>IF &rarr; ENDIF</code>, <code>FOR &rarr; NEXT i</code>, <code>WHILE &rarr; ENDWHILE</code>, <code>REPEAT &rarr; UNTIL</code>, <code>CASE &rarr; ENDCASE</code>, <code>PROCEDURE &rarr; ENDPROCEDURE</code>, <code>FUNCTION &rarr; ENDFUNCTION</code>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 9 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">An SQL query that should return all electronics products.</p>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT <span class="kw">WHERE</span> Category = Electronics;</pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> <code>Electronics</code> with no quotes is interpreted by SQL as a <em>column name</em>, not a string literal. Either the query fails (no such column) or it does something completely unintended.</p>
+        <p class="mt-2"><strong>Fix:</strong> wrap text values in quotes.</p>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> PRODUCT <span class="kw">WHERE</span> Category = <span class="str">"Electronics"</span>;</pre>
+        <p class="mt-2 text-zinc-400">Numbers (<code>Price &gt; 50</code>) and booleans (<code>InStock = TRUE</code>) are <em>not</em> quoted. Only text and dates.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card mb-4">
+    <div class="badge badge-amber mb-2">Problem 10 &mdash; find the error(s)</div>
+    <p class="text-sm text-zinc-400 mb-2">Pseudocode that validates that an age is between 0 and 120 inclusive.</p>
+<pre><span class="kw">INPUT</span> Age
+<span class="kw">IF</span> Age &lt; <span class="num">0</span> <span class="kw">OR</span> Age &gt; <span class="num">120</span> <span class="kw">THEN</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Valid"</span>
+<span class="kw">ELSE</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Invalid"</span>
+<span class="kw">ENDIF</span></pre>
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sky-400">Show answer</summary>
+      <div class="mt-2 text-sm">
+        <p><strong>Bug:</strong> The condition <code>Age &lt; 0 OR Age &gt; 120</code> is true when the age is <em>out of range</em> &mdash; i.e. invalid. The outputs are swapped.</p>
+        <p class="mt-2"><strong>Fix:</strong> swap the outputs, or invert the condition:</p>
+<pre><span class="kw">IF</span> Age &gt;= <span class="num">0</span> <span class="kw">AND</span> Age &lt;= <span class="num">120</span> <span class="kw">THEN</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Valid"</span>
+<span class="kw">ELSE</span>
+  <span class="kw">OUTPUT</span> <span class="str">"Invalid"</span>
+<span class="kw">ENDIF</span></pre>
+        <p class="mt-2 text-zinc-400">Note: an age range check is <strong>range validation</strong>, not length or type. State the right validation name in 1-mark questions.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="sec-mistakes" class="section">
+  <h2 class="text-2xl font-bold mb-1">Common Mistakes Examiners Penalise</h2>
+  <p class="text-sm text-zinc-400 mb-4">These are the recurring deductions seen in every examiner report. Most of them lose only 1 mark each &mdash; but a paper with five of these slips is the difference between an A and an A*. Read all of them tonight.</p>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 1</div>
+    <p class="font-semibold">Using <code>=</code> for assignment in pseudocode</p>
+    <p class="text-sm text-zinc-400">Pseudocode uses <code>&larr;</code> for assignment and <code>=</code> only for comparison. Writing <code>x = 5</code> in pseudocode is wrong even if "everyone knows what you mean".</p>
+<pre><span class="com">// Wrong</span>
+Count = Count + <span class="num">1</span>
+<span class="com">// Right</span>
+Count <span class="kw">&larr;</span> Count + <span class="num">1</span></pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 2</div>
+    <p class="font-semibold">Forgetting to initialise <code>Total</code> or <code>Count</code> before the loop</p>
+    <p class="text-sm text-zinc-400">Adding to a variable that was never set is undefined behaviour. Always set running totals and counters to 0 (or 1) <em>before</em> the loop begins.</p>
+<pre><span class="com">// Wrong &mdash; Total used before being set</span>
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  Total <span class="kw">&larr;</span> Total + i
+<span class="kw">NEXT</span> i
+
+<span class="com">// Right</span>
+Total <span class="kw">&larr;</span> <span class="num">0</span>
+<span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> <span class="num">10</span>
+  Total <span class="kw">&larr;</span> Total + i
+<span class="kw">NEXT</span> i</pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 3</div>
+    <p class="font-semibold">Off-by-one in <code>FOR i &larr; 1 TO 9</code></p>
+    <p class="text-sm text-zinc-400">Pseudocode <code>TO</code> is <strong>inclusive on both ends</strong>. <code>FOR i &larr; 1 TO 10</code> is 10 iterations, <code>FOR i &larr; 1 TO 9</code> is only 9. Python <code>range(1, 10)</code> is also only 9. Always check whether the question wanted "the first 10" or "1 to 10".</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 4</div>
+    <p class="font-semibold">Not casting <code>int(input())</code> in Python</p>
+    <p class="text-sm text-zinc-400">A bare <code>input()</code> returns a string. If you intend to do arithmetic or numeric comparison, you must cast.</p>
+<pre><span class="com"># Wrong</span>
+n = <span class="fn">input</span>(<span class="str">"Enter: "</span>)
+<span class="kw">if</span> n &gt; <span class="num">10</span>: ...   <span class="com"># TypeError</span>
+
+<span class="com"># Right</span>
+n = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter: "</span>))</pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 5</div>
+    <p class="font-semibold">Omitting validation when the question explicitly asks for it</p>
+    <p class="text-sm text-zinc-400">If the question says "the program <em>must</em> validate the input is between 1 and 100", you must include an <code>IF</code> (or <code>REPEAT &hellip; UNTIL</code>) check &mdash; not just accept input. State the validation type in commentary where possible (range, length, type, presence, format, lookup/check digit).</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 6</div>
+    <p class="font-semibold">Forgetting quotes around SQL text values</p>
+    <p class="text-sm text-zinc-400">Text and dates need quotes; numbers and booleans don't. Single or double quotes both work, but be consistent within one query.</p>
+<pre><span class="com">-- Wrong</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Name = Smith;
+<span class="com">-- Right</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Name = <span class="str">"Smith"</span>;</pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 7</div>
+    <p class="font-semibold">Trace tables: one row per <em>line</em> instead of per <em>change</em></p>
+    <p class="text-sm text-zinc-400">A trace table records the value of each variable <em>when it changes</em>. You do not write a new row for <code>OUTPUT</code> or for an <code>IF</code> evaluation that doesn't update anything. Output usually has its own column.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 8</div>
+    <p class="font-semibold">Confusing validation and verification</p>
+    <p class="text-sm text-zinc-400"><strong>Validation</strong> = is the data <em>sensible</em>? (range, length, type, presence, format, lookup) &mdash; done by the computer. <strong>Verification</strong> = was the data <em>copied/entered correctly</em>? (double-entry, visual check) &mdash; about transcription, not sense.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 9</div>
+    <p class="font-semibold">Bubble sort without a <code>Swapped</code> flag</p>
+    <p class="text-sm text-zinc-400">The full mark scheme version of bubble sort uses a <code>Swapped</code> boolean so the algorithm can exit early. Forgetting it usually still scores most marks &mdash; but if the question says "most efficient" or "stop when sorted", you must include it.</p>
+<pre><span class="kw">REPEAT</span>
+  Swapped <span class="kw">&larr;</span> <span class="kw">FALSE</span>
+  <span class="kw">FOR</span> i <span class="kw">&larr;</span> <span class="num">1</span> <span class="kw">TO</span> n - <span class="num">1</span>
+    <span class="kw">IF</span> A[i] &gt; A[i+<span class="num">1</span>] <span class="kw">THEN</span>
+      <span class="com">// swap</span>
+      Swapped <span class="kw">&larr;</span> <span class="kw">TRUE</span>
+    <span class="kw">ENDIF</span>
+  <span class="kw">NEXT</span> i
+<span class="kw">UNTIL</span> Swapped = <span class="kw">FALSE</span></pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 10</div>
+    <p class="font-semibold">Returning the <em>value</em> when asked for the <em>position</em></p>
+    <p class="text-sm text-zinc-400">For linear/binary search questions, read whether the output should be the item found, its index/position, or just a boolean "yes/no found". The three are different answers.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 11</div>
+    <p class="font-semibold">Forgetting <code>CLOSEFILE</code> / <code>f.close()</code></p>
+    <p class="text-sm text-zinc-400">Any file question expects the file to be closed at the end. It's a free mark &mdash; never skip it.</p>
+<pre><span class="kw">OPENFILE</span> <span class="str">"data.txt"</span> <span class="kw">FOR</span> <span class="kw">READ</span>
+  <span class="kw">READFILE</span> <span class="str">"data.txt"</span>, Line
+<span class="kw">CLOSEFILE</span> <span class="str">"data.txt"</span></pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 12</div>
+    <p class="font-semibold">Writing Python <code>elif</code> in pseudocode</p>
+    <p class="text-sm text-zinc-400">Pseudocode does not have <code>elif</code>. Use nested <code>IF &hellip; ELSE IF</code>, or much better, <code>CASE OF &hellip; ENDCASE</code> for multi-way selection.</p>
+<pre><span class="com">// Multi-way preferred form</span>
+<span class="kw">CASE OF</span> Grade
+  <span class="str">"A"</span> : <span class="kw">OUTPUT</span> <span class="str">"Excellent"</span>
+  <span class="str">"B"</span> : <span class="kw">OUTPUT</span> <span class="str">"Good"</span>
+  <span class="str">"C"</span> : <span class="kw">OUTPUT</span> <span class="str">"Pass"</span>
+  <span class="kw">OTHERWISE</span> : <span class="kw">OUTPUT</span> <span class="str">"Fail"</span>
+<span class="kw">ENDCASE</span></pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 13</div>
+    <p class="font-semibold">Initialising <code>Max</code> with <code>0</code> (fails for negative inputs)</p>
+    <p class="text-sm text-zinc-400">The safe pattern is to initialise <code>Max</code> with the <em>first input value</em>, then loop over the rest. The reverse mistake is initialising <code>Min</code> with <code>0</code> when inputs may be positive.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 14</div>
+    <p class="font-semibold">Misreading <code>&lt;=</code> as <code>&lt;</code> in range checks</p>
+    <p class="text-sm text-zinc-400">"Between 1 and 10 inclusive" means <code>&gt;= 1 AND &lt;= 10</code>, not <code>&gt; 0 AND &lt; 11</code> (which is the same, but harder to read), and definitely not <code>&gt; 1 AND &lt; 10</code> (which excludes 1 and 10). Always re-check the boundary.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 15</div>
+    <p class="font-semibold">Pseudocode arrays treated as 0-indexed</p>
+    <p class="text-sm text-zinc-400">A pseudocode array declared <code>ARRAY[1:n]</code> starts at index <strong>1</strong>, not 0. Loops should start at 1. Confusing Python's 0-indexed lists with pseudocode's 1-indexed arrays is one of the most common errors on Paper 2.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 16</div>
+    <p class="font-semibold">SQL: <code>ORDER BY</code> placed before <code>WHERE</code></p>
+    <p class="text-sm text-zinc-400">The clause order is fixed: <code>SELECT &hellip; FROM &hellip; WHERE &hellip; GROUP BY &hellip; ORDER BY &hellip;</code>. Putting them in a different order is a syntax error.</p>
+<pre><span class="com">-- Wrong order</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student <span class="kw">ORDER BY</span> Name <span class="kw">WHERE</span> Year = <span class="num">11</span>;
+<span class="com">-- Right</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Year = <span class="num">11</span> <span class="kw">ORDER BY</span> Name;</pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 17</div>
+    <p class="font-semibold">Forgetting the colon in Python control statements</p>
+    <p class="text-sm text-zinc-400">Every Python <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>, and <code>else</code> must end with a colon. Indentation alone is not enough.</p>
+<pre><span class="com"># Wrong</span>
+<span class="kw">if</span> x &gt; <span class="num">10</span>
+    <span class="fn">print</span>(x)
+
+<span class="com"># Right</span>
+<span class="kw">if</span> x &gt; <span class="num">10</span>:
+    <span class="fn">print</span>(x)</pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 18</div>
+    <p class="font-semibold">Mixing single and double quotes inconsistently</p>
+    <p class="text-sm text-zinc-400">Python accepts both <code>'x'</code> and <code>"x"</code> for strings, but mixing them in the same string literal (e.g. <code>"hello'</code>) is a syntax error. In pseudocode, use double quotes consistently &mdash; that is what the mark scheme uses.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 19</div>
+    <p class="font-semibold">Confusing <code>MOD</code> / <code>DIV</code> with <code>/</code></p>
+    <p class="text-sm text-zinc-400"><code>DIV</code> is integer division (drop the remainder). <code>MOD</code> is the remainder. <code>/</code> is true (float) division. Python equivalents: <code>//</code> and <code>%</code>. Mixing these up turns "is it even?" into nonsense.</p>
+<pre><span class="num">7</span> <span class="kw">DIV</span> <span class="num">2</span> = <span class="num">3</span>      <span class="com">// integer quotient</span>
+<span class="num">7</span> <span class="kw">MOD</span> <span class="num">2</span> = <span class="num">1</span>      <span class="com">// remainder</span>
+<span class="num">7</span> / <span class="num">2</span>     = <span class="num">3.5</span>    <span class="com">// real division</span></pre>
+  </div>
+
+  <div class="card mb-3">
+    <div class="badge badge-red mb-1">Mistake 20</div>
+    <p class="font-semibold">Not ending with an <code>OUTPUT</code></p>
+    <p class="text-sm text-zinc-400">If a question says "calculate X" or "find Y", the marker almost always expects you to <em>display</em> the result. A program that calculates the right answer but never outputs it loses 1 mark every time.</p>
+  </div>
+</section>
+
+<section id="sec-checklist" class="section">
+  <h2 class="text-2xl font-bold mb-1">Last-Minute Checklist</h2>
+  <p class="text-sm text-zinc-400 mb-4">Tick each item only when you can recite it from memory. Ticks are saved in your browser, so you can come back to this list right before the exam and only revisit the unchecked ones.</p>
+
+  <div class="card mb-4">
+    <h3 class="font-semibold mb-2">Self-Test Checklist</h3>
+    <p class="text-xs text-zinc-400 mb-3">Tick each item you can confidently explain or write without notes.</p>
+    <div id="cklist" class="space-y-2 text-sm">
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.0', this.checked ? '1' : '0')">
+        <span>The 4 stages of the program development life cycle: <em>Analysis, Design, Coding, Testing</em></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.1', this.checked ? '1' : '0')">
+        <span>The 3 computational thinking skills: <em>abstraction, decomposition, algorithmic thinking</em> &mdash; and what each means</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.2', this.checked ? '1' : '0')">
+        <span>The 6 validation types: <em>range, length, type, presence, format, check digit</em> (or lookup)</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.3', this.checked ? '1' : '0')">
+        <span>The 2 verification methods: <em>double entry</em> and <em>visual (screen) check</em></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.4', this.checked ? '1' : '0')">
+        <span>The 4 test data types: <em>normal, boundary, abnormal/erroneous, extreme</em> &mdash; and an example of each</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.5', this.checked ? '1' : '0')">
+        <span>The 3 error types: <em>syntax, logic, runtime</em> &mdash; with a one-line example of each</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.6', this.checked ? '1' : '0')">
+        <span>The 5 flowchart symbols: <em>terminator (rounded rect), process (rect), input/output (parallelogram), decision (diamond), arrow</em></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.7', this.checked ? '1' : '0')">
+        <span>Pseudocode <code>FOR &hellip; NEXT</code> syntax with optional <code>STEP</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.8', this.checked ? '1' : '0')">
+        <span>Pseudocode <code>WHILE &hellip; ENDWHILE</code> syntax (pre-test)</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.9', this.checked ? '1' : '0')">
+        <span>Pseudocode <code>REPEAT &hellip; UNTIL</code> syntax (post-test, runs at least once)</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.10', this.checked ? '1' : '0')">
+        <span>Pseudocode <code>IF &hellip; THEN &hellip; ELSE &hellip; ENDIF</code> syntax</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.11', this.checked ? '1' : '0')">
+        <span>Pseudocode <code>CASE OF &hellip; OTHERWISE &hellip; ENDCASE</code> syntax</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.12', this.checked ? '1' : '0')">
+        <span>Array declaration: <code>DECLARE A : ARRAY[1:n] OF INTEGER</code> &mdash; <strong>1-indexed</strong></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.13', this.checked ? '1' : '0')">
+        <span>2D array declaration: <code>DECLARE B : ARRAY[1:r, 1:c] OF &hellip;</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.14', this.checked ? '1' : '0')">
+        <span>Procedure: <code>PROCEDURE Name(params) &hellip; ENDPROCEDURE</code>, called with <code>CALL Name(args)</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.15', this.checked ? '1' : '0')">
+        <span>Function: <code>FUNCTION Name(params) RETURNS Type &hellip; RETURN value &hellip; ENDFUNCTION</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.16', this.checked ? '1' : '0')">
+        <span>Parameter (in the definition) vs argument (in the call) &mdash; can you explain the difference?</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.17', this.checked ? '1' : '0')">
+        <span>Local vs global variable &mdash; can you describe one advantage of each?</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.18', this.checked ? '1' : '0')">
+        <span>Linear search: walk through array, compare each item, stop when found or end reached</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.19', this.checked ? '1' : '0')">
+        <span>Binary search idea: <em>sorted</em> data, check middle, halve range; can you say its big-O advantage in words?</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.20', this.checked ? '1' : '0')">
+        <span>Bubble sort with <code>Swapped</code> flag &mdash; outer <code>REPEAT &hellip; UNTIL NOT Swapped</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.21', this.checked ? '1' : '0')">
+        <span>4 string functions: <code>LENGTH(s)</code>, <code>UCASE(s)</code>, <code>LCASE(s)</code>, <code>SUBSTRING(s, start, length)</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.22', this.checked ? '1' : '0')">
+        <span>File ops: <code>OPENFILE &hellip; FOR READ/WRITE/APPEND</code>, <code>READFILE</code>, <code>WRITEFILE</code>, <code>CLOSEFILE</code>, <code>EOF()</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.23', this.checked ? '1' : '0')">
+        <span>Python <code>int(input())</code> gotcha &mdash; cast every numeric input</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.24', this.checked ? '1' : '0')">
+        <span>Python lists are <strong>0-indexed</strong>, pseudocode arrays are <strong>1-indexed</strong></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.25', this.checked ? '1' : '0')">
+        <span><code>range(a, b)</code> in Python <strong>excludes</strong> <code>b</code>; pseudocode <code>FOR a TO b</code> <strong>includes</strong> <code>b</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.26', this.checked ? '1' : '0')">
+        <span>SQL clause order: <code>SELECT &hellip; FROM &hellip; WHERE &hellip; ORDER BY &hellip;</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.27', this.checked ? '1' : '0')">
+        <span>SQL aggregates: <code>SUM</code>, <code>COUNT</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code></span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.28', this.checked ? '1' : '0')">
+        <span>SQL wildcards with <code>LIKE</code>: <code>%</code> matches any sequence, <code>_</code> matches one character</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.29', this.checked ? '1' : '0')">
+        <span>SQL: text values in quotes, numbers and booleans without quotes</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.30', this.checked ? '1' : '0')">
+        <span><code>MOD</code> and <code>DIV</code> in pseudocode, <code>%</code> and <code>//</code> in Python &mdash; recognise both</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.31', this.checked ? '1' : '0')">
+        <span>Difference between <em>validation</em> (sensible) and <em>verification</em> (entered correctly)</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.32', this.checked ? '1' : '0')">
+        <span>Difference between <em>iteration</em> (loops) and <em>selection</em> (IF/CASE)</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.33', this.checked ? '1' : '0')">
+        <span>How a <em>trace table</em> records variable changes &mdash; one column per variable, one row per change</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" onchange="localStorage.setItem('cram.ck.34', this.checked ? '1' : '0')">
+        <span>Five data types: <code>INTEGER</code>, <code>REAL</code>, <code>CHAR</code>, <code>STRING</code>, <code>BOOLEAN</code></span>
+      </label>
+    </div>
+    <p class="text-xs text-zinc-500 mt-3">Tick states are stored under <code>cram.ck.*</code> in <code>localStorage</code>. The main app restores them on page load.</p>
+  </div>
+
+  <div class="card card-accent mb-4">
+    <h3 class="font-semibold mb-2">Exam Strategy</h3>
+    <ul class="text-sm space-y-2 list-disc list-inside">
+      <li><strong>First 3 minutes:</strong> read the whole paper. Flag any question that looks hard with a tiny star &mdash; you'll do those last so you don't burn time staring at them.</li>
+      <li><strong>Use pencil</strong> for flowcharts and trace tables. Mistakes are inevitable; ink corrections look messy and lose method-mark legibility.</li>
+      <li><strong>Long answers (programming questions worth 6+ marks):</strong> begin with a one-line comment stating the plan, e.g. <code>// initialise total, loop 10 times reading input, output total</code>. The examiner gives method marks for clear intent even if the code has slips.</li>
+      <li><strong>Trace tables:</strong> draw a thin horizontal line every time the loop restarts. It prevents you from skipping rows or duplicating values when there are several iterations to record.</li>
+      <li><strong>Always end programming answers with <code>OUTPUT</code></strong> (or <code>print()</code>). Calculating the right value but never displaying it is a near-universal mark deduction.</li>
+      <li><strong>Running out of time?</strong> Write a pseudocode <em>skeleton</em>: <code>INPUT</code> &rarr; <code>IF</code> or <code>LOOP</code> &rarr; the calculation &rarr; <code>OUTPUT</code>. Even a 4-line skeleton typically scores 2&ndash;3 method marks &mdash; far better than zero.</li>
+      <li><strong>Never leave a question blank.</strong> If you have <em>any</em> idea, write it. The mark scheme rewards "shows attempt to use a loop", "identifies need for validation", etc., even on partly-wrong answers.</li>
+      <li><strong>For SQL:</strong> check clause order before you write the next clause. <code>WHERE</code> before <code>GROUP BY</code> before <code>ORDER BY</code>. Single statement, ends with a semicolon.</li>
+      <li><strong>For Python answers:</strong> remember the colon, remember to indent, remember to cast inputs. Three free marks lost there in a typical paper.</li>
+      <li><strong>State the validation type</strong> by name (range / length / type / presence / format / check digit). Markers look for the word.</li>
+      <li><strong>After every section,</strong> glance back at the question. Did it ask for <em>position</em> or <em>value</em>? <em>Count</em> or <em>list</em>? Many slips come from answering a slightly different question.</li>
+    </ul>
+  </div>
+
+  <div class="card mb-4">
+    <h3 class="font-semibold mb-2">Mental Math Refresher</h3>
+    <div class="text-sm space-y-3">
+      <div>
+        <div class="badge badge-purple mb-1">DIV &amp; MOD</div>
+        <p class="text-zinc-300">Integer arithmetic for "every nth", "last digit", "is even", etc.</p>
+<pre><span class="num">7</span> <span class="kw">DIV</span> <span class="num">2</span> = <span class="num">3</span>     <span class="num">10</span> <span class="kw">DIV</span> <span class="num">3</span> = <span class="num">3</span>     <span class="num">25</span> <span class="kw">DIV</span> <span class="num">10</span> = <span class="num">2</span>
+<span class="num">7</span> <span class="kw">MOD</span> <span class="num">2</span> = <span class="num">1</span>     <span class="num">10</span> <span class="kw">MOD</span> <span class="num">3</span> = <span class="num">1</span>     <span class="num">25</span> <span class="kw">MOD</span> <span class="num">10</span> = <span class="num">5</span>
+<span class="com">// Python equivalents: //  and  %</span></pre>
+        <p class="text-zinc-400"><strong>Even number test:</strong> <code>n MOD 2 = 0</code>. <strong>Last digit:</strong> <code>n MOD 10</code>. <strong>Drop last digit:</strong> <code>n DIV 10</code>.</p>
+      </div>
+
+      <div>
+        <div class="badge badge-purple mb-1">Binary basics (mostly Paper 1, occasionally useful here)</div>
+<pre><span class="num">8</span>-bit place values:  <span class="num">128</span> <span class="num">64</span> <span class="num">32</span> <span class="num">16</span>  <span class="num">8</span>  <span class="num">4</span>  <span class="num">2</span>  <span class="num">1</span>
+<span class="num">10101010</span>           = <span class="num">128</span>+<span class="num">32</span>+<span class="num">8</span>+<span class="num">2</span> = <span class="num">170</span>
+<span class="num">11111111</span>           = <span class="num">255</span>
+<span class="num">10000000</span>           = <span class="num">128</span></pre>
+        <p class="text-zinc-400">Hex: 0&ndash;9 then A=10, B=11, &hellip; F=15. <code>FF</code> = 255. One hex digit = 4 bits.</p>
+      </div>
+
+      <div>
+        <div class="badge badge-purple mb-1">Common ASCII values</div>
+<pre><span class="str">'A'</span> = <span class="num">65</span>     <span class="str">'a'</span> = <span class="num">97</span>     <span class="str">'0'</span> = <span class="num">48</span>     space = <span class="num">32</span></pre>
+        <p class="text-zinc-400"><strong>Letter to lowercase:</strong> add 32. <strong>Digit char to number:</strong> subtract 48 (or the ASCII code of <code>'0'</code>). Useful if a Caesar-cipher or character-shift question comes up.</p>
+      </div>
+
+      <div>
+        <div class="badge badge-purple mb-1">Quick conversions to memorise</div>
+<pre><span class="num">1</span> KB =  <span class="num">1024</span> bytes        <span class="num">1</span> byte = <span class="num">8</span> bits
+<span class="num">1</span> MB =  <span class="num">1024</span> KB
+<span class="num">1</span> GB =  <span class="num">1024</span> MB</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent mb-4">
+    <h3 class="font-semibold mb-2">You're ready.</h3>
+    <p class="text-sm text-zinc-200">If you've worked through this app &mdash; lifecycle, pseudocode, algorithms, flowcharts, traces, the error-spotting set above, the common-mistakes list &mdash; you have covered every topic the 2026 0478/0984 Paper 2 can ask. The syllabus is <em>finite</em>, and you have studied it.</p>
+    <p class="text-sm text-zinc-200 mt-2">Tonight: do <strong>not</strong> stay up cramming new material. Skim this checklist, get to bed at a sensible hour, eat breakfast tomorrow. Your brain consolidates what you learned today during sleep &mdash; that work happens automatically as long as you let it.</p>
+    <p class="text-sm text-zinc-200 mt-2">In the exam: read carefully, breathe between questions, use pencil, write <code>OUTPUT</code> at the end of every program, and trust the preparation you've done. If a question stumps you, leave a skeleton answer and move on &mdash; you can always return.</p>
+    <p class="text-sm text-zinc-200 mt-2 font-semibold">Take one slow breath before you turn over the paper. You've got this.</p>
+  </div>
+</section>
